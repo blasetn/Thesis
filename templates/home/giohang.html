@@ -1,0 +1,160 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block title %}Panda Cake - Giỏ hàng{% endblock %}
+{% block content %}
+    <section style="background-color: black;">
+        <div class="container" style="height: 160px;">
+            <div><img src="" alt=""></div>
+            <h1 style="font-weight: 700; color: #fff; text-align: center; margin-top: 40px">GIỎ HÀNG</h1>
+        </div>
+    </section>
+
+    <div id="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="" class="not-active">Trang chủ</a></li>
+                <span class="kitu"> / </span>
+                <li class="active"><span>Giỏ hàng</span></li>
+            </ol>
+        </div>
+    </div>
+
+    <!--== Start Cart Area Wrapper ==-->
+    <section class="product-area cart-page-area">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}"
+                         role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="cart-table-wrap">
+                        <div class="cart-table table-responsive">
+                            <table>
+                                <thead>
+                                <tr style="text-align: center">
+                                    <th class="width-thumbnail"></th>
+                                    <th class="width-name">Sản phẩm</th>
+                                    <th class="width-smell">Vị</th>
+                                    <th class="width-price">Đơn giá</th>
+                                    <th class="width-quantity">Số lượng</th>
+                                    <th class="width-subtotal">Số tiền</th>
+                                    <th class="width-remove"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in giohang %}
+                                    <tr>
+                                        <td class="product-thumbnail">
+                                            <a href="{% url 'ctsp' item.id %}"><img src="{{ MEDIA_URL }}{{ item.hinh }}"
+                                                                                    alt="Image"></a>
+                                        </td>
+                                        <td class="product-name">
+                                            <h5><a href="{% url 'ctsp' item.id %}">{{ item.ten }}</a></h5>
+                                        </td>
+                                        <td class="product-smell">{{ item.vi }}</td>
+                                        <td class="product-price"><span
+                                                class="amount">{{ item.gia | floatformat:0 | intcomma }}đ</span></td>
+                                        <td class="cart-quality">
+                                            <div class="product-details-quality">
+                                                <a type="button" href="{% url 'themspgh' item.id 1 %}"
+                                                   style="font-size: 20px; vertical-align: top; border: 1px solid rgba(0,0,0,0.1); width: 32px; padding: 9px 0; text-align: center"><i
+                                                        class='bx bx-minus'></i></a>
+                                                <input style="text-align: center" disabled type="text"
+                                                       class="input-text qty text" name="quantity"
+                                                       value="{{ item.soluong }}" title="Qty"
+                                                       placeholder="">
+                                                <a type="button" href="{% url 'themspgh' item.id %}"
+                                                   style="font-size: 20px; vertical-align: top; border: 1px solid rgba(0,0,0,0.1); width: 32px; padding: 9px 0; text-align: center"><i
+                                                        class='bx bx-plus'></i></a>
+                                            </div>
+                                        </td>
+                                        <td class="product-total">
+                                            <span>{{ item.gia | mul:item.soluong | floatformat:0 | intcomma }}đ</span>
+                                        </td>
+                                        <td class="product-remove"><a href="{% url 'xoaspgh' item.id %}">
+                                            <i class='bx bx-trash'></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin: 50px 0;">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="cart-shiping-update-wrapper">
+                            <div class="cart-shiping-btn continure-btn">
+                                <a class="btn btn-link" href="{% url 'sanpham' 0 %}"><i
+                                        class='bx bx-left-arrow-alt'></i> Trở về</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        {#                        <div class="cart-calculate-discount-wrap mb-40">#}
+                        {#                            <h4>Mã giảm giá </h4>#}
+                        {#                            <div class="calculate-discount-content">#}
+                        {#                                <p>Nhập mã giảm giá (nếu có)!</p>#}
+                        {#                                <div class="input-style">#}
+                        {#                                    <input type="text" placeholder="Mã giảm giá">#}
+                        {#                                </div>#}
+                        {#                                <div class="calculate-discount-btn">#}
+                        {#                                    <a class="btn btn-link" href="#/">Áp dụng</a>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-md-12 col-lg-5">
+                        <div class="grand-total-wrap" style="float: right; width: 100%;">
+                            <form action="{% url 'thanhtoan' %}" method="get">
+                                {% csrf_token %}
+                                <div class="grand-total-content">
+                                    <h3>Tổng tiền hàng <span>{{ tongtienhang | floatformat:0 | intcomma }}đ</span></h3>
+                                    <input type="hidden" name="tongtienhang" value="{{ tongtienhang }}">
+                                    <div class="grand-shipping-1">
+                                        <p>Phí vận chuyển
+                                            <span>
+                                                {% if tongthanhtoan <= 0 %}0
+                                                {% else %}{{ ship | floatformat:0 | intcomma }}
+                                                {% endif %}đ
+                                            </span>
+                                        </p>
+                                        <input type="hidden" name="ship"
+                                               value="{% if tongthanhtoan <= 0 %}0{% else %}{{ ship }}{% endif %}">
+                                    </div>
+                                    {#                                    <div class="grand-shipping-2">#}
+                                    {#                                        <p>Giảm giá<span>{{ giamgia | floatformat:0 | intcomma }}đ</span></p>#}
+                                    <input type="hidden" name="giamgia" value="{{ giamgia }}">
+                                    {#                                    </div>#}
+                                    {#                                <div class="shipping-country">#}
+                                    {#                                    <p>Vận chuyển đến Cần Thơ</p>#}
+                                    {#                                </div>#}
+                                    <div class="grand-total">
+                                        <h4>Tổng thanh toán <span>{{ tongthanhtoan | floatformat:0 | intcomma }}đ</span>
+                                        </h4>
+                                        <input type="hidden" name="tongthanhtoan" value="{{ tongthanhtoan }}">
+                                    </div>
+                                </div>
+                                <div class="grand-total-btn">
+                                    <button class="btn btn-link" type="submit" href="{% url 'thanhtoan' %}"
+                                            {% if tongthanhtoan <= 0 %}disabled{% endif %}>THANH TOÁN
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

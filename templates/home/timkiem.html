@@ -1,0 +1,71 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Panda Cake - Tìm kiếm{% endblock %}
+{% block content %}
+    <section style="background-color: black;">
+        <div class="container" style="height: 160px;">
+            <div><img src="" alt=""></div>
+            <h1 style="font-weight: 700; color: #fff; text-align: center; margin-top: 40px;">
+                TÌM KIẾM</h1>
+        </div>
+    </section>
+
+    <!-- <div id="breadcrumb">
+    <div class="container">
+    <ol class="breadcrumb">
+    <li><a href="index.jsp" class="not-active">Home</a></li>
+    <span class="kitu"> / </span>
+    <li class="active"><span>Tìm kiếm</span></li>
+    </ol>
+    </div>
+    </div> -->
+
+    <div style="margin-top: 50px ;margin-bottom: 50px;">
+        <div class="container">
+            <div style="padding: 0 300px;">
+                <form action="{% url 'timkiem' %}" method="POST">
+                    {% csrf_token %}
+                    <div style="display: inline-table; width: 100%; text-align: center; border-bottom: 2px solid rgba(0,0,0,0.4)">
+                        <input style="
+                                padding: 20px 40px;
+                                font-size: 20px;
+                                outline: none;
+                                border: none; width: 400px; text-align: center" placeholder="Nhập thông tin sản phẩm ..."
+                           type="text" name="key_search" id="">
+                        <button type="submit" style="border: none; background-color: white; font-size: 30px; vertical-align: middle"><i class='bx bx-search'></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="container" style="min-height: 400px">
+            <div>
+                {% if kq == null %}
+                    <p style="font-size: 20px; text-align: center;">Không có kết quả</p>
+                {% endif %}
+                <div class="row product-right-mid">
+                    {% for item in kq %}
+                        <div class="col-3">
+                            <div class="card-than">
+                                <div id="card-img">
+                                    <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.hinhsp__hinhsp_url }}"
+                                         alt="">
+                                </div>
+                                <div class="card-bot">
+                                    <p class="card-name"><a href="{% url 'ctsp' item.sp_id %}">{{ item.sp_ten }}</a>
+                                    </p>
+                                    <p class="card-price">
+                                        {{ item.sp_gia | floatformat:0 | intcomma }}đ
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

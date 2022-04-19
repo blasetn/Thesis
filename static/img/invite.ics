@@ -1,0 +1,57 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+DTSTART:20220113T070000Z
+DTEND:20220113T080000Z
+DTSTAMP:20220112T071750Z
+ORGANIZER;CN=thao.le@ptnglobalcorp.com:mailto:thao.le@ptnglobalcorp.com
+UID:07akei2jqdd5qcmedcdjmc3i5h@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=OPT-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=tram.nguyen@ptnglobalcorp.com;X-NUM-GUESTS=0:mailto:tram.nguyen@ptn
+ globalcorp.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE
+ ;CN=thao.le@ptnglobalcorp.com;X-NUM-GUESTS=0:mailto:thao.le@ptnglobalcorp.c
+ om
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=kieuchautuanngoc@gmail.com;X-NUM-GUESTS=0:mailto:kieuchautuanngoc@g
+ mail.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=an.pham@ptnglobalcorp.com;X-NUM-GUESTS=0:mailto:an.pham@ptnglobalco
+ rp.com
+X-GOOGLE-CONFERENCE:https://meet.google.com/may-yzfu-ybu
+X-MICROSOFT-CDO-OWNERAPPTID:947225081
+CREATED:20220112T071748Z
+DESCRIPTION:Dear Ngoc\,<p>Thank you for your interest in our recruitment in
+ formation. We have reviewed your application and would like to invite you f
+ or an interview through this Google Meeting request.</p><p>Please feel free
+  to contact me if you need any further information via my email&nbsp\;<a hr
+ ef="mailto:thao.le@ptnglobalcorp.com">thao.le@ptnglobalcorp.com</a>&nbsp\;<
+ a href="https://drive.google.com/drive/folders/1MEraN7gdTivdhvRaUqq_hdqu5Xs
+ CBFIQ?usp=sharing" id="ow698" __is_owner="true">here</a><a href="/" target=
+ "true" id="ow716" __is_owner="true"></a></p><p>We are looking forward to di
+ scussing this with you again.</p><p>@Hi anh An\, please see Ngoc's CV&nbsp\
+ ;<a href="https://drive.google.com/drive/folders/1MEraN7gdTivdhvRaUqq_hdqu5
+ XsCBFIQ?usp=sharing" id="ow672" __is_owner="true">here</a><a href="/" id="o
+ w690" __is_owner="true"></a><a></a></p><p>Thanks and Best Regards\,<br>Thao
+  Le</p>\n\n-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:
+ ~:~:~:~:~:~:~:~::~:~::-\nVui lòng không chỉnh sửa phần mô tả này.\n\nSự kiệ
+ n này có một cuộc gọi video.\nTham gia: https://meet.google.com/may-yzfu-yb
+ u\n(US) +1 267-819-1423 Mã PIN: 643222991#\nXem các số điện thoại khác: htt
+ ps://tel.meet/may-yzfu-ybu?pin=2379230951107&hs=7\n\nXem sự kiện của bạn tạ
+ i https://calendar.google.com/calendar/event?action=VIEW&eid=MDdha2VpMmpxZG
+ Q1cWNtZWRjZGptYzNpNWgga2lldWNoYXV0dWFubmdvY0Bt&tok=MjUjdGhhby5sZUBwdG5nbG9i
+ YWxjb3JwLmNvbTI1MTcwNTM2NGFlZDdlMGNmOTA0MTY2ZTQ4MWMyOGQ1ZjZkYjVlYjc&ctz=Asi
+ a%2FHo_Chi_Minh&hl=vi&es=1.\n-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20220112T071748Z
+LOCATION:Google Meet
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Interview Invitation -  Kieu Chau Tuan Ngoc @Jan 13\, 2022 2:00 pm 
+ - 3:00 pm (ICT) (kieuchautuanngoc@gmail.com)
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

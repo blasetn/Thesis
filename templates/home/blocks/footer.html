@@ -1,0 +1,18 @@
+{% load static %}
+<footer>
+    <div class="container">
+        <div class="footer-logo">
+            <a href="{% url 'trangchu' %}">
+                <img src="{% static 'img/logo.png' %}" alt="">
+            </a>
+        </div>
+        <div class="footer-info" style="padding-top: 150px; padding-left: 100px; padding-right: 100px;">
+            <p>Mời bạn một miếng bánh ngon, một tách trà nóng, một ngày an yên</p>
+            <ul style="margin-top: 30px; padding-left: 0">
+                <li><a href="{% url 'trangchu' %}">TRANG CHỦ</a></li>
+                <li><a href="{% url 'sanpham' 0 %}">SẢN PHẨM</a></li>
+                <li><a href="{% url 'taikhoan' %}">TÀI KHOẢN</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>

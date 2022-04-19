@@ -1,0 +1,290 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+
+{% block title %}Quản trị - Đơn hàng{% endblock %}
+
+{% block content %}
+    <style>
+        .account .avatar {
+            border-right: 1px dashed rgba(0, 0, 0, 0.3);
+        }
+
+        .account .content {
+            padding-left: 25px;
+        }
+
+        .account .tab-content {
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            padding: 30px;
+        }
+
+        .account p {
+            font-weight: 600;
+            font-size: 18px;
+            text-align: justify;
+            margin: 10px 0;
+        }
+
+        .account p span {
+            font-weight: 400;
+        }
+
+        .account .button-function {
+            margin-top: 30px;
+        }
+
+        .account label {
+            font-size: 20px;
+        }
+
+        .account .gioitinh {
+            margin-right: 20px;
+        }
+
+        .account .tab-lable {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .account .list-group-item.active {
+            background-color: #f379a7;
+            border-color: #f379a7;
+        }
+
+        .account .input-text input {
+            width: 100%;
+            padding: 10px;
+            outline-color: #f379a7;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+
+        .account .coldk {
+            padding-right: 40px !important;
+        }
+
+        .your-order-area h3 {
+            font-weight: 600;
+            font-size: 20px;
+            margin: 0 0 21px;
+        }
+
+        .your-order-area .your-order-wrap {
+            background-color: #f6f6f6;
+            padding: 36px;
+        }
+
+        .your-order-area .your-order-wrap .your-order-title h4 {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 17px;
+            text-transform: uppercase;
+            margin: 0 0 18px;
+            padding: 0 0 22px;
+            border-bottom: 1px solid #bebebe;
+        }
+
+        .your-order-area .your-order-wrap .your-order-product {
+            padding-bottom: 21px;
+        }
+
+        .your-order-area .your-order-wrap .your-order-product ul {
+            padding-left: 0;
+        }
+
+        .your-order-area .your-order-wrap .your-order-product ul li {
+            display: flex;
+            font-size: 17px;
+            justify-content: space-between;
+            margin: 0 0 16px;
+            font-weight: 500;
+        }
+
+        .your-order-area .your-order-wrap .your-order-product ul li span {
+            font-size: 17px;
+            color: #f379a7;
+            font-weight: 500;
+        }
+
+        .your-order-area .your-order-wrap .your-order-subtotal {
+            border-top: 1px solid #bebebe;
+            padding: 20px 0;
+        }
+
+        .your-order-area .your-order-wrap .your-order-subtotal h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .your-order-area .your-order-wrap .your-order-shipping {
+            padding: 21px 0 22px;
+        }
+
+        .your-order-area .your-order-wrap .your-order-shipping > span {
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        .your-order-area .your-order-wrap .your-order-total {
+            border-bottom: 1px solid #bebebe;
+            border-top: 1px solid #bebebe;
+            padding: 20px 0;
+        }
+
+        .your-order-area .your-order-wrap .your-order-total h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .your-order-area .your-order-wrap .payment-method {
+            padding: 40px 0 10px;
+        }
+
+        .your-order-area .your-order-wrap .payment-method .sin-payment {
+            margin-bottom: 25px;
+        }
+
+        .your-order-area .your-order-wrap .payment-method .sin-payment label {
+            cursor: pointer;
+            font-size: 17px;
+            margin: 0px 0 0 21px;
+        }
+
+        .your-order-area .place-order {
+            margin: 20px 0 50px 0;
+        }
+
+        .your-order-area .place-order button {
+            padding: 18px 43px 18px;
+            font-size: 24px;
+            line-height: 1;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            text-align: center;
+            background-color: #f379a7;
+            border: none;
+            width: 100%;
+        }
+    </style>
+    <div class="main">
+        <div class="main-header">
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class='bx bx-menu-alt-left'></i>
+            </div>
+            <div class="main-title">
+                Chi tiết đơn hàng
+            </div>
+        </div>
+        <div class="main-content">
+            <section class="product-area shop-checkout-area account mb-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="billing-info-wrap">
+                                <h3>Thông tin đơn hàng</h3>
+                                <div class="row">
+                                    <div class="col coldk">
+                                        <div class="input-text">
+                                            <p>Họ tên:</p>
+                                            <span>{{ dh.dh_hoten }}</span>
+                                        </div>
+                                        <div class="input-text">
+                                            <p>Số điện thoại:</p>
+                                            <span>{{ dh.dh_sdt }}</span>
+                                        </div>
+                                        <div class="input-text">
+                                            <p>Địa chỉ:</p>
+                                            <span>{{ dh.dh_diachi }}</span>
+                                        </div>
+                                        <div class="input-text">
+                                            <p>Email:</p>
+                                            <span>{{ dh.dh_email }}</span>
+                                        </div>
+                                        <div class="input-text">
+                                            <p>Ngày đặt hàng:</p>
+                                            <span>{{ dh.dh_thoigian | date:"H:i-d-m-Y" }}</span>
+                                        </div>
+                                        <div class="input-text">
+                                            <p>Trạng thái:</p>
+                                            <span>
+                                                {% if dh.dh_trangthai == '0' %}
+                                                    Chưa xác nhận
+                                                {% elif dh.dh_trangthai == '1' %}
+                                                    Đã hủy
+                                                {% elif dh.dh_trangthai == '2' %}
+                                                    Đã xác nhận
+                                                {% elif dh.dh_trangthai == '3' %}
+                                                    Đang giao hàng
+                                                {% elif dh.dh_trangthai == '4' %}
+                                                    Đã hoàn thành
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="your-order-area">
+                                <h3>Đơn hàng</h3>
+                                <div class="your-order-wrap">
+                                    <div class="your-order-info-wrap">
+                                        <div class="your-order-title">
+                                            <h4>Sản phẩm <span>Số tiền hàng</span></h4>
+                                        </div>
+                                        <div class="your-order-product">
+                                            <ul>
+                                                {% for item in ctdh %}
+                                                    <li>{{ item.ctdh_tensp }} x {{ item.ctdh_soluong }}
+                                                        <span>
+                                                        {{ item.ctdh_gia | mul:item.ctdh_soluong }}đ
+                                                    </span>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        <div class="your-order-subtotal">
+                                            <h3>Tổng số tiền hàng
+                                                <span>{{ dh.dh_tienhang | floatformat:0 | intcomma }}đ</span>
+                                            </h3>
+                                        </div>
+                                        <div class="your-order-subtotal">
+                                            <h3>Ship <span>{{ dh.dh_ship | floatformat:0 | intcomma }}đ</span></h3>
+                                            <h3 style="margin-top: 10px;">Giảm giá
+                                                <span>{{ dh.dh_giamgia | floatformat:0 | intcomma }}đ</span></h3>
+                                        </div>
+                                        <div class="your-order-total">
+                                            <h3>Tổng thanh toán
+                                                <span>{{ dh.dh_tongtien | floatformat:0 | intcomma }}đ</span>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="payment-method">
+                                        <h3>Phương thức thanh toán</h3>
+                                        <span>{% if dh.dh_thanhtoan == '0' %}Thanh toán khi nhận
+                                            hàng{% elif dh.dh_thanhtoan == '1' %}
+                                            Thanh toán online{% endif %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}

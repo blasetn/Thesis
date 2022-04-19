@@ -1,0 +1,108 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'img/logo-icon.png' %}" rel="shortcut icon"/>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <script src="{% static 'lib/jquery-3.5.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+<body>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <a href="#"><img src="{% static 'img/logo.png' %}" alt=""></a>
+        <div class="sidebar-close" id="sidebar-close">
+            <i class='bx bx-left-arrow-alt'></i>
+        </div>
+    </div>
+    <div class="sidebar-user">
+        <div class="sidebar-user-info">
+            {#            <img src="{% static 'img/logo-icon.png' %}" alt="" class="profile-image">#}
+            <div class="sidebar-user-name">
+                <i class='bx bx-user' style="font-size: 25px; margin-right: 10px;"></i>{{ request.user.username }}
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline" onclick="window.location.href='#'">
+            <i class='bx bx-log-out'></i>
+        </button>
+    </div>
+    <!-- SIDEBAR MENU -->
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{% url 'admin' %}" class="">
+                <i class='bx bx-home'></i>
+                <span>Tổng quan</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-store-alt'></i>
+                <span>Đơn hàng</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'category' %}">
+                <i class='bx bx-category'></i>
+                <span>Danh mục</span>
+            </a>
+        </li>
+        {% if request.user.is_superuser %}
+        <li class="sidebar-submenu">
+            <a href="#" class="sidebar-menu-dropdown">
+                <i class='bx bx-cake'></i>
+                <span>Sản phẩm</span>
+                <div class="dropdown-icon"></div>
+            </a>
+            <ul class="sidebar-menu sidebar-menu-dropdown-content">
+                <li>
+                    <a href="{% url 'themsanpham' %}">
+                        Thêm mới
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'xemsanpham' %}">
+                        Tất cả
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-user-circle'></i>
+                <span>Nhân viên</span>
+            </a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="#">
+                <i class='bx bx-message-dots' ></i>
+                <span>Chat</span>
+            </a>
+        </li>
+    </ul>
+    <!-- END SIDEBAR MENU -->
+</div>
+<!-- END SIDEBAR -->
+
+<!-- MAIN CONTENT -->
+{% block content %}{% endblock %}
+<!-- END MAIN CONTENT -->
+
+<div class="overlay"></div>
+
+<!-- APP JS -->
+<script src="{% static 'js/admin.js' %}"></script>
+</body>
+
+</html>

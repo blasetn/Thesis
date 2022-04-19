@@ -1,0 +1,29 @@
+{% load humanize %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel='stylesheet'>
+    <link href="{% static 'lib/bootstrap.css' %}" rel='stylesheet'>
+    <link href="{% static 'css/style.css' %}" rel='stylesheet'>
+</head>
+
+<body>
+{% include './blocks/navbar.html' %}
+
+{% block content %}{% endblock %}
+
+{% include './blocks/footer.html' %}
+
+
+<script src="{% static 'lib/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'lib/bootstrap.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

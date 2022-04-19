@@ -1,0 +1,312 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Panda Cake - Tài khoản{% endblock %}
+{% block content %}
+    <section style="background-color: black;">
+        <div class="container" style="height: 160px;">
+            <div><img src="" alt=""></div>
+            <h1 style="font-weight: 700; color: #fff; text-align: center; margin-top: 40px; text-transform: uppercase">
+                TÀI KHOẢN </h1>
+        </div>
+    </section>
+
+    <div id="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="" class="not-active">Home</a></li>
+                <span class="kitu"> / </span>
+                <li class="active"><span>Tài khoản</span></li>
+            </ol>
+        </div>
+    </div>
+
+    <style>
+        .account .avatar {
+            border-right: 1px dashed rgba(0, 0, 0, 0.3);
+        }
+
+        .account .content {
+            padding-left: 25px;
+        }
+
+        .account .tab-content {
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            padding: 30px;
+        }
+
+        .account p {
+            font-weight: 700;
+            font-size: 18px;
+            text-align: justify;
+            margin: 10px 0;
+        }
+
+        .account p span {
+            font-weight: 400;
+        }
+
+        .account .button-function {
+            margin-top: 30px;
+        }
+
+        .account .button-function .btndangky {
+            background-color: black;
+            font-size: 18px;
+            font-weight: 900;
+            color: white;
+            border: black;
+            height: 50px;
+            width: 150px;
+            border-radius: 10px;
+            float: right;
+        }
+
+        .account .button-function .btnnhaplai {
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+            margin-right: 15px;
+        }
+
+        .account label {
+            font-size: 20px;
+        }
+
+        .account .gioitinh {
+            margin-right: 20px;
+        }
+
+        .account .tab-lable {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .account .list-group-item.active {
+            background-color: #f379a7;
+            border-color: #f379a7;
+        }
+
+        .account .input-text input {
+            width: 100%;
+            padding: 10px;
+            outline-color: #f379a7;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+    </style>
+    <section class="mb-5 account" style="min-height: 500px">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}"
+                         role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="row">
+                <div class="col-3">
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <a class="list-group-item list-group-item-action tab-lable active" id="list-home-list"
+                           data-toggle="list"
+                           href="#list-home" role="tab" aria-controls="home">Thông tin tài khoản</a>
+                        <a class="list-group-item list-group-item-action tab-lable" id="list-profile-list"
+                           data-toggle="list"
+                           href="#list-profile" role="tab" aria-controls="profile">Cập nhật tài khoản</a>
+                        <a class="list-group-item list-group-item-action tab-lable" id="list-profile-list"
+                           data-toggle="list"
+                           href="#list-order" role="tab" aria-controls="profile">Đơn hàng</a>
+                        <a class="list-group-item list-group-item-action tab-lable" id="list-profile-list"
+                           data-toggle="list"
+                           href="#list-dmk" role="tab" aria-controls="profile">Đổi mật khẩu</a>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="list-home" role="tabpanel"
+                             aria-labelledby="list-home-list">
+                            <div class="row">
+                                <div class="col coldk">
+                                    <div class="row">
+                                        <div class="col-4 avatar">
+                                            <img class="d-100 w-100" src="{{ MEDIA_URL }}{{ cttk.cttk_avatar }}"
+                                                 alt="Avatar">
+                                        </div>
+                                        <div class="col-8 content">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <div class="input-text">
+                                                        <p>Họ tên: <span>{{ cttk.cttk_hoten }}</span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-5">
+                                                    <div class="input-text">
+                                                        <p>Giới tính:
+                                                            <span>
+                                                                {% if cttk.cttk_gioitinh == 0 %}
+                                                                    Nam
+                                                                {% elif cttk.cttk_gioitinh == 1 %}
+                                                                    Nữ
+                                                                {% else %}
+                                                                {% endif %}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="input-text">
+                                                        <p>Ngày sinh: <span>{{ cttk.cttk_ngaysinh|date:"d/m/Y" }}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="input-text">
+                                                        <p>Số điện thoại: <span>{{ cttk.cttk_sdt }}</span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="input-text">
+                                                        <p>Email: <span>{{ request.user.email }}</span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="input-text">
+                                                        <p>Địa chỉ: <span>{{ cttk.cttk_diachi }}</span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="text-align: right">
+                                <button onclick="window.location.href='{% url 'dangxuat' %}'"
+                                        style="color: white; background-color: #f379a7; border: none; padding: 5px 10px; font-size: 20px; font-weight: 600; border-radius: 5px">
+                                    Đăng xuất
+                                </button>
+                            </p>
+                        </div>
+                        <div class="tab-pane fade" id="list-profile" role="tabpanel"
+                             aria-labelledby="list-profile-list">
+                            <div class="row">
+                                <div class="col coldk">
+                                    <form action="{% url 'cntk' %}" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-4 avatar input-text">
+                                                <img class="d-100 w-100" src="{{ MEDIA_URL }}{{ cttk.cttk_avatar }}"
+                                                     alt="Avatar">
+                                                <input type="file" required name="hinh" id="" style="border: none;">
+                                            </div>
+                                            <div class="col-8 content">
+                                                <div class="input-text">
+                                                    <p>Họ tên:</p>
+                                                    <input required type="text" name="hoten" value="{% if cttk.cttk_hoten != None %}{{ cttk.cttk_hoten }}{% endif %}">
+                                                </div>
+                                                <div>
+                                                    <p>Giới tính:</p>
+                                                    <input type="radio" name="gioitinh" id="nam" value="0"
+                                                           {% if cttk.cttk_gioitinh == 0 %}checked{% endif %}>
+                                                    <label class="gioitinh" for="nam">Nam</label>
+                                                    <input type="radio" name="gioitinh" id="nu" value="1"
+                                                           {% if cttk.cttk_gioitinh == 1 %}checked{% endif %}>
+                                                    <label for="nu">Nữ</label>
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Ngày sinh:</p>
+                                                    <input type="date" name="ngaysinh" id=""
+                                                           value="{{ cttk.cttk_ngaysinh|date:"Y-m-d" }}">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Số điện thoại:</p>
+                                                    <input required type="text" name="sdt" value="{% if cttk.cttk_sdt != None %}{{ cttk.cttk_sdt }}{% endif %}">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Email:</p>
+                                                    <input required type="text" name="email"
+                                                           value="{{ request.user.email }}">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Địa chỉ:</p>
+                                                    <input required type="text" name="diachi" value="{% if cttk.cttk_diachi != None %}{{ cttk.cttk_diachi }}{% endif %}">
+                                                </div>
+                                                <div class="button-function">
+                                                    <button type="submit" name="dangky"
+                                                            class="btn btn-outline-dark btndangky">CẬP NHẬT
+                                                    </button>
+                                                    <button type="reset" name="dangky"
+                                                            class="btn btn-outline-dark btndangky btnnhaplai">NHẬP LẠI
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="list-order" role="tabpanel"
+                             aria-labelledby="list-profile-list">
+                            <ul style="list-style: none; padding: 0">
+                                {% for item in dh %}
+                                    <li style="margin: 5px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding: 10px 10px">
+                                        <div class="row">
+                                            <div class="col">
+                                                <span>Mã đơn hàng: {{ item.dh_id }}</span>
+                                                <br>
+                                                <span>Ngày đặt: {{ item.dh_thoigian | date:"H:i-d-m-Y" }}</span>
+                                            </div>
+                                            <div class="col">
+                                                Tổng thanh toán: {{ item.dh_tongtien | floatformat:0 | intcomma }}đ
+                                                <br>
+                                                <a style="color: #f379a7; font-weight: 700"
+                                                   href="{% url 'tttc' item.dh_id %}">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade" id="list-dmk" role="tabpanel"
+                             aria-labelledby="list-profile-list">
+                            <div class="row">
+                                <div class="col coldk">
+                                    <form action="{% url 'dmk' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-12 content">
+                                                <div class="input-text">
+                                                    <p>Mật khẩu cũ:</p>
+                                                    <input required type="password" name="mk_cu">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Mật khẩu mới:</p>
+                                                    <input required type="password" name="mk_moi">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Nhập lại mật khẩu mới:</p>
+                                                    <input required type="password" name="re_mk_moi">
+                                                </div>
+                                                <div class="button-function">
+                                                    <button type="submit" class="btn btn-outline-dark btndangky">
+                                                        XÁC NHẬN
+                                                    </button>
+                                                    <button type="reset"
+                                                            class="btn btn-outline-dark btndangky btnnhaplai">
+                                                        NHẬP LẠI
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Quản trị - Nhân viên{% endblock %}
+
+{% block content %}
+    <div class="main">
+        <div class="main-header">
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class='bx bx-menu-alt-left'></i>
+            </div>
+            <div class="main-title">
+                Nhân viên
+            </div>
+        </div>
+        <div class="main-content add_tindang">
+            <div class="row">
+                <div class="col-12">
+                    <div class="box" style="margin-top: 20px;">
+                        <p style="margin-bottom: 20px">{% if messages %}
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        {% endif %}</p>
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="box">
+                                    <div class="box-header" style="margin-bottom: 20px">
+                                        Thêm nhân viên
+                                    </div>
+                                    <form action="{% url 'themnv' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="div_input_text">
+                                            <p>Tài khoản:</p>
+                                            <input required type="text" class="input_text" name="dk_taikhoan">
+                                            <p>Mật khẩu:</p>
+                                            <input required type="password" class="input_text" name="dk_matkhau">
+                                            <p>Nhập lại mật khẩu:</p>
+                                            <input required type="password" class="input_text" name="dk_rematkhau">
+                                            <p>Email:</p>
+                                            <input required type="email" class="input_text" name="dk_email">
+                                            <p>Quyền:</p>
+                                            <select style="color: rgba(0, 0, 0, 0.8);" name="quyen" id="" required>
+                                                <option disabled selected>Chọn quyền</option>
+                                                <option value="0">Admin</option>
+                                                <option value="1">Nhân viên</option>
+                                            </select>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div style="float: right;" class="button-action">
+                                                    <button type="reset">Nhập lại</button>
+                                                    <button type="submit" id="btn_ok">
+                                                        <!-- <span><i class='bx bx-check'></i></span> -->
+                                                        Xác nhận
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="box">
+                                    <div class="box-header">
+                                        Danh sách nhân viên
+                                    </div>
+                                    <div class="box-body overflow-scroll">
+                                        <table style="min-width: auto">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tài khoản</th>
+                                                <th>Quyền</th>
+                                                <th>Chức năng</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for item in nv %}
+                                                <tr>
+                                                    <td>{{ item.id }}</td>
+                                                    <td>
+                                                        <div class="order-owner">
+                                                            <span style="text-transform: none;">{{ item.username }}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>{% if item.is_superuser == True %}Admin{% else %}Nhân
+                                                        viên{% endif %}</td>
+                                                    <td>
+                                                        <a href="{% url 'xoanv' item.id %}"
+                                                           style="font-size: 30px"><i
+                                                                class='bx bx-trash'></i></a>
+                                                        <a href="{% url 'capnhatnv' item.id "up" %}"
+                                                           style="font-size: 30px"><i class='bx bx-up-arrow-alt'></i></a>
+                                                        <a href="{% url 'capnhatnv' item.id "down" %}"
+                                                           style="font-size: 30px"><i class='bx bx-down-arrow-alt' ></i></a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

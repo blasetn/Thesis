@@ -1,0 +1,126 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Panda Cake - Sản phẩm{% endblock %}
+{% block content %}
+    <section style="background-color: black;">
+        <div class="container" style="height: 160px;">
+            <div><img src="" alt=""></div>
+            <h1 style="font-weight: 700; color: #fff; text-align: center; margin-top: 40px">SẢN PHẨM</h1>
+        </div>
+    </section>
+
+    <div id="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="" class="not-active">Home</a></li>
+                <span class="kitu"> / </span>
+                <li class="active"><span>Sản phẩm</span></li>
+            </ol>
+        </div>
+    </div>
+
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-3 product-left">
+                    <div class="product-title category">
+                        <h4>DANH MỤC</h4>
+                        <a href="{% url 'sanpham' 0 %}">Tất cả</a>
+                        <ul>
+                            {% for item in nav %}
+                                <li><a href="{% url 'sanpham' item.danhmuc_id %}">{{ item.danhmuc_ten }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+{#                    <div class="product-title category">#}
+{#                        <h4>GIỚI TÍNH</h4>#}
+{#                        <a href="">Tất cả</a>#}
+{#                        <ul>#}
+{#                            <li><a href="">Nam</a></li>#}
+{#                            <li><a href="">Nữ</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                    <div class="product-title brand">#}
+{#                        <h4>THƯƠNG HIỆU</h4>#}
+{#                        <a href="">Tất cả</a>#}
+{#                        <ul>#}
+{#                            <li><a href="">TH</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                    <div class="product-title price">#}
+{#                        <h4>MỨC GIÁ</h4>#}
+{#                        <a href="">Tất cả</a>#}
+{#                        <ul>#}
+{#                            <li><a href="">Dưới 1.000.000đ</a></li>#}
+{#                            <li><a href="">1.000.000đ - 2.000.000đ </a></li>#}
+{#                            <li><a href="">2.000.000đ - 3.000.000đ</a></li>#}
+{#                            <li><a href="">3.000.000đ - 5.000.000đ</a></li>#}
+{#                            <li><a href="">Trên 5.000.000đ</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
+                    <!-- <div class="product-title size col" style="display: block;">
+                        <h4>SIZE</h4>
+                        <ul>
+                            <c:forEach var="isize" begin="34" end="47">
+                                <li><a href="product.jsp?size=${isize}"
+                                        class="btn btn-outline-primary">${isize}</a></li>
+                            </c:forEach>
+                        </ul>
+                    </div> -->
+                </div>
+                <div class="col-12 col-lg-9">
+{#                    <div class="row product-right-top">#}
+{#                        <div class="col">#}
+{#                            <a href=""><i class="fi-rr-grid"></i></a>#}
+{#                            <span style="margin-left: 45px;">Sản phẩm 1 đến 9</span>#}
+{#                        </div>#}
+{#                        <div class="col">#}
+{#                            <p>#}
+{#                                <strong>Hiển thị 9</strong>#}
+{#                                <strong>sản phẩm mỗi trang</strong>#}
+{#                            </p>#}
+{#                        </div>#}
+{#                        <div class="col">#}
+{#                            <p style="float: right;">#}
+{#                                <strong>Sắp xếp:</strong>#}
+{#                                <select name="" id="">#}
+{#                                    <option value="0">Mới nhất</option>#}
+{#                                    <option value="1">Giá thấp</option>#}
+{#                                    <option value="2">Giá cao</option>#}
+{#                                </select>#}
+{#                            </p>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <hr style="margin-top: 10px; margin-bottom: 40px;">#}
+                    <div class="row product-right-mid">
+                        {% for item in sp %}
+                            <div class="col-4">
+                                <div class="card-than">
+                                    <div id="card-img">
+                                        <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.hinhsp__hinhsp_url }}"
+                                             alt="">
+                                        {#                                    <div class="card-hover" id="card-hover">#}
+                                        {#                                        <a href="" class="card-add"><i#}
+                                        {#                                                class="fi-rr-shopping-bag-add"></i></a>#}
+                                        {#                                        <a href="" class="card-like"><i class="fi-rr-heart"></i></a>#}
+                                        {#                                        <a href="" class="card-quickview"><i class="fi-rr-eye"></i></a>#}
+                                        {#                                    </div>#}
+                                    </div>
+                                    <div class="card-bot">
+                                        <p class="card-name"><a
+                                                href="{% url 'ctsp' item.sp_id %}">{{ item.sp_ten }}</a>
+                                        </p>
+                                        <p class="card-price">
+                                            Giá: {{ item.sp_gia | floatformat:0 | intcomma }}đ
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
