@@ -12,54 +12,25 @@
         <div class="box" style="margin-top: 20px;">
             <p>
                 {% if messages %}
-                    {% for message in messages %}
-                            {{ message }}
-                    {% endfor %}
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
                 {% endif %}
             </p>
             <div class="row">
-                <div class="col-5">
+                <div class="col-12">
                     <div class="row">
                         <div class="col-12" style="margin-bottom: 20px;">
                             <div class="box">
-                                <div class="box-header" style="margin-bottom: 20px">Thêm danh mục mới</div>
-                                <form id="add_category_form" action="{% url 'category' %}" method="POST">
-                                    {% csrf_token %}
-                                    <div class="div_input_text" id="div_input_category">
-                                        <p id="testinput">
-                                            Tên danh mục:
-                                        </p>
-                                        <div class="div-option-add">
-                                            {% if id %}
-                                                <input type="text" name="name_category" class="input_text">
-                                            {% else %}
-                                                <input type="text" name="name_category[]" class="input_text">
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    {% if not id %}
-                                        <div style="width: 100%; text-align: center;">
-                                            <a type="button" style="font-size: 30px;" onclick="add_input('div_input_category','name_category[]')">+</a>
-                                        </div>
-                                    {% endif %}
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div style="float: right;" class="button-action">
-                                                <button type="reset">Nhập lại</button>
-                                                {% if id %}
-                                                    <button type="submit" name="submit_add_category" id="btn_ok">Cập nhật</button>
-                                                {% else %}
-                                                    <button type="submit" name="submit_update_category" id="btn_ok">Xác nhận</button>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#ModalAddCategory">
+                                    Thêm danh mục
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-7">
+                <div class="col-12">
                     <div class="box">
                         <div class="box-header">Danh mục đã có</div>
                         <div class="box-body overflow-scroll">
@@ -68,6 +39,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Danh mục</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -81,17 +54,24 @@
                                             {{ item.category_name }}
                                         </td>
                                         <td>
-                                            <a href="{% url 'category' item.category_id %}" style="font-size: 25px">
+                                            {{ item.category_date_created }}
+                                        </td>
+                                        <td>
+                                            <div class="payment-status payment-paid">
+                                                <div class="dot"></div>
+                                                <span>Hiện</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a class="category_update" id="{{ item.category_id }}"
+                                                style="font-size: 25px" data-toggle="modal"
+                                                data-target="#ModalUpdateCategory">
                                                 <i class='bx bx-wrench'></i></a>
                                         </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
-                            <div style="float: right;" class="button-action">
-                                <button type="button">Chỉnh sửa</button>
-                                <button type="button">Xóa</button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,4 +79,88 @@
         </div>
     </div>
 </div>
+
+
+<aside class="main-content add_tindang">
+    <form id="add_category_form" action="{% url 'category' %}" method="POST">
+        {% csrf_token %}
+        <div class="modal fade" id="ModalAddCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm danh mục</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="div_input_text" id="div_input_category">
+                            <p id="testinput">
+                                Tên danh mục:
+                            </p>
+                            <div class="div-option-add">
+                                <input type="hidden" name="category_id" value="">
+                                <input type="text" name="name_category[]" class="input_text">
+                            </div>
+                        </div>
+                        <div style="width: 100%; text-align: center;">
+                            <a type="button" style="font-size: 30px;"
+                                onclick="add_input('div_input_category','name_category[]')">+</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div style="float: right;" class="button-action">
+                            <button type="reset">Nhập lại</button>
+                            <button type="submit" name="submit_add_category" id="btn_ok">Xác
+                                nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</aside>
+
+
+<aside class="main-content add_tindang">
+    <form id="update_category_form" action="{% url 'category' %}" method="POST">
+        {% csrf_token %}
+        <div class="modal fade" id="ModalUpdateCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Sửa danh mục</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="div_input_text" id="div_input_category">
+                            <p>
+                                Tên danh mục:
+                            </p>
+                            <div class="div-option-add">
+                                <input type="hidden" name="category_update_id" id="category_update_id">
+                                <input type="text" name="name_category" id="category_update_input_name" class="input_text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div style="float: right;" class="button-action">
+                            <button type="reset">Nhập lại</button>
+                            <button type="submit" name="submit_update_category" id="btn_ok">Xác
+                                nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</aside>
+
+<script>
+
+</script>
 {% endblock %}

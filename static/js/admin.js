@@ -1,22 +1,3 @@
-function add_input(location, inputname) {
-    var loc = document.getElementById(location);
-    var div = document.createElement("div");
-    var input = document.createElement("input");
-    var del = document.createElement("i");
-    del.className = "bx bx-x";
-    del.onclick = function(){
-        this.parentNode.remove();
-    }
-    input.type = "text";
-    input.className = "input_text";
-    input.name = inputname;
-    div.className = "div-option-add";
-    loc.appendChild(div);
-    div.appendChild(input);
-    div.appendChild(del);
-}
-
-
 document.querySelectorAll('.sidebar-submenu').forEach(e => {
     e.querySelector('.sidebar-menu-dropdown').onclick = (event) => {
         event.preventDefault()
@@ -45,3 +26,37 @@ document.querySelector('#sidebar-close').onclick = () => {
     sidebar.classList.toggle('active')
     overlay.classList.toggle('active')
 }
+
+function add_input(location, inputname) {
+    var loc = document.getElementById(location);
+    var div = document.createElement("div");
+    var input = document.createElement("input");
+    var del = document.createElement("i");
+    del.className = "bx bx-x";
+    del.onclick = function(){
+        this.parentNode.remove();
+    }
+    input.type = "text";
+    input.className = "input_text";
+    input.name = inputname;
+    div.className = "div-option-add";
+    loc.appendChild(div);
+    div.appendChild(input);
+    div.appendChild(del);
+}
+
+$(document).on('click','.category_update',function(e){
+    e.preventDefault();
+    var category_id = $(this).attr("id");
+    var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+    $.ajax({
+        url:"/admin/get_category",
+        method:"POST",
+        data:{category_id:category_id, 'csrfmiddlewaretoken': csrf_token},
+        dataType:"json",
+        success:function(response){
+            $('#category_update_id').val(response[0]['category_id']);
+            $('#category_update_input_name').val(response[0]['category_name']);
+        }
+    });
+})

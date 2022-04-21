@@ -22,6 +22,6 @@ urlpatterns = [
     # Admin
     path('admin/', views.admin, name='admin'),
     path('admin/category/', views.category, name='category'),
-    path('admin/category/<int:id>', views.category, name='category'),
+    path('admin/get_category', views.get_category, name='get_category'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
