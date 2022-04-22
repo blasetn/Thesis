@@ -60,7 +60,7 @@ $(document).on('click', '.category_update', function (e) {
             $('#category_update_input_name').val(response[0]['category_name']);
             if (response[0]['category_status'] == '1') {
                 $('#category_status').attr('checked', true);
-            }else{
+            } else {
                 $('#category_status').attr('checked', false);
             }
             // $('#category_status').attr('checked', false);
@@ -87,13 +87,13 @@ $(document).on('click', '.product_update', function (e) {
             $('#product_description').text(response['product_detail'][0]['pd_description']);
             if (response['product_detail'][0]['pd_status'] == 1) {
                 $('#product_status').attr('checked', true);
-            }else{
+            } else {
                 $('#product_status').attr('checked', false);
             }
             $('#product_category option[value=' + response['product_detail'][0]['category_id'] + ']').prop("selected", true);
             var image_data = response['product_img'];
-            image_data.forEach(element=>{
-                var image_card = '<div class="card"><img src="/media/'+ element['ip_url'] +'" class="card-img-top"></div>'
+            image_data.forEach(element => {
+                var image_card = '<div class="card"><img src="/media/' + element['ip_url'] + '" class="card-img-top"></div>'
                 $('#image_update_product').append(image_card);
             })
         }
@@ -110,9 +110,44 @@ $(document).on('click', '.product_discount', function (e) {
         data: { product_id: product_id, 'csrfmiddlewaretoken': csrf_token },
         dataType: "json",
         success: function (response) {
-            console.log(response);
+            console.log(response)
+            $('#product_price_id').val(response['product_price'][0]['pd_id']);
             $('#product_price1').val(response['product_price'][0]['pd_price']);
             $('#product_price2').val(response['product_price'][0]['productdiscount__pdd_discount']);
+            if (response['product_price'][0]['productdiscount__pdd_active'] == '1') {
+                $('#product_price_active').attr('checked', true);
+            } else {
+                $('#product_price_active').attr('checked', false);
+            }
+            $('#product_price_datestart').val("");
+            $('#product_price_dateend').val("");
+            $('#product_price_datestart').attr('max', "");
+            $('#product_price_dateend').attr('min', "");
+            if (response['product_price'][0]['productdiscount__pdd_date_start'] && response['product_price'][0]['productdiscount__pdd_date_end']) {
+                var date_start = new Date(response['product_price'][0]['productdiscount__pdd_date_start']).toISOString().slice(0, 19);
+                var date_end = new Date(response['product_price'][0]['productdiscount__pdd_date_end']).toISOString().slice(0, 19);
+                $('#product_price_time_active').attr('checked', true);
+                $('.product_price_time_start').removeClass("d-none");
+                $('.product_price_time_end').removeClass("d-none");
+                $('#product_price_datestart').attr('max', date_end);
+                $('#product_price_dateend').attr('min', date_start);
+                $('#product_price_datestart').val(date_start);
+                $('#product_price_dateend').val(date_end);
+            } else {
+                $('#product_price_time_active').attr('checked', false);
+                $('.product_price_time_start').addClass("d-none");
+                $('.product_price_time_end').addClass("d-none");
+            }
         }
     });
 })
+
+$(document).on('change', '.product_price_time_active', function () {
+    if (this.checked) {
+        $('.product_price_time_start').removeClass("d-none");
+        $('.product_price_time_end').removeClass("d-none");
+    } else {
+        $('.product_price_time_start').addClass("d-none");
+        $('.product_price_time_end').addClass("d-none");
+    }
+});

@@ -77,7 +77,8 @@ def category(request):
         category_status = request.POST['category_status']
         for item in list_name_category:
             if item:
-                Category(category_name=item, category_status=category_status).save()
+                Category(category_name=item,
+                         category_status=category_status).save()
         messages.success(request, "Thêm danh mục thành công!")
     if 'submit_update_category' in request.POST:
         category_id = request.POST["category_update_id"]
@@ -98,7 +99,8 @@ def get_category(request):
 
 
 def product(request):
-    all_product = Product.objects.all()
+    all_product = list(Product.objects.values('pd_id', 'pd_name', 'pd_price', 'pd_spec', 'pd_description', 'pd_status', 'pd_quantity',
+                                              'category__category_name', 'productdiscount__pdd_discount', 'productdiscount__pdd_active', 'productdiscount__pdd_date_start', 'productdiscount__pdd_date_end', 'pd_view', 'pd_date_created'))
     all_category = Category.objects.all()
     if 'submit_add_product' in request.POST:
         pd_name = request.POST['product_name']
@@ -126,8 +128,8 @@ def product(request):
         category = Category.objects.get(pk=request.POST['product_category'])
         pd_status = request.POST['product_status']
         Product.objects.filter(pk=product_id).update(pd_name=pd_name, pd_price=pd_price, pd_spec=pd_spec,
-                                             pd_description=pd_description, pd_status=pd_status,
-                                             pd_quantity=pd_quantity, category=category)
+                                                     pd_description=pd_description, pd_status=pd_status,
+                                                     pd_quantity=pd_quantity, category=category)
         if request.FILES.getlist('product_images', False):
             product_id = Product.objects.get(pk=product_id)
             image_old = ImageProduct.objects.filter(product=product_id)
@@ -139,14 +141,37 @@ def product(request):
             for image in images:
                 ImageProduct(ip_url=image, product=product_id).save()
         messages.success(request, "Cập nhật sản phẩm thành công!")
+    if 'submit_update_price_product' in request.POST:
+        product_id = request.POST['product_price_id']
+        pd_price = request.POST['product_price1']
+        pdd_discount = request.POST['product_price2']
+        pdd_avtive = request.POST['product_price_active']
+        product = Product.objects.get(pk=product_id)
+        product.pd_price = pd_price
+        product.save()
+        try:
+            product_discount = ProductDiscount.objects.get(pk=product)
+            if product_discount:
+                product_discount.pdd_discount = pdd_discount
+                product_discount.pdd_active = pdd_avtive
+                if request.POST['product_price_datestart']:
+                    product_discount.pdd_date_start = request.POST['product_price_datestart']
+                if request.POST['product_price_dateend']:
+                    product_discount.pdd_date_end = request.POST['product_price_dateend']
+                product_discount.save()
+        except:
+            ProductDiscount(product=product, pdd_discount=pdd_discount, pdd_active=pdd_avtive).save()
+            if request.POST['product_price_datestart'] and request.POST['product_price_dateend']:
+                ProductDiscount(pdd_date_start=request.POST['product_price_datestart'], pdd_date_end=request.POST['product_price_dateend']).save()
+        messages.success(request, "Cập nhật giá sản phẩm thành công!")
     return render(request, 'admin/product.html', {'products': all_product, 'categorys': all_category})
 
 
 def get_product(request):
     product_id = request.POST["product_id"]
     product_detail = list(Product.objects.values().filter(pk=product_id))
-    product_img = list(ImageProduct.objects.values().filter(product=product_id))
-    product_price = list(Product.objects.values('pd_id', 'pd_price', 'productdiscount__pdd_discount', 'productdiscount__pdd_active', 'productdiscount__pdd_date_start', 'productdiscount__pdd_date_end'))
+    product_img = list(
+        ImageProduct.objects.values().filter(product=product_id))
+    product_price = list(Product.objects.values('pd_id', 'pd_price', 'productdiscount__pdd_discount',
+                         'productdiscount__pdd_active', 'productdiscount__pdd_date_start', 'productdiscount__pdd_date_end').filter(pk=product_id))
     return JsonResponse({'product_detail': product_detail, 'product_img': product_img, 'product_price': product_price})
-
-
