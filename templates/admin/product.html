@@ -1,0 +1,376 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Quản trị - Sản phẩm{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div class="main-header">
+        <div class="mobile-toggle" id="mobile-toggle">
+            <i class='bx bx-menu-alt-left'></i>
+        </div>
+        <div class="main-title">
+            Sản phẩm
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="row">
+            <div class="col-12 col-bot">
+                <p style="margin-bottom: 20px">
+                    {% if messages %}
+                    {% for message in messages %}
+                <div class="text-center alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}"
+                    role="alert">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+                </p>
+                <div class="box">
+                    <div style="padding: 0 20px;" class="row">
+                        <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3">
+                            <div class="button-action button-action-list">
+                                <button type="button" id="btn_ok" data-toggle="modal" data-target="#ModalAddProduct">
+                                    Thêm sản phẩm
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-1 col-md-3 col-lg-3 col-xl-3"></div>
+                        <div class="col-12 col-sm-1 col-md-2 col-lg-2 col-xl-3"></div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                            <div>
+                                <span style="font-size: 1.5rem; margin-top: 8px; position: absolute;"><i
+                                        class='bx bx-search'></i></span>
+                                <input
+                                    style="text-align: center ;width: 100%; ;font-size: 1.2rem; padding: 10px 15px 10px 30px; border: none; border-bottom: 1px solid rgba( 0,0,0, 0.3); outline: none; "
+                                    placeholder="Nhập nội dung tìm kiếm" type="search" name="" id="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <!-- ORDERS TABLE -->
+                <div class="box">
+                    <div class="box-header text-center">Tất cả sản phẩm</div>
+                    <hr>
+                    <div class="box-body overflow-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="10%">ID</th>
+                                    <th width="30%">Tên</th>
+                                    <th width="15%">Giá</th>
+                                    <th width="10%">Trạng thái</th>
+                                    <th width="10%">Lượt xem</th>
+                                    <th width="15%">Ngày tạo</th>
+                                    <th width="10%">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>{{ product.pd_id }}</td>
+                                    <td>
+                                        {#<img src="{{ MEDIA_URL }}{{ item.imagepost__link }}" alt="">#}
+                                        <span>{{ product.pd_name }}</span>
+                                    </td>
+                                    <td>{{ product.pd_price | floatformat:0 | intcomma }}₫</td>
+                                    <td>
+                                        {% if product.pd_status == '1' %}
+                                        <div class="payment-status payment-paid">
+                                            <div class="dot"></div>
+                                            <span>Hiển thị</span>
+                                        </div>
+                                        {% else %}
+                                        <div class="payment-status payment-pending">
+                                            <div class="dot"></div>
+                                            <span>Đã ẩn</span>
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ product.pd_view }}</td>
+                                    <td>{{ product.pd_date_created | date:'H:i d-m-Y' }}</td>
+                                    <td class="d-flex justify-content-around">
+                                        <a class="product_update" style="font-size: 25px" id="{{ product.pd_id }}"
+                                            data-toggle="modal" data-target="#ModalUpdateProduct" title="Chỉnh sửa">
+                                            <i class='bx bx-pencil'></i></a>
+                                        <a class="product_discount" style="font-size: 25px" id="{{ product.pd_id }}"
+                                            data-toggle="modal" data-target="#ModalUpdatePriceProduct" title="Giảm giá">
+                                            <i class='bx bx-money-withdraw'></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- END ORDERS TABLE -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<aside class="main-content add_tindang">
+    <form action="{% url 'ad_product' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal fade" id="ModalAddProduct" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm sản phẩm</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Tên sản phẩm:</p>
+                                    <input type="text" name="product_name" class="input_text" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Giá:</p>
+                                    <input type="text" name="product_price" class="input_text" required
+                                        pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Số lượng:</p>
+                                    <input type="number" name="product_quantity" class="input_text" required min="0"
+                                        max="1000">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Danh mục:</p>
+                                    <select style="color: rgba(0, 0, 0, 0.8);" name="product_category" required>
+                                        <option disabled selected>Chọn danh mục</option>
+                                        {% for category in categorys %}
+                                        <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Ẩn / Hiện sản phẩm:</p>
+                                    <label class="switch">
+                                        <input type="hidden" name="product_status" value="0">
+                                        <input type="checkbox" name="product_status" value="1" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-6 div_col_input_hinhanh">
+                                <div class="div_input_text">
+                                    <p>Hình ảnh</p>
+                                    <div>
+                                        <input type="file" name="product_images" class="input_image" multiple>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="div_input_text">
+                                    <p>Thông số:</p>
+                                    <textarea name="product_spec" id="" style="width: 100%; height: 200px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="div_input_text">
+                                    <p>Mô tả:</p>
+                                    <textarea name="product_description" id=""
+                                        style="width: 100%; height: 200px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div style="float: right;" class="button-action">
+                            <button type="reset">Nhập lại</button>
+                            <button type="submit" name="submit_add_product" id="btn_ok">Xác
+                                nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</aside>
+
+<aside class="main-content add_tindang">
+    <form action="{% url 'ad_product' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input id="product_id" type="hidden" name="product_id">
+        <div class="modal fade" id="ModalUpdateProduct" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm sản phẩm</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Tên sản phẩm:</p>
+                                    <input id="product_name" type="text" name="product_name" class="input_text"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Giá:</p>
+                                    <input id="product_price" type="text" name="product_price" class="input_text"
+                                        required pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Số lượng:</p>
+                                    <input id="product_quantity" type="number" name="product_quantity"
+                                        class="input_text" required min="0" max="1000">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Danh mục:</p>
+                                    <select id="product_category" style="color: rgba(0, 0, 0, 0.8);"
+                                        name="product_category" required>
+                                        {% for category in categorys %}
+                                        <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Ẩn / Hiện sản phẩm:</p>
+                                    <label class="switch">
+                                        <input type="hidden" name="product_status" value="0">
+                                        <input id="product_status" type="checkbox" name="product_status" value="1">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-6 div_col_input_hinhanh">
+                                <div class="div_input_text">
+                                    <p>Hình ảnh</p>
+                                    <div>
+                                        <input id="product_images" type="file" name="product_images" class="input_image"
+                                            multiple>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="div_input_text">
+                                    <p>Thông số:</p>
+                                    <textarea id="product_spec" name="product_spec"
+                                        style="width: 100%; height: 200px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="div_input_text">
+                                    <p>Mô tả:</p>
+                                    <textarea id="product_description" name="product_description"
+                                        style="width: 100%; height: 200px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <p>Hình ảnh hiện tại:</p>
+                                <div class="card-group" id="image_update_product">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div style="float: right;" class="button-action">
+                                <button type="reset">Nhập lại</button>
+                                <button type="submit" name="submit_update_product" id="btn_ok">Xác
+                                    nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </form>
+</aside>
+
+<aside class="main-content add_tindang">
+    <form action="{% url 'ad_product' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input id="product_id" type="hidden" name="product_id">
+        <div class="modal fade" id="ModalUpdatePriceProduct" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Điều chỉnh giá</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Giá hiện tại:</p>
+                                    <input id="product_price1" type="text" name="product_price1" class="input_text"
+                                        required pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Giá:</p>
+                                    <input id="product_price2" type="text" name="product_price2" class="input_text"
+                                        required pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Ngày bắt đầu:</p>
+                                    <input id="product_price_datestart" type="datetime-local"
+                                        name="product_price_datestart" class="input_text" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Ngày kết thúc:</p>
+                                    <input id="product_price_dateend" type="datetime-local" name="product_price_dateend"
+                                        class="input_text" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Kích hoạt:</p>
+                                    <label class="switch" title="Ẩn / Hiện">
+                                        <input type="hidden" name="product_price_active" value="0">
+                                        <input id="product_price_active" type="checkbox" name="product_price_active"
+                                            value="1">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div style="float: right;" class="button-action">
+                                <button type="reset">Nhập lại</button>
+                                <button type="submit" name="submit_update_product" id="btn_ok">Xác
+                                    nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </form>
+</aside>
+{% endblock %}

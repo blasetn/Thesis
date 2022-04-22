@@ -17,6 +17,7 @@ class Category(models.Model):
     category_id = models.BigAutoField(primary_key=True)
     category_name = models.CharField(max_length=250, null=True)
     category_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    category_status = models.CharField(default=0, max_length=5, null=True)
 
 
 class Product(models.Model):
@@ -28,7 +29,7 @@ class Product(models.Model):
     pd_status = models.CharField(default=0, max_length=5, null=True)
     pd_view = models.PositiveBigIntegerField(default=0)
     pd_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    sp_quantity = models.PositiveSmallIntegerField(default=0)
+    pd_quantity = models.PositiveSmallIntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
@@ -36,8 +37,8 @@ class ProductDiscount(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
     pdd_discount = models.FloatField()
     pdd_active = models.BooleanField()
-    pdd_date_start = models.DateTimeField()
-    pdd_date_end = models.DateTimeField()
+    pdd_date_start = models.DateTimeField(null=True)
+    pdd_date_end = models.DateTimeField(null=True)
 
 
 class ImageProduct(models.Model):
@@ -79,6 +80,7 @@ class Voucher(models.Model):
     voucher_exp = models.DateTimeField(null=True)
     voucher_quantity = models.PositiveSmallIntegerField(null=True)
     voucher_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    voucher_status = models.CharField(default=0, max_length=5, null=True)
 
 
 class News(models.Model):

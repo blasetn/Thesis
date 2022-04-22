@@ -47,6 +47,12 @@
         </li>
         <li>
             <a href="#">
+                <i class='bx bx-message-dots' ></i>
+                <span>Chat</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
                 <i class='bx bx-store-alt'></i>
                 <span>Đơn hàng</span>
             </a>
@@ -57,37 +63,34 @@
                 <span>Danh mục</span>
             </a>
         </li>
-        {% if request.user.is_superuser %}
-        <li class="sidebar-submenu">
-            <a href="#" class="sidebar-menu-dropdown">
-                <i class='bx bx-cake'></i>
+        <li>
+            <a href="{% url 'ad_product' %}">
+                <i class='bx bx-devices'></i>
                 <span>Sản phẩm</span>
-                <div class="dropdown-icon"></div>
             </a>
-            <ul class="sidebar-menu sidebar-menu-dropdown-content">
-                <li>
-                    <a href="{% url 'themsanpham' %}">
-                        Thêm mới
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'xemsanpham' %}">
-                        Tất cả
-                    </a>
-                </li>
-            </ul>
+        </li>
+        <li>
+            <a href="">
+                <i class='bx bx-barcode' ></i>
+                <span>Mã giảm giá</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-news' ></i>
+                <span>Tin tức</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-user-pin' ></i>
+                <span>Khách hàng</span>
+            </a>
         </li>
         <li>
             <a href="#">
                 <i class='bx bx-user-circle'></i>
                 <span>Nhân viên</span>
-            </a>
-        </li>
-        {% endif %}
-        <li>
-            <a href="#">
-                <i class='bx bx-message-dots' ></i>
-                <span>Chat</span>
             </a>
         </li>
     </ul>
