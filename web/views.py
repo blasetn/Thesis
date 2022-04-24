@@ -2,9 +2,6 @@ import os
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.core import serializers
-from regex import F
-from tomlkit import array
 
 from web.models import *
 
@@ -65,43 +62,50 @@ def search(request):
 
 # Admin
 
+def content():
+    all_category = get_all_category()
+    return locals()
 
 def admin(request):
     return render(request, 'admin/index.html')
 
+# Admin Category
+
+def get_all_category():
+    return Category.objects.all()
+
+def get_detail_category(id):
+    return Category.objects.get(pk=id)
 
 def category(request):
-    all_category = Category.objects.all()
     if 'submit_add_category' in request.POST:
         list_name_category = request.POST.getlist("name_category[]")
         category_status = request.POST['category_status']
         for item in list_name_category:
             if item:
                 Category(category_name=item,
-                         category_status=category_status).save()
+                        category_status=category_status).save()
         messages.success(request, "Thêm danh mục thành công!")
     if 'submit_update_category' in request.POST:
         category_id = request.POST["category_update_id"]
         category_name = request.POST["name_category"]
         category_status = request.POST['category_status']
-        category_obj = Category.objects.get(pk=category_id)
+        category_obj = get_detail_category(category_id)
         category_obj.category_name = category_name
         category_obj.category_status = category_status
         category_obj.save()
         messages.success(request, "Cập nhật danh mục thành công!")
-    return render(request, 'admin/category.html', {'all_category': all_category})
+    return render(request, 'admin/category.html', content())
 
-
-def get_category(request):
+def ajax_get_category(request):
     category_id = request.POST["category_id"]
     category_detail = list(Category.objects.filter(pk=category_id).values())
     return JsonResponse(category_detail, safe=False)
 
+# Admin Product
 
 def product(request):
-    all_product = list(Product.objects.values('pd_id', 'pd_name', 'pd_price', 'pd_spec', 'pd_description', 'pd_status', 'pd_quantity',
-                                              'category__category_name', 'productdiscount__pdd_discount', 'productdiscount__pdd_active', 'productdiscount__pdd_date_start', 'productdiscount__pdd_date_end', 'pd_view', 'pd_date_created'))
-    all_category = Category.objects.all()
+    all_product = Product.objects.all()
     if 'submit_add_product' in request.POST:
         pd_name = request.POST['product_name']
         pd_price = request.POST['product_price']
@@ -146,6 +150,7 @@ def product(request):
         pd_price = request.POST['product_price1']
         pdd_discount = request.POST['product_price2']
         pdd_avtive = request.POST['product_price_active']
+        pdd_time = request.POST['product_price_time_active']
         product = Product.objects.get(pk=product_id)
         product.pd_price = pd_price
         product.save()
@@ -154,17 +159,25 @@ def product(request):
             if product_discount:
                 product_discount.pdd_discount = pdd_discount
                 product_discount.pdd_active = pdd_avtive
-                if request.POST['product_price_datestart']:
-                    product_discount.pdd_date_start = request.POST['product_price_datestart']
-                if request.POST['product_price_dateend']:
-                    product_discount.pdd_date_end = request.POST['product_price_dateend']
+                if pdd_time == '0':
+                    product_discount.pdd_date_start = None
+                    product_discount.pdd_date_end = None
+                if pdd_time == '1':
+                    if request.POST['product_price_datestart']:
+                        product_discount.pdd_date_start = request.POST['product_price_datestart']
+                    else:
+                        product_discount.pdd_date_start = None
+                    if request.POST['product_price_dateend']:
+                        product_discount.pdd_date_end = request.POST['product_price_dateend']                        
+                    else:
+                        product_discount.pdd_date_end = None
                 product_discount.save()
         except:
             ProductDiscount(product=product, pdd_discount=pdd_discount, pdd_active=pdd_avtive).save()
             if request.POST['product_price_datestart'] and request.POST['product_price_dateend']:
                 ProductDiscount(pdd_date_start=request.POST['product_price_datestart'], pdd_date_end=request.POST['product_price_dateend']).save()
         messages.success(request, "Cập nhật giá sản phẩm thành công!")
-    return render(request, 'admin/product.html', {'products': all_product, 'categorys': all_category})
+    return render(request, 'admin/product.html', {'products': all_product, 'categorys': get_all_category()})
 
 
 def get_product(request):
@@ -175,3 +188,7 @@ def get_product(request):
     product_price = list(Product.objects.values('pd_id', 'pd_price', 'productdiscount__pdd_discount',
                          'productdiscount__pdd_active', 'productdiscount__pdd_date_start', 'productdiscount__pdd_date_end').filter(pk=product_id))
     return JsonResponse({'product_detail': product_detail, 'product_img': product_img, 'product_price': product_price})
+
+
+def voucher(request):
+    return render(request, 'admin/voucher.html')

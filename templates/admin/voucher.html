@@ -11,7 +11,7 @@
         <div class="mobile-toggle" id="mobile-toggle">
             <i class='bx bx-menu-alt-left'></i>
         </div>
-        <div class="main-title">Danh mục</div>
+        <div class="main-title">Mã giảm giá</div>
     </div>
     <div class="main-content add_tindang">
         <div>
@@ -33,7 +33,7 @@
                                         <div class="button-action button-action-list">
                                             <button type="button" id="btn_ok" data-toggle="modal"
                                             data-target="#ModalAddCategory">
-                                                Thêm danh mục
+                                                Thêm mã giảm giá
                                             </button>
                                         </div>
                                     </div>
@@ -44,7 +44,8 @@
                                             <span style="font-size: 1.5rem; margin-top: 8px; position: absolute;"><i
                                                     class='bx bx-search'></i></span>
                                             <input style="text-align: center ;width: 100%; ;font-size: 1.2rem; padding: 10px 15px 10px 30px; border: none; border-bottom: 1px solid rgba( 0,0,0, 0.3); outline: none; "
-                                                   placeholder="Nhập nội dung tìm kiếm" type="search" name="">
+                                                   placeholder="Nhập nội dung tìm kiếm" type="search" name="" id="">
+                                            <!-- <button style="font-size: 1.2rem; padding: 10px 15px; background-color: white; border: 1px solid rgba( 0,0,0, 0.3);" type="submit">Tìm kiếm</button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -54,14 +55,14 @@
                 </div>
                 <div class="col-12">
                     <div class="box">
-                        <div class="box-header text-center">Tất cả danh mục</div>
+                        <div class="box-header text-center">Tất cả mã giảm giá</div>
                         <hr>
                         <div class="box-body overflow-scroll">
                             <table style="min-width: auto; max-height: 800px;">
                                 <thead>
                                     <tr>
                                         <th width="10%">ID</th>
-                                        <th width="30%">Tên danh mục</th>
+                                        <th width="30%">Giá trị</th>
                                         <th width="25%">Ngày tạo</th>
                                         <th width="25%">Trạng thái</th>
                                         <th width="10%"></th>
@@ -112,9 +113,9 @@
 
 
 <aside class="main-content add_tindang">
-    <form action="{% url 'ad_category' %}" method="POST">
+    <form id="add_category_form" action="{% url 'category' %}" method="POST">
         {% csrf_token %}
-        <div class="modal fade" id="ModalAddCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+        <div class="modal fade" id="ModalVoucher" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -158,7 +159,7 @@
 
 
 <aside class="main-content add_tindang">
-    <form id="update_category_form" action="{% url 'ad_category' %}" method="POST">
+    <form id="update_category_form" action="{% url 'category' %}" method="POST">
         {% csrf_token %}
         <div class="modal fade" id="ModalUpdateCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">

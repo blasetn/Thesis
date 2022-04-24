@@ -80,13 +80,13 @@
                                     </td>
                                     <td>
                                         {% now "F d ,Y, g:i a" as now %}
-                                        {% if product.productdiscount__pdd_discount and product.productdiscount__pdd_active == 1 %}
-                                            {% if not product.productdiscount__pdd_date_start and not product.productdiscount__pdd_date_end %}
-                                                {{ product.productdiscount__pdd_discount | floatformat:0 | intcomma }}₫
+                                        {% if product.productdiscount.pdd_discount and product.productdiscount.pdd_active == 1 %}
+                                            {% if not product.productdiscount.pdd_date_start and not product.productdiscount.pdd_date_end %}
+                                                {{ product.productdiscount.pdd_discount | floatformat:0 | intcomma }}₫
                                                 <br>
                                                 <del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
-                                            {% elif product.productdiscount__pdd_date_start|date:'F d ,Y, g:i a' < now and now < product.productdiscount__pdd_date_end|date:'F d ,Y, g:i a' %}
-                                                {{ product.productdiscount__pdd_discount | floatformat:0 | intcomma }}₫
+                                            {% elif product.productdiscount.pdd_date_start|date:'F d ,Y, g:i a' < now and now < product.productdiscount.pdd_date_end|date:'F d ,Y, g:i a' %}
+                                                {{ product.productdiscount.pdd_discount | floatformat:0 | intcomma }}₫
                                                 <br>
                                                 <del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
                                             {% else %}
@@ -109,7 +109,7 @@
                                         </div>
                                         {% endif %}
                                     </td>
-                                    <td>{{ product.category__category_name }}</td>
+                                    <td>{{ product.category.category_name }}</td>
                                     <td>{{ product.pd_view }}</td>
                                     <td>{{ product.pd_date_created | date:'H:i d-m-Y' }}</td>
                                     <td>
@@ -370,7 +370,8 @@
                                 <div class="div_input_text">
                                     <p>Thời gian:</p>
                                     <label class="switch" title="Ẩn / Hiện">
-                                        <input id="product_price_time_active" class="product_price_time_active" type="checkbox">
+                                        <input name="product_price_time_active" value="0" type="hidden">
+                                        <input id="product_price_time_active" name="product_price_time_active" value="1" class="product_price_time_active" type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
