@@ -51,7 +51,7 @@ $(document).on('click', '.category_update', function (e) {
     var category_id = $(this).attr("id");
     var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
     $.ajax({
-        url: "/admin/get_category/",
+        url: "/admin/ajax_get_category/",
         method: "POST",
         data: { category_id: category_id, 'csrfmiddlewaretoken': csrf_token },
         dataType: "json",
@@ -74,7 +74,7 @@ $(document).on('click', '.product_update', function (e) {
     var product_id = $(this).attr("id");
     var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
     $.ajax({
-        url: "/admin/get_product/",
+        url: "/admin/ajax_get_product/",
         method: "POST",
         data: { product_id: product_id, 'csrfmiddlewaretoken': csrf_token },
         dataType: "json",
@@ -105,12 +105,11 @@ $(document).on('click', '.product_discount', function (e) {
     var product_id = $(this).attr("id");
     var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
     $.ajax({
-        url: "/admin/get_product/",
+        url: "/admin/ajax_get_product/",
         method: "POST",
         data: { product_id: product_id, 'csrfmiddlewaretoken': csrf_token },
         dataType: "json",
         success: function (response) {
-            console.log(response)
             $('#product_price_id').val(response['product_price'][0]['pd_id']);
             $('#product_price1').val(response['product_price'][0]['pd_price']);
             $('#product_price2').val(response['product_price'][0]['productdiscount__pdd_discount']);
@@ -124,16 +123,25 @@ $(document).on('click', '.product_discount', function (e) {
             $('#product_price_datestart').attr('max', "");
             $('#product_price_dateend').attr('min', "");
             if (response['product_price'][0]['productdiscount__pdd_date_start'] || response['product_price'][0]['productdiscount__pdd_date_end']) {
-                var date_start = new Date(response['product_price'][0]['productdiscount__pdd_date_start']).toISOString().slice(0, 19);
-                var date_end = new Date(response['product_price'][0]['productdiscount__pdd_date_end']).toISOString().slice(0, 19);
+                var date_start = response['product_price'][0]['productdiscount__pdd_date_start'];
+                var date_end = response['product_price'][0]['productdiscount__pdd_date_end'];
                 $('#product_price_time_active').attr('checked', true);
                 $('.product_price_time_start').removeClass("d-none");
                 $('.product_price_time_end').removeClass("d-none");
                 // $('#product_price_datestart').attr('max', date_end);
                 $('#product_price_dateend').attr('min', date_start);
-                $('#product_price_datestart').val(date_start);
-                $('#product_price_dateend').val(date_end);
-                console.log(date_end);
+                if(date_start == null){
+                    $('#product_price_datestart').val("");
+                }else{
+                    date_start = new Date(date_start).toISOString().slice(0, 19);
+                    $('#product_price_datestart').val(date_start);
+                }
+                if(date_end == null){
+                    $('#product_price_dateend').val("");
+                }else{
+                    date_end = new Date(date_end).toISOString().slice(0, 19);
+                    $('#product_price_dateend').val(date_end);
+                }
             } else {
                 $('#product_price_time_active').attr('checked', false);
                 $('.product_price_time_start').addClass("d-none");
@@ -150,5 +158,13 @@ $(document).on('change', '.product_price_time_active', function () {
     } else {
         $('.product_price_time_start').addClass("d-none");
         $('.product_price_time_end').addClass("d-none");
+    }
+});
+
+$(document).on('change', '.voucher_value_type', function () {
+    if (this.checked) {
+        $('.input_voucher_value').attr("max", 100);
+    } else {
+        $('.input_voucher_value').removeAttr("max");
     }
 });

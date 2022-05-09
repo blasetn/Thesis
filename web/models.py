@@ -77,10 +77,11 @@ class Voucher(models.Model):
     voucher_id = models.BigAutoField(primary_key=True)
     voucher_code = models.CharField(max_length=250)
     voucher_value = models.FloatField()
-    voucher_exp = models.DateTimeField(null=True)
-    voucher_quantity = models.PositiveSmallIntegerField(null=True)
+    voucher_date_start = models.DateTimeField(null=True)
+    voucher_date_end = models.DateTimeField(null=True)
+    voucher_quantity = models.PositiveSmallIntegerField(null=True, default=None)
     voucher_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    voucher_status = models.CharField(default=0, max_length=5, null=True)
+    voucher_active = models.CharField(default=0, max_length=5, null=True)
 
 
 class News(models.Model):

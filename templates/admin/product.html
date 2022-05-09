@@ -71,7 +71,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for product in products %}
+                                {% for product in all_product %}
                                 <tr>
                                     <td>{{ product.pd_id }}</td>
                                     <td>
@@ -83,18 +83,30 @@
                                         {% if product.productdiscount.pdd_discount and product.productdiscount.pdd_active == 1 %}
                                             {% if not product.productdiscount.pdd_date_start and not product.productdiscount.pdd_date_end %}
                                                 {{ product.productdiscount.pdd_discount | floatformat:0 | intcomma }}₫
-                                                <br>
-                                                <del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
+                                                <br><del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
+                                            {% elif not product.productdiscount.pdd_date_start and product.productdiscount.pdd_date_end  %}
+                                                {% if now < product.productdiscount.pdd_date_end|date:'F d ,Y, g:i a' %}
+                                                    {{ product.productdiscount.pdd_discount | floatformat:0 | intcomma }}₫
+                                                    <br><del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
+                                                {%else%}
+                                                    {{ product.pd_price | floatformat:0 | intcomma }}₫
+                                                {% endif %}
+                                            {% elif product.productdiscount.pdd_date_start and not product.productdiscount.pdd_date_end  %}
+                                                {% if now > product.productdiscount.pdd_date_start|date:'F d ,Y, g:i a' %}
+                                                    {{ product.productdiscount.pdd_discount | floatformat:0 | intcomma }}₫
+                                                    <br><del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
+                                                {%else%}
+                                                    {{ product.pd_price | floatformat:0 | intcomma }}₫
+                                                {% endif %}
                                             {% elif product.productdiscount.pdd_date_start|date:'F d ,Y, g:i a' < now and now < product.productdiscount.pdd_date_end|date:'F d ,Y, g:i a' %}
                                                 {{ product.productdiscount.pdd_discount | floatformat:0 | intcomma }}₫
-                                                <br>
-                                                <del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
+                                                <br><del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
                                             {% else %}
                                                 {{ product.pd_price | floatformat:0 | intcomma }}₫
                                             {% endif %}
-                                        {% else %}
+                                        {% else  %}
                                             {{ product.pd_price | floatformat:0 | intcomma }}₫
-                                        {%endif%}
+                                        {% endif %}
                                     </td>
                                     <td>
                                         {% if product.pd_status == '1' %}
@@ -174,7 +186,7 @@
                                     <p>Danh mục:</p>
                                     <select style="color: rgba(0, 0, 0, 0.8);" name="product_category" required>
                                         <option disabled selected>Chọn danh mục</option>
-                                        {% for category in categorys %}
+                                        {% for category in all_category %}
                                         <option value="{{ category.category_id }}">{{ category.category_name }}</option>
                                         {% endfor %}
                                     </select>
@@ -268,7 +280,7 @@
                                     <p>Danh mục:</p>
                                     <select id="product_category" style="color: rgba(0, 0, 0, 0.8);"
                                         name="product_category" required>
-                                        {% for category in categorys %}
+                                        {% for category in all_category %}
                                         <option value="{{ category.category_id }}">{{ category.category_name }}</option>
                                         {% endfor %}
                                     </select>
@@ -356,7 +368,7 @@
                                         required pattern="[0-9]+">
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-6 col-sm-6">
                                 <div class="div_input_text">
                                     <p>Kích hoạt:</p>
                                     <label class="switch" title="Ẩn / Hiện">
@@ -366,7 +378,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-12 product_price_time">
+                            <div class="col-6 product_price_time">
                                 <div class="div_input_text">
                                     <p>Thời gian:</p>
                                     <label class="switch" title="Ẩn / Hiện">

@@ -1,7 +1,7 @@
 {% extends 'admin/base.html' %}
+{% load mathfilters %}
 {% load static %}
 {% load humanize %}
-
 
 {% block title %}Quản trị - Danh mục{% endblock %}
 {% block content %}
@@ -32,7 +32,7 @@
                                     <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3">
                                         <div class="button-action button-action-list">
                                             <button type="button" id="btn_ok" data-toggle="modal"
-                                            data-target="#ModalAddCategory">
+                                            data-target="#ModalVoucher">
                                                 Thêm mã giảm giá
                                             </button>
                                         </div>
@@ -62,39 +62,96 @@
                                 <thead>
                                     <tr>
                                         <th width="10%">ID</th>
-                                        <th width="30%">Giá trị</th>
+                                        <th width="20%">Mã giảm giá</th>
+                                        <th width="20%">Giá trị</th>
                                         <th width="25%">Ngày tạo</th>
-                                        <th width="25%">Trạng thái</th>
-                                        <th width="10%"></th>
+                                        <th width="20%">Trạng thái</th>
+                                        <th width="5%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for item in all_category %}
+                                    {% for item in all_voucher %}
                                     <tr>
                                         <td>
-                                            {{ item.category_id }}
+                                            {{ item.voucher_id }}
                                         </td>
                                         <td>
-                                            {{ item.category_name }}
+                                            {{ item.voucher_code }}
                                         </td>
                                         <td>
-                                            {{ item.category_date_created | date:'H:i d-m-Y' }}
+                                            {% if item.voucher_value > 1%}
+                                                {{ item.voucher_value | floatformat:0 | intcomma }}đ
+                                            {% else %}
+                                                {{ item.voucher_value|mul:100 | floatformat:0 }}%
+                                            {% endif %}
                                         </td>
                                         <td>
-                                            {% if item.category_status == '1' %}
-                                                <div class="payment-status payment-paid">
-                                                    <div class="dot"></div>
-                                                    <span>Hiển thị</span>
-                                                </div>
+                                            {{ item.voucher_date_created | date:'H:i d-m-Y' }}
+                                        </td>
+                                        <td>
+                                            {% now "F d ,Y, g:i a" as now %}
+                                            {% if item.voucher_active == '1' %}
+                                                {% if item.voucher_quantity > 0 %}
+                                                    {% if not item.voucher_date_start and not item.voucher_date_end %}
+                                                        <div class="payment-status payment-paid">
+                                                            <div class="dot"></div>
+                                                            <span>Có hiệu lực</span>
+                                                        </div>
+                                                    {% elif not item.voucher_date_start and item.voucher_date_end  %}
+                                                        {% if now < item.voucher_date_end|date:'F d ,Y, g:i a' %}
+                                                            <div class="payment-status payment-paid">
+                                                                <div class="dot"></div>
+                                                                <span>Có hiệu lực</span>
+                                                            </div>
+                                                        {%else%}
+                                                            <div class="payment-status payment-pending">
+                                                                <div class="dot"></div>
+                                                                <span>Hết hiệu lực</span>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% elif item.voucher_date_start and not item.voucher_date_end  %}
+                                                        {% if now > item.voucher_date_start|date:'F d ,Y, g:i a' %}
+                                                            <div class="payment-status payment-paid">
+                                                                <div class="dot"></div>
+                                                                <span>Có hiệu lực</span>
+                                                            </div>
+                                                        {%else%}
+                                                            <div class="payment-status payment-pending">
+                                                                <div class="dot"></div>
+                                                                <span>Chưa hiệu lực</span>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% elif item.voucher_date_start|date:'F d ,Y, g:i a' < now and now < item.voucher_date_end|date:'F d ,Y, g:i a' %}
+                                                        <div class="payment-status payment-paid">
+                                                            <div class="dot"></div>
+                                                            <span>Có hiệu lực</span>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="payment-status payment-pending">
+                                                            <div class="dot"></div>
+                                                            <span>Không hiệu lực</span>
+                                                        </div>
+                                                    {% endif %}
+                                                {% elif item.voucher_quantity == None %}
+                                                    <div class="payment-status payment-paid">
+                                                        <div class="dot"></div>
+                                                        <span>Có hiệu lực</span>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="payment-status payment-pending">
+                                                        <div class="dot"></div>
+                                                        <span>Hết lượt</span>
+                                                    </div>
+                                                {% endif %}
                                             {% else %}
                                                 <div class="payment-status payment-pending">
                                                     <div class="dot"></div>
-                                                    <span>Đã ẩn</span>
+                                                    <span>Chưa kích hoạt</span>
                                                 </div>
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a class="category_update" id="{{ item.category_id }}"
+                                            <a class="category_update" id="{{ item.voucher_id }}"
                                                 style="font-size: 25px" data-toggle="modal"
                                                 data-target="#ModalUpdateCategory">
                                                 <i class='bx bx-edit'></i></a>
@@ -111,55 +168,97 @@
     </div>
 </div>
 
-
 <aside class="main-content add_tindang">
-    <form id="add_category_form" action="{% url 'category' %}" method="POST">
+    <form action="{% url 'ad_voucher' %}" method="POST">
         {% csrf_token %}
         <div class="modal fade" id="ModalVoucher" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Thêm danh mục</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm mã giảm giá</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="div_input_text" id="div_input_category">
-                            <p>
-                                Tên danh mục:
-                                <label class="switch" style="float: right;" title="Ẩn / Hiện">
-                                    <input type="hidden" name="category_status" value="0">
-                                    <input id="category_status" type="checkbox" name="category_status" value="1">
-                                    <span class="slider round"></span>
-                                </label>
-                            </p>
-                            <div class="div-option-add">
-                                <input type="text" name="name_category[]" class="input_text">
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>Mã giảm giá:</p>
+                                    <input type="text" name="voucher_code" class="input_text" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>
+                                        Giá trị:
+                                        <label class="switch" style="float: right;" title="Tắt (Trực tiếp $) / Bật (Phần trăm %)">
+                                            <input type="hidden" name="voucher_value_type" value="0">
+                                            <input id="voucher_value_type" class="voucher_value_type" type="checkbox" name="voucher_value_type" value="1">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                    <input type="number" name="voucher_value" class="input_text input_voucher_value" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>
+                                        Số lượng:
+                                    </p>
+                                    <input type="number" placeholder="Không nhập là không giới hạn" name="voucher_quantity" class="input_text">
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>Kích hoạt:</p>
+                                    <label class="switch" title="Ẩn / Hiện">
+                                        <input type="hidden" name="voucher_active" value="0">
+                                        <input id="voucher_active" type="checkbox" name="voucher_active" value="1" checked="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-4 voucher_time">
+                                <div class="div_input_text">
+                                    <p>Thời gian:</p>
+                                    <label class="switch" title="Ẩn / Hiện">
+                                        <input name="voucher_time_active" value="0" type="hidden">
+                                        <input id="product_price_time_active" name="voucher_time_active" value="1" class="product_price_time_active" type="checkbox">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 d-none product_price_time_start">
+                                <div class="div_input_text">
+                                    <p>Ngày bắt đầu:</p>
+                                    <input id="voucher_date_start" type="datetime-local" name="voucher_date_start" class="input_text">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 d-none product_price_time_end">
+                                <div class="div_input_text">
+                                    <p>Ngày kết thúc:</p>
+                                    <input id="voucher_date_end" type="datetime-local" name="voucher_date_end" class="input_text">
+                                </div>
                             </div>
                         </div>
-                        <div style="width: 100%; text-align: center;">
-                            <a type="button" style="font-size: 30px;"
-                                onclick="add_input('div_input_category','name_category[]')">+</a>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div style="float: right;" class="button-action">
-                            <button type="reset">Nhập lại</button>
-                            <button type="submit" name="submit_add_category" id="btn_ok">Xác
-                                nhận</button>
+                        <div class="modal-footer">
+                            <div style="float: right;" class="button-action">
+                                <button type="reset">Nhập lại</button>
+                                <button type="submit" name="submit_add_voucher" id="btn_ok">Xác
+                                    nhận</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </form>
 </aside>
 
 
 <aside class="main-content add_tindang">
-    <form id="update_category_form" action="{% url 'category' %}" method="POST">
+    <form id="update_category_form" action="{% url 'ad_category' %}" method="POST">
         {% csrf_token %}
         <div class="modal fade" id="ModalUpdateCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">

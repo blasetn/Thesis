@@ -22,9 +22,9 @@ urlpatterns = [
     # Admin
     path('admin/', views.admin, name='admin'),
     path('admin/category/', views.category, name='ad_category'),
-    path('admin/get_category/', views.ajax_get_category, name='get_category'),
+    path('admin/ajax_get_category/', views.ajax_get_category, name='ajax_get_category'),
     path('admin/product/', views.product, name='ad_product'),
-    path('admin/get_product/', views.get_product, name='get_product'),
-    path('admin/voucher/', views.voucher, name='voucher'),
+    path('admin/ajax_get_product/', views.ajax_get_product, name='ajax_get_product'),
+    path('admin/voucher/', views.voucher, name='ad_voucher'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
