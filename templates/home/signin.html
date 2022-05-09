@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
 {% block title %}Panda Cake - Sản phẩm{% endblock %}
@@ -76,45 +76,43 @@
             <div class="row mt-5">
                 <div class="col coldk">
                     <h3 style="text-align: center; margin-bottom: 40px; font-weight: 700;">ĐĂNG KÝ</h3>
-                    <form action="{% url 'dangky' %}" method="post">
+                    <form action="{% url 'signin' %}" method="post">
                         {% csrf_token %}
                         <div class="input-text">
                             <p>Tài khoản:</p>
-                            <input required type="text" name="dk_taikhoan">
+                            <input required type="text" name="signup_username">
                         </div>
                         <div class="input-text">
                             <p>Mật khẩu:</p>
-                            <input required type="password" name="dk_matkhau">
+                            <input required type="password" name="signup_password">
                         </div>
                         <div class="input-text">
                             <p>Nhập lại mật khẩu:</p>
-                            <input required type="password" name="dk_rematkhau">
+                            <input required type="password" name="signup_repassword">
                         </div>
                         <div class="input-text">
                             <p>Email:</p>
-                            <input required type="email" name="dk_email">
+                            <input required type="email" name="signup_email">
                         </div>
                         <div class="button-function">
-                            <button type="submit" name="dangky" class="btn btn-outline-dark btndangky">ĐĂNG
-                                KÝ
-                            </button>
+                            <button type="submit" name="signup" class="btn btn-outline-dark btndangky">ĐĂNG KÝ</button>
                         </div>
                     </form>
                 </div>
                 <div class="col coldn">
                     <h3 style="text-align: center; margin-bottom: 40px; font-weight: 700;">ĐĂNG NHẬP</h3>
-                    <form action="{% url 'dangnhap' %}" method="post">
+                    <form action="{% url 'signin' %}" method="post">
                         {% csrf_token %}
                         <div class="input-text">
                             <p>Tài khoản:</p>
-                            <input required type="text" name="dn_taikhoan">
+                            <input required type="text" name="signin_username">
                         </div>
                         <div class="input-text">
                             <p>Mật khẩu:</p>
-                            <input required type="password" name="dn_matkhau">
+                            <input required type="password" name="signin_password">
                         </div>
                         <div class="button-function">
-                            <button type="submit" name="dangnhap" class="btn btn-outline-dark btndangnhap">ĐĂNG
+                            <button type="submit" name="signin" class="btn btn-outline-dark btndangnhap">ĐĂNG
                                 NHẬP
                             </button>
                         </div>

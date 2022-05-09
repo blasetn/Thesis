@@ -151,9 +151,9 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a class="category_update" id="{{ item.voucher_id }}"
+                                            <a class="btn_voucher_update" id="{{ item.voucher_id }}"
                                                 style="font-size: 25px" data-toggle="modal"
-                                                data-target="#ModalUpdateCategory">
+                                                data-target="#ModalUpdateVoucher">
                                                 <i class='bx bx-edit'></i></a>
                                         </td>
                                     </tr>
@@ -233,13 +233,13 @@
                             <div class="col-12 col-sm-6 d-none product_price_time_start">
                                 <div class="div_input_text">
                                     <p>Ngày bắt đầu:</p>
-                                    <input id="voucher_date_start" type="datetime-local" name="voucher_date_start" class="input_text">
+                                    <input type="datetime-local" name="voucher_date_start" class="input_text">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 d-none product_price_time_end">
                                 <div class="div_input_text">
                                     <p>Ngày kết thúc:</p>
-                                    <input id="voucher_date_end" type="datetime-local" name="voucher_date_end" class="input_text">
+                                    <input type="datetime-local" name="voucher_date_end" class="input_text">
                                 </div>
                             </div>
                         </div>
@@ -258,39 +258,86 @@
 
 
 <aside class="main-content add_tindang">
-    <form id="update_category_form" action="{% url 'ad_category' %}" method="POST">
+    <form action="{% url 'ad_voucher' %}" method="POST">
         {% csrf_token %}
-        <div class="modal fade" id="ModalUpdateCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <input type="hidden" id="voucher_id" name="voucher_id" value="">
+        <div class="modal fade" id="ModalUpdateVoucher" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Sửa danh mục</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Cập nhật mã giảm giá</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="div_input_text" id="div_input_category">
-                            <p>
-                                Tên danh mục:
-                                <label class="switch" style="float: right;" title="Ẩn / Hiện">
-                                    <input type="hidden" name="category_status" value="0">
-                                    <input id="category_update_status" type="checkbox" name="category_status" value="1">
-                                    <span class="slider round"></span>
-                                </label>
-                            </p>
-                            <div class="div-option-add">
-                                <input type="hidden" name="category_update_id" id="category_update_id">
-                                <input type="text" name="name_category" id="category_update_input_name" class="input_text">
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>Mã giảm giá:</p>
+                                    <input type="text" id="voucher_code" name="voucher_code" class="input_text" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>
+                                        Giá trị:
+                                        <label class="switch" style="float: right;" title="Tắt (Trực tiếp $) / Bật (Phần trăm %)">
+                                            <input type="hidden" name="voucher_value_type" value="0">
+                                            <input id="voucher_value_type_update" class="voucher_value_type" type="checkbox" name="voucher_value_type" value="1">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </p>
+                                    <input type="number" id="voucher_value" name="voucher_value" class="input_text input_voucher_value" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>
+                                        Số lượng:
+                                    </p>
+                                    <input type="number" id="voucher_quantity" placeholder="Không nhập là không giới hạn" name="voucher_quantity" class="input_text">
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="div_input_text">
+                                    <p>Kích hoạt:</p>
+                                    <label class="switch" title="Ẩn / Hiện">
+                                        <input type="hidden" name="voucher_active" value="0">
+                                        <input id="voucher_active_update" type="checkbox" name="voucher_active" value="1" checked="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-4 voucher_time">
+                                <div class="div_input_text">
+                                    <p>Thời gian:</p>
+                                    <label class="switch" title="Ẩn / Hiện">
+                                        <input name="voucher_time_active" value="0" type="hidden">
+                                        <input id="voucher_time_active" name="voucher_time_active" value="1" class="product_price_time_active" type="checkbox">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 d-none product_price_time_start">
+                                <div class="div_input_text">
+                                    <p>Ngày bắt đầu:</p>
+                                    <input id="voucher_date_start" type="datetime-local" name="voucher_date_start" class="input_text">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 d-none product_price_time_end">
+                                <div class="div_input_text">
+                                    <p>Ngày kết thúc:</p>
+                                    <input id="voucher_date_end" type="datetime-local" name="voucher_date_end" class="input_text">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div style="float: right;" class="button-action">
-                            <button type="reset">Nhập lại</button>
-                            <button type="submit" name="submit_update_category" id="btn_ok">Xác
-                                nhận</button>
+                        <div class="modal-footer">
+                            <div style="float: right;" class="button-action">
+                                <button type="reset">Nhập lại</button>
+                                <button type="submit" name="submit_update_voucher" id="btn_ok">Xác
+                                    nhận</button>
+                            </div>
                         </div>
                     </div>
                 </div>

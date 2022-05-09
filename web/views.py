@@ -1,28 +1,103 @@
 import os
 
 from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from web.models import *
+from .decorators import *
+
+
+def context():
+    all_category = Category.objects.all()
+    all_product = Product.objects.all()
+    all_voucher = Voucher.objects.all()
+    return locals()
 
 # Home
-
-
 def home(request):
-    return render(request, 'home/index.html')
+    return render(request, 'home/index.html', context())
 
 
 def signin(request):
-    return render(request, 'home/signin.html')
-
-
-def signup(request):
-    return render(request, 'home/signup.html')
+    if 'signup' in request.POST:
+        username = request.POST['signup_username']
+        password = request.POST['signup_password']
+        repassword = request.POST['signup_repassword']
+        email = request.POST['signup_email']
+        user_check = User.objects.filter(username=username)
+        if user_check.count() < 1:
+            if password == repassword:
+                user = User.objects.create_user(username, email, password)
+                user.save()
+                user_id = User.objects.get(pk=user.id)
+                UserDetail(user=user_id).save()
+                messages.success(request, "Đăng ký thành công!")
+            else:
+                messages.error(request, "Đăng ký không thành công: Mật khẩu và nhập lại mật khẩu không khớp!")
+        else:
+            messages.error(request, "Đăng ký không thành công: Tài khoản đã tồn tại!")
+    if 'signin' in request.POST:
+        username = request.POST['signin_username']
+        password = request.POST['signin_password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+        else:
+            messages.error(request, "Đăng nhập không thành công: Sai tài khoản hoặc mật khẩu!")
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        return render(request, 'home/signin.html', context())
 
 
 def account(request):
-    return render(request, 'home/account.html')
+    all_category = Category.objects.all()
+    if request.user.is_authenticated:
+        user_detail = UserDetail.objects.get(pk=request.user.id)
+        if 'update' in request.POST:
+            user_detail.ud_fullname = request.POST['fullname']
+            user_detail.ud_sex = request.POST['sex']
+            user_detail.ud_birthdate = request.POST['birthdate']
+            user_detail.ud_phone = request.POST['phone']
+            user_detail.ud_address = request.POST['address']
+            if request.FILES.get('user_avatar', False):
+                try:
+                    os.remove(user_detail.ud_avatar.path)
+                except:
+                    pass
+                user_detail.ud_avatar = request.FILES['user_avatar']
+            user_detail.save()
+            user = User.objects.get(pk=request.user.id)
+            user.email = request.POST['email']
+            user.save()
+            messages.success(request, "Cập nhật tài khoản thành công!")
+            return redirect('account')
+        if 'changepass' in request.POST:
+            password_old = request.POST['password_old']
+            password_new = request.POST['password_new']
+            re_password_new = request.POST['re_password_new']
+            user = authenticate(request, username=request.user.username, password=password_old)
+            if user is not None:
+                if password_new == re_password_new:
+                    user.set_password(password_new)
+                    user.save()
+                    messages.success(request, "Đổi mật khẩu thành công!")
+                else:
+                    messages.error(request, "Đổi mật khẩu không thành công: Mật khẩu và nhập lại mật khẩu mới không khớp!")
+            else:
+                messages.error(request, "Đổi mật khẩu không thành công: Mật khẩu cũ không đúng!")
+            return redirect('account')
+        return render(request, 'home/account.html', locals())
+    else:
+        return redirect('signin')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
 
 
 def cart(request):
@@ -49,12 +124,16 @@ def contact(request):
     return render(request, 'home/contact.html')
 
 
-def shop(request):
-    return render(request, 'home/shop.html')
+def shop(request, id=None):
+    all_category = Category.objects.all()
+    all_product = Product.objects.all().values('pd_id', 'pd_name', 'pd_price', 'imageproduct__ip_url')
+    if id==1:
+        all_category = Category.objects.all()[:2]
+    return render(request, 'home/shop.html', locals())
 
 
 def product(request):
-    return render(request, 'home/product.html')
+    return render(request, 'home/product.html', locals())
 
 
 def search(request):
@@ -62,13 +141,6 @@ def search(request):
 
 
 # Admin
-
-def context():
-    all_category = Category.objects.all()
-    all_product = Product.objects.all()
-    all_voucher = Voucher.objects.all()
-    return locals()
-
 # @register.simple_tag
 # def check_price_product(discount, active, start, end):
 #     now = datetime.now()
@@ -130,7 +202,7 @@ def ajax_get_category(request):
 # Admin Product
 
 
-def product(request):
+def ad_product(request):
     if 'submit_add_product' in request.POST:
         pd_name = request.POST['product_name']
         pd_price = request.POST['product_price']
@@ -251,4 +323,41 @@ def voucher(request):
                             voucher_date_end=voucher_date_end, voucher_quantity=voucher_quantity, voucher_active=voucher_active)
             voucher_add.save()
             messages.success(request, "Thêm mã giảm giá thành công!")
+    if 'submit_update_voucher' in request.POST:
+        voucher_id = request.POST['voucher_id']
+        voucher_code = request.POST['voucher_code']
+        voucher_value_type = request.POST['voucher_value_type']
+        voucher_value = float(request.POST['voucher_value'])
+        voucher_quantity = request.POST['voucher_quantity']
+        voucher_active = request.POST['voucher_active']
+        voucher_time_active = request.POST['voucher_time_active']
+        voucher_date_start = request.POST['voucher_date_start']
+        voucher_date_end = request.POST['voucher_date_end']
+        voucher_update = Voucher.objects.get(pk=voucher_id)
+        voucher_update.code = voucher_code
+        if voucher_value_type == "1":
+            voucher_value /= 100.00
+        voucher_update.voucher_value = voucher_value
+        if voucher_time_active == '1':
+            if not voucher_date_start:
+                voucher_date_start = None
+            if not voucher_date_end:
+                voucher_date_end = None
+        voucher_update.voucher_date_start = voucher_date_start
+        voucher_update.voucher_date_end = voucher_date_end
+        if not voucher_quantity:
+            voucher_quantity = None
+        voucher_update.voucher_quantity = voucher_quantity
+        voucher_update.voucher_active = voucher_active
+        voucher_update.save()
+        messages.success(request, "Cập nhật mã giảm giá thành công!")
     return render(request, 'admin/voucher.html', context())
+
+
+def ajax_get_voucher(request):
+    voucher_id = request.POST["voucher_id"]
+    voucher_detail = list(Voucher.objects.filter(pk=voucher_id).values())
+    context = {
+        'voucher_detail': voucher_detail
+    }
+    return JsonResponse(context)

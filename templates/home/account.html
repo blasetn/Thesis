@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
 {% block title %}Panda Cake - Tài khoản{% endblock %}
@@ -14,7 +14,7 @@
     <div id="breadcrumb">
         <div class="container">
             <ol class="breadcrumb">
-                <li><a href="" class="not-active">Home</a></li>
+                <li><a href="{% url 'home' %}" class="not-active">Trang chủ</a></li>
                 <span class="kitu"> / </span>
                 <li class="active"><span>Tài khoản</span></li>
             </ol>
@@ -114,10 +114,10 @@
                            href="#list-home" role="tab" aria-controls="home">Thông tin tài khoản</a>
                         <a class="list-group-item list-group-item-action tab-lable" id="list-profile-list"
                            data-toggle="list"
-                           href="#list-profile" role="tab" aria-controls="profile">Cập nhật tài khoản</a>
+                           href="#list-order" role="tab" aria-controls="profile">Đơn hàng</a>
                         <a class="list-group-item list-group-item-action tab-lable" id="list-profile-list"
                            data-toggle="list"
-                           href="#list-order" role="tab" aria-controls="profile">Đơn hàng</a>
+                           href="#list-profile" role="tab" aria-controls="profile">Cập nhật tài khoản</a>
                         <a class="list-group-item list-group-item-action tab-lable" id="list-profile-list"
                            data-toggle="list"
                            href="#list-dmk" role="tab" aria-controls="profile">Đổi mật khẩu</a>
@@ -131,23 +131,26 @@
                                 <div class="col coldk">
                                     <div class="row">
                                         <div class="col-4 avatar">
-                                            <img class="d-100 w-100" src="{{ MEDIA_URL }}{{ cttk.cttk_avatar }}"
-                                                 alt="Avatar">
+                                            {% if user_detail.ud_avatar %}
+                                                <img class="d-100 w-100" src="{{ MEDIA_URL }}{{ user_detail.ud_avatar }}" alt="Avatar">
+                                            {% else %}
+                                                <img class="d-100 w-100" src="{% static 'img/avatar_user.png' %}" alt="Avatar">
+                                            {% endif %}
                                         </div>
                                         <div class="col-8 content">
                                             <div class="row">
                                                 <div class="col-7">
                                                     <div class="input-text">
-                                                        <p>Họ tên: <span>{{ cttk.cttk_hoten }}</span></p>
+                                                        <p>Họ tên: <span>{{ user_detail.ud_fullname }}</span></p>
                                                     </div>
                                                 </div>
                                                 <div class="col-5">
                                                     <div class="input-text">
                                                         <p>Giới tính:
                                                             <span>
-                                                                {% if cttk.cttk_gioitinh == 0 %}
+                                                                {% if user_detail.ud_sex == 0 %}
                                                                     Nam
-                                                                {% elif cttk.cttk_gioitinh == 1 %}
+                                                                {% elif user_detail.ud_sex == 1 %}
                                                                     Nữ
                                                                 {% else %}
                                                                 {% endif %}
@@ -157,13 +160,13 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="input-text">
-                                                        <p>Ngày sinh: <span>{{ cttk.cttk_ngaysinh|date:"d/m/Y" }}</span>
+                                                        <p>Ngày sinh: <span>{{ user_detail.ud_birthdate|date:'d-m-Y' }}</span>
                                                         </p>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="input-text">
-                                                        <p>Số điện thoại: <span>{{ cttk.cttk_sdt }}</span></p>
+                                                        <p>Số điện thoại: <span>{{ user_detail.ud_phone }}</span></p>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -173,7 +176,7 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="input-text">
-                                                        <p>Địa chỉ: <span>{{ cttk.cttk_diachi }}</span></p>
+                                                        <p>Địa chỉ: <span>{{ user_detail.ud_address }}</span></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,73 +185,18 @@
                                 </div>
                             </div>
                             <p style="text-align: right">
-                                <button onclick="window.location.href='{% url 'dangxuat' %}'"
+                                <button onclick="window.location.href='{% url 'logout' %}'"
                                         style="color: white; background-color: #f379a7; border: none; padding: 5px 10px; font-size: 20px; font-weight: 600; border-radius: 5px">
                                     Đăng xuất
                                 </button>
                             </p>
                         </div>
-                        <div class="tab-pane fade" id="list-profile" role="tabpanel"
-                             aria-labelledby="list-profile-list">
-                            <div class="row">
-                                <div class="col coldk">
-                                    <form action="{% url 'cntk' %}" method="post" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        <div class="row">
-                                            <div class="col-4 avatar input-text">
-                                                <img class="d-100 w-100" src="{{ MEDIA_URL }}{{ cttk.cttk_avatar }}"
-                                                     alt="Avatar">
-                                                <input type="file" required name="hinh" id="" style="border: none;">
-                                            </div>
-                                            <div class="col-8 content">
-                                                <div class="input-text">
-                                                    <p>Họ tên:</p>
-                                                    <input required type="text" name="hoten" value="{% if cttk.cttk_hoten != None %}{{ cttk.cttk_hoten }}{% endif %}">
-                                                </div>
-                                                <div>
-                                                    <p>Giới tính:</p>
-                                                    <input type="radio" name="gioitinh" id="nam" value="0"
-                                                           {% if cttk.cttk_gioitinh == 0 %}checked{% endif %}>
-                                                    <label class="gioitinh" for="nam">Nam</label>
-                                                    <input type="radio" name="gioitinh" id="nu" value="1"
-                                                           {% if cttk.cttk_gioitinh == 1 %}checked{% endif %}>
-                                                    <label for="nu">Nữ</label>
-                                                </div>
-                                                <div class="input-text">
-                                                    <p>Ngày sinh:</p>
-                                                    <input type="date" name="ngaysinh" id=""
-                                                           value="{{ cttk.cttk_ngaysinh|date:"Y-m-d" }}">
-                                                </div>
-                                                <div class="input-text">
-                                                    <p>Số điện thoại:</p>
-                                                    <input required type="text" name="sdt" value="{% if cttk.cttk_sdt != None %}{{ cttk.cttk_sdt }}{% endif %}">
-                                                </div>
-                                                <div class="input-text">
-                                                    <p>Email:</p>
-                                                    <input required type="text" name="email"
-                                                           value="{{ request.user.email }}">
-                                                </div>
-                                                <div class="input-text">
-                                                    <p>Địa chỉ:</p>
-                                                    <input required type="text" name="diachi" value="{% if cttk.cttk_diachi != None %}{{ cttk.cttk_diachi }}{% endif %}">
-                                                </div>
-                                                <div class="button-function">
-                                                    <button type="submit" name="dangky"
-                                                            class="btn btn-outline-dark btndangky">CẬP NHẬT
-                                                    </button>
-                                                    <button type="reset" name="dangky"
-                                                            class="btn btn-outline-dark btndangky btnnhaplai">NHẬP LẠI
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                         <div class="tab-pane fade" id="list-order" role="tabpanel"
                              aria-labelledby="list-profile-list">
                             <ul style="list-style: none; padding: 0">
+                                {% if not dh %}
+                                    <p class="text-center">Tài khoản chưa có đơn hàng nào!</p>
+                                {% else %}
                                 {% for item in dh %}
                                     <li style="margin: 5px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding: 10px 10px">
                                         <div class="row">
@@ -266,30 +214,92 @@
                                         </div>
                                     </li>
                                 {% endfor %}
+                                {% endif %}
                             </ul>
+                        </div>
+                        <div class="tab-pane fade" id="list-profile" role="tabpanel"
+                             aria-labelledby="list-profile-list">
+                            <div class="row">
+                                <div class="col coldk">
+                                    <form action="{% url 'account' %}" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-4 avatar input-text">
+                                                {% if user_detail.ud_avatar %}
+                                                    <img class="d-100 w-100" src="{{ MEDIA_URL }}{{ user_detail.ud_avatar }}" alt="Avatar">
+                                                {% else %}
+                                                    <img class="d-100 w-100" src="{% static 'img/avatar_user.png' %}" alt="Avatar">
+                                                {% endif %}
+                                                <input type="file" name="user_avatar" style="border: none;">
+                                            </div>
+                                            <div class="col-8 content">
+                                                <div class="input-text">
+                                                    <p>Họ tên:</p>
+                                                    <input required type="text" name="fullname" value="{% if user_detail.ud_fullname %}{{ user_detail.ud_fullname }}{% endif %}">
+                                                </div>
+                                                <div>
+                                                    <p>Giới tính:</p>
+                                                    <input type="radio" name="sex" id="nam" value="0"
+                                                           {% if user_detail.ud_sex == 0 %}checked{% endif %}>
+                                                    <label class="gioitinh" for="nam">Nam</label>
+                                                    <input type="radio" name="sex" id="nu" value="1"
+                                                           {% if user_detail.ud_sex == 1 %}checked{% endif %}>
+                                                    <label for="nu">Nữ</label>
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Ngày sinh:</p>
+                                                    <input type="date" name="birthdate" id=""
+                                                           value="{{ user_detail.ud_birthdate|date:'Y-m-d' }}">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Số điện thoại:</p>
+                                                    <input required type="text" name="phone" value="{% if user_detail.ud_phone %}{{ user_detail.ud_phone }}{% endif %}">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Email:</p>
+                                                    <input required type="text" name="email"
+                                                           value="{{ request.user.email }}">
+                                                </div>
+                                                <div class="input-text">
+                                                    <p>Địa chỉ:</p>
+                                                    <input required type="text" name="address" value="{% if user_detail.ud_address %}{{ user_detail.ud_address }}{% endif %}">
+                                                </div>
+                                                <div class="button-function">
+                                                    <button type="submit" name="update"
+                                                            class="btn btn-outline-dark btndangky">CẬP NHẬT
+                                                    </button>
+                                                    <button type="reset"
+                                                            class="btn btn-outline-dark btndangky btnnhaplai">NHẬP LẠI
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="list-dmk" role="tabpanel"
                              aria-labelledby="list-profile-list">
                             <div class="row">
                                 <div class="col coldk">
-                                    <form action="{% url 'dmk' %}" method="post">
+                                    <form action="{% url 'account' %}" method="post">
                                         {% csrf_token %}
                                         <div class="row">
                                             <div class="col-12 content">
                                                 <div class="input-text">
                                                     <p>Mật khẩu cũ:</p>
-                                                    <input required type="password" name="mk_cu">
+                                                    <input required type="password" name="password_old">
                                                 </div>
                                                 <div class="input-text">
                                                     <p>Mật khẩu mới:</p>
-                                                    <input required type="password" name="mk_moi">
+                                                    <input required type="password" name="password_new">
                                                 </div>
                                                 <div class="input-text">
                                                     <p>Nhập lại mật khẩu mới:</p>
-                                                    <input required type="password" name="re_mk_moi">
+                                                    <input required type="password" name="re_password_new">
                                                 </div>
                                                 <div class="button-function">
-                                                    <button type="submit" class="btn btn-outline-dark btndangky">
+                                                    <button type="submit" name="changepass" class="btn btn-outline-dark btndangky">
                                                         XÁC NHẬN
                                                     </button>
                                                     <button type="reset"

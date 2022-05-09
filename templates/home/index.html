@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
 {% block title %}Panda cake - Trang chủ{% endblock %}
@@ -44,7 +44,7 @@
                 <div class="row">
                     <!-- DEMO 1 Item-->
                     <div class="col-lg-3 mb-3 mb-lg-0">
-                        <a href="{% url 'sanpham' 1 %}">
+                        <a href="{% url 'product' %}">
                             <div class="hover hover-1 text-white rounded">
                                 <img src="{% static 'img/ngang-1.jpg' %}" alt="">
                                 <div class="hover-overlay"></div>
@@ -57,7 +57,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 mb-3 mb-lg-0">
-                        <a href="{% url 'sanpham' 2 %}">
+                        <a href="{% url 'product' %}">
                             <div class="hover hover-1 text-white rounded">
                                 <img src="{% static 'img/ngang-2.jpg' %}" alt="">
                                 <div class="hover-overlay"></div>
@@ -70,7 +70,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 mb-3 mb-lg-0">
-                        <a href="{% url 'sanpham' 3 %}">
+                        <a href="{% url 'product' %}">
                             <div class="hover hover-1 text-white rounded">
                                 <img src="{% static 'img/ngang-3.jpeg' %}" alt="">
                                 <div class="hover-overlay"></div>
@@ -84,7 +84,7 @@
                     </div>
                     <!-- DEMO 1 Item-->
                     <div class="col-lg-3">
-                        <a href="{% url 'sanpham' 4 %}">
+                        <a href="{% url 'product' %}">
                             <div class="hover hover-1 text-white rounded">
                                 <img src="{% static 'img/ngang-4.jpg' %}" alt="">
                                 <div class="hover-overlay"></div>
@@ -105,12 +105,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-3">
-                    <a href="{% url 'sanpham' 1 %}">
+                    <a href="{% url 'product' %}">
                         <div class="hover hover-1 text-white rounded" style="height: 421px !important;">
                             <img src="{% static 'img/doc-1.jpg' %}" alt="">
                             <div class="hover-overlay"></div>
                             <div class="hover-1-content px-5 py-4 section-3-nike">
-                                <a href="{% url 'sanpham' 1 %}" style="color: white;">
+                                <a href="{% url 'product' %}" style="color: white;">
                                     <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">BÁNH KEM</h3>
                                 </a>
                             </div>
@@ -160,12 +160,12 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <a href="{% url 'sanpham' 2 %}">
+                    <a href="{% url 'product' %}">
                         <div class="hover hover-1 text-white rounded" style="height: 421px !important;"><img
                                 src="{% static 'img/doc-2.jpg' %}" alt="">
                             <div class="hover-overlay"></div>
                             <div class="hover-1-content px-5 py-4 section-5-adidas">
-                                <a href="{% url 'sanpham' 2 %}" style="color: white;">
+                                <a href="{% url 'product' %}" style="color: white;">
                                     <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">CHEESE
                                     </h3>
                                 </a>
@@ -182,12 +182,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-3">
-                    <a href="{% url 'sanpham' 3 %}">
+                    <a href="{% url 'product' %}">
                         <div class="hover hover-1 text-white rounded" style="height: 421px !important;">
                             <img src="{% static 'img/doc-3.jpg' %}" alt="">
                             <div class="hover-overlay"></div>
                             <div class="hover-1-content px-5 py-4 section-3-nike">
-                                <a href="{% url 'sanpham' 3 %}" style="color: white;">
+                                <a href="{% url 'product' %}" style="color: white;">
                                     <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">MOUSSE</h3>
                                 </a>
                             </div>
@@ -237,12 +237,12 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <a href="{% url 'sanpham' 4 %}">
+                    <a href="{% url 'product' %}">
                         <div class="hover hover-1 text-white rounded" style="height: 421px !important;"><img
                                 src="{% static 'img/doc-4.jpeg' %}" alt="">
                             <div class="hover-overlay"></div>
                             <div class="hover-1-content px-5 py-4 section-5-adidas">
-                                <a href="{% url 'sanpham' 4 %}" style="color: white;">
+                                <a href="{% url 'product' %}" style="color: white;">
                                     <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">TIRAMISU
                                     </h3>
                                 </a>

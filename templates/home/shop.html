@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
 {% block title %}Panda Cake - Sản phẩm{% endblock %}
@@ -26,10 +26,10 @@
                 <div class="col-12 col-lg-3 product-left">
                     <div class="product-title category">
                         <h4>DANH MỤC</h4>
-                        <a href="{% url 'sanpham' 0 %}">Tất cả</a>
+                        <a href="{% url 'shop' %}">Tất cả</a>
                         <ul>
-                            {% for item in nav %}
-                                <li><a href="{% url 'sanpham' item.danhmuc_id %}">{{ item.danhmuc_ten }}</a></li>
+                            {% for category in all_category %}
+                                <li><a href="{% url 'shop' category.category_id %}">{{ category.category_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -94,11 +94,11 @@
 {#                    </div>#}
 {#                    <hr style="margin-top: 10px; margin-bottom: 40px;">#}
                     <div class="row product-right-mid">
-                        {% for item in sp %}
+                        {% for product in all_product %}
                             <div class="col-4">
                                 <div class="card-than">
                                     <div id="card-img">
-                                        <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.hinhsp__hinhsp_url }}"
+                                        <img class="d-block w-100" src="{{ MEDIA_URL }}{{ product.imageproduct__ip_url }}"
                                              alt="">
                                         {#                                    <div class="card-hover" id="card-hover">#}
                                         {#                                        <a href="" class="card-add"><i#}
@@ -109,10 +109,10 @@
                                     </div>
                                     <div class="card-bot">
                                         <p class="card-name"><a
-                                                href="{% url 'ctsp' item.sp_id %}">{{ item.sp_ten }}</a>
+                                                href="{% url 'product' %}">{{ product.pd_name }}</a>
                                         </p>
                                         <p class="card-price">
-                                            Giá: {{ item.sp_gia | floatformat:0 | intcomma }}đ
+                                            Giá: {{ product.pd_price | floatformat:0 | intcomma }}đ
                                         </p>
                                     </div>
                                 </div>

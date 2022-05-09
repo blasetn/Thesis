@@ -4,7 +4,7 @@ from django.db.models import Q
 
 
 class UserDetail(models.Model):
-    username = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     ud_fullname = models.CharField(max_length=250, null=True)
     ud_sex = models.BooleanField(null=True)
     ud_birthdate = models.DateField(null=True)

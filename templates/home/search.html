@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
 {% block title %}Panda Cake - Tìm kiếm{% endblock %}
@@ -24,7 +24,7 @@
     <div style="margin-top: 50px ;margin-bottom: 50px;">
         <div class="container">
             <div style="padding: 0 300px;">
-                <form action="{% url 'timkiem' %}" method="POST">
+                <form action="" method="POST">
                     {% csrf_token %}
                     <div style="display: inline-table; width: 100%; text-align: center; border-bottom: 2px solid rgba(0,0,0,0.4)">
                         <input style="

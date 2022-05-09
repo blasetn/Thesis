@@ -168,3 +168,62 @@ $(document).on('change', '.voucher_value_type', function () {
         $('.input_voucher_value').removeAttr("max");
     }
 });
+
+$(document).on('click', '.btn_voucher_update', function (e) {
+    e.preventDefault();
+    var voucher_id = $(this).attr("id");
+    var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+    $.ajax({
+        url: "/admin/ajax_get_voucher/",
+        method: "POST",
+        data: { voucher_id: voucher_id, 'csrfmiddlewaretoken': csrf_token },
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            $('#voucher_id').val(response['voucher_detail'][0]['voucher_id']);
+            $('#voucher_code').val(response['voucher_detail'][0]['voucher_code']);
+            if (response['voucher_detail'][0]['voucher_value'] > 1) {
+                $('#voucher_value_type_update').attr('checked', false);
+                $('#voucher_value').val(response['voucher_detail'][0]['voucher_value']);
+            } else {
+                $('#voucher_value_type_update').attr('checked', true);
+                $('#voucher_value').val(response['voucher_detail'][0]['voucher_value']*100);
+            }
+            $('#voucher_quantity').val(response['voucher_detail'][0]['voucher_quantity']);
+            if (response['voucher_detail'][0]['voucher_active'] == 1) {
+                $('#voucher_active_update').attr('checked', true);
+            } else {
+                $('#voucher_active_update').attr('checked', false);
+            }
+            $('#voucher_date_start').val("");
+            $('#voucher_date_end').val("");
+            $('#voucher_date_start').attr('max', "");
+            $('#voucher_date_end').attr('min', "");
+            if (response['voucher_detail'][0]['voucher_date_start'] || response['voucher_detail'][0]['voucher_date_end']) {
+                var date_start = response['voucher_detail'][0]['voucher_date_start'];
+                var date_end = response['voucher_detail'][0]['voucher_date_end'];
+                $('#voucher_time_active').attr('checked', true);
+                $('.product_price_time_start').removeClass("d-none");
+                $('.product_price_time_end').removeClass("d-none");
+                // $('#product_price_datestart').attr('max', date_end);
+                $('#voucher_date_end').attr('min', date_start);
+                if(date_start == null){
+                    $('#voucher_date_start').val("");
+                }else{
+                    date_start = new Date(date_start).toISOString().slice(0, 19);
+                    $('#voucher_date_start').val(date_start);
+                }
+                if(date_end == null){
+                    $('#voucher_date_end').val("");
+                }else{
+                    date_end = new Date(date_end).toISOString().slice(0, 19);
+                    $('#voucher_date_end').val(date_end);
+                }
+            } else {
+                $('#voucher_time_active').attr('checked', false);
+                $('.product_price_time_start').addClass("d-none");
+                $('.product_price_time_end').addClass("d-none");
+            }
+        }
+    });
+})

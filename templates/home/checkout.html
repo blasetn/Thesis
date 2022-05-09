@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
 {% load mathfilters %}
@@ -84,7 +84,7 @@
     <!--== Start Checkout Area Wrapper ==-->
     <section class="product-area shop-checkout-area account">
         <div class="container">
-            <form action="{% url 'thanhtoan' %}" method="post">
+            <form action="" method="post">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-7">
