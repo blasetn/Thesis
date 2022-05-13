@@ -84,7 +84,7 @@
     <!--== Start Checkout Area Wrapper ==-->
     <section class="product-area shop-checkout-area account">
         <div class="container">
-            <form action="" method="post">
+            <form action="{% url 'checkout' %}" method="post">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-7">
@@ -123,9 +123,9 @@
                                     <div class="your-order-product">
                                         <ul>
                                             {% for item in giohang %}
-                                                <li>{{ item.ten }} × {{ item.soluong }}
+                                                <li>{{ item.name }} × {{ item.quantity }}
                                                     <span>
-                                                        {{ item.gia | mul:item.soluong | floatformat:0 | intcomma }}đ
+                                                        {{ item.price | mul:item.quantity | floatformat:0 | intcomma }}đ
                                                     </span>
                                                 </li>
                                             {% endfor %}
@@ -156,7 +156,7 @@
                                     <div class="pay-top sin-payment">
                                         <input id="payment_method_1" class="input-radio" type="radio" value="cheque"
                                                checked="checked" name="payment_method">
-                                        <label for="payment_method_1"> Thanh toán tiền mặt </label>
+                                        <label for="payment_method_1"> Thanh toán khi nhận hàng</label>
                                     </div>
                                 </div>
                             </div>

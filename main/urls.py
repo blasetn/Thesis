@@ -18,7 +18,9 @@ urlpatterns = [
     path('home/contact/', views.contact, name='contact'),
     path('home/shop/', views.shop, name='shop'),
     path('home/shop/<int:id>/', views.shop, name='shop'),
-    path('home/product/', views.product, name='product'),
+    path('home/product/<int:id>/', views.product, name='product'),
+    path('home/action_cart/', views.action_cart, name='action_cart'),
+    path('home/order_detail/<int:id>/', views.order_detail, name='order_detail'),
     path('home/search/', views.search, name='search'),
     # Admin
     path('admin/', views.admin, name='admin'),

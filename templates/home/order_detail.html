@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
 {% load mathfilters %}
@@ -92,36 +92,36 @@
                             <div class="col coldk">
                                 <div class="input-text">
                                     <p>Họ tên:</p>
-                                    <span>{{ dh.dh_hoten }}</span>
+                                    <span>{{ dh.order_name }}</span>
                                 </div>
                                 <div class="input-text">
                                     <p>Số điện thoại:</p>
-                                    <span>{{ dh.dh_sdt }}</span>
+                                    <span>{{ dh.order_phone }}</span>
                                 </div>
                                 <div class="input-text">
                                     <p>Địa chỉ:</p>
-                                    <span>{{ dh.dh_diachi }}</span>
+                                    <span>{{ dh.order_address }}</span>
                                 </div>
                                 <div class="input-text">
                                     <p>Email:</p>
-                                    <span>{{ dh.dh_email }}</span>
+                                    <span>{{ dh.order_email }}</span>
                                 </div>
                                 <div class="input-text">
                                     <p>Ngày đặt hàng:</p>
-                                    <span>{{ dh.dh_thoigian | date:"H:i-d-m-Y" }}</span>
+                                    <span>{{ dh.order_time | date:"H:i-d-m-Y" }}</span>
                                 </div>
                                 <div class="input-text">
                                     <p>Trạng thái:</p>
                                     <span>
-                                        {% if dh.dh_trangthai == '0' %}
+                                        {% if dh.order_status == '0' %}
                                             Chưa xác nhận
-                                        {% elif dh.dh_trangthai == '1' %}
+                                        {% elif dh.order_status == '1' %}
                                             Đã hủy
-                                        {% elif dh.dh_trangthai == '2' %}
+                                        {% elif dh.order_status == '2' %}
                                             Đã xác nhận
-                                        {% elif dh.dh_trangthai == '3' %}
+                                        {% elif dh.order_status == '3' %}
                                             Đang giao hàng
-                                        {% elif dh.dh_trangthai == '4' %}
+                                        {% elif dh.order_status == '4' %}
                                             Đã hoàn thành
                                         {% endif %}
                                     </span>
@@ -141,9 +141,9 @@
                                 <div class="your-order-product">
                                     <ul>
                                         {% for item in ctdh %}
-                                            <li>{{ item.ctdh_tensp }} x {{ item.ctdh_soluong }}
+                                            <li>{{ item.od_nameproduct }} x {{ item.od_quantity }}
                                                 <span>
-                                                        {{ item.ctdh_gia | mul:item.ctdh_soluong }}đ
+                                                        {{ item.od_price | mul:item.od_quantity | floatformat:0 | intcomma }}đ
                                                     </span>
                                             </li>
                                         {% endfor %}
@@ -151,24 +151,24 @@
                                 </div>
                                 <div class="your-order-subtotal">
                                     <h3>Tổng số tiền hàng
-                                        <span>{{ dh.dh_tienhang | floatformat:0 | intcomma }}đ</span>
+                                        <span>{{ dh.order_totalprice | floatformat:0 | intcomma }}đ</span>
                                     </h3>
                                 </div>
                                 <div class="your-order-subtotal">
-                                    <h3>Ship <span>{{ dh.dh_ship | floatformat:0 | intcomma }}đ</span></h3>
+                                    <h3>Ship <span>{{ dh.order_ship | floatformat:0 | intcomma }}đ</span></h3>
                                     <h3 style="margin-top: 10px;">Giảm giá
-                                        <span>{{ dh.dh_giamgia | floatformat:0 | intcomma }}đ</span></h3>
+                                        <span>{{ dh.order_discount | floatformat:0 | intcomma }}đ</span></h3>
                                 </div>
                                 <div class="your-order-total">
                                     <h3>Tổng thanh toán
-                                        <span>{{ dh.dh_tongtien | floatformat:0 | intcomma }}đ</span>
+                                        <span>{{ dh.order_totalprice | floatformat:0 | intcomma }}đ</span>
                                     </h3>
                                 </div>
                             </div>
                             <div class="payment-method">
                                 <h3>Phương thức thanh toán</h3>
-                                <span>{% if dh.dh_thanhtoan == '0' %}Thanh toán khi nhận
-                                    hàng{% elif dh.dh_thanhtoan == '1' %}
+                                <span>{% if dh.order_status == '0' %}Thanh toán khi nhận
+                                    hàng{% elif dh.order_status == '1' %}
                                     Thanh toán online{% endif %}</span>
                             </div>
                         </div>

@@ -41,7 +41,6 @@
                                 <tr style="text-align: center">
                                     <th class="width-thumbnail"></th>
                                     <th class="width-name">Sản phẩm</th>
-                                    <th class="width-smell">Vị</th>
                                     <th class="width-price">Đơn giá</th>
                                     <th class="width-quantity">Số lượng</th>
                                     <th class="width-subtotal">Số tiền</th>
@@ -52,33 +51,32 @@
                                 {% for item in giohang %}
                                     <tr>
                                         <td class="product-thumbnail">
-                                            <a href="{% url 'ctsp' item.id %}"><img src="{{ MEDIA_URL }}{{ item.hinh }}"
+                                            <a href="{% url 'product' item.id %}"><img src="{{ MEDIA_URL }}{{ item.image }}"
                                                                                     alt="Image"></a>
                                         </td>
                                         <td class="product-name">
-                                            <h5><a href="{% url 'ctsp' item.id %}">{{ item.ten }}</a></h5>
+                                            <h5><a href="{% url 'product' item.id %}">{{ item.name }}</a></h5>
                                         </td>
-                                        <td class="product-smell">{{ item.vi }}</td>
                                         <td class="product-price"><span
-                                                class="amount">{{ item.gia | floatformat:0 | intcomma }}đ</span></td>
+                                                class="amount">{{ item.price | floatformat:0 | intcomma }}đ</span></td>
                                         <td class="cart-quality">
                                             <div class="product-details-quality">
-                                                <a type="button" href="{% url 'themspgh' item.id 1 %}"
+                                                <a type="button" href=""
                                                    style="font-size: 20px; vertical-align: top; border: 1px solid rgba(0,0,0,0.1); width: 32px; padding: 9px 0; text-align: center"><i
                                                         class='bx bx-minus'></i></a>
                                                 <input style="text-align: center" disabled type="text"
                                                        class="input-text qty text" name="quantity"
-                                                       value="{{ item.soluong }}" title="Qty"
+                                                       value="{{ item.quantity }}" title="Qty"
                                                        placeholder="">
-                                                <a type="button" href="{% url 'themspgh' item.id %}"
+                                                <a type="button" href=""
                                                    style="font-size: 20px; vertical-align: top; border: 1px solid rgba(0,0,0,0.1); width: 32px; padding: 9px 0; text-align: center"><i
                                                         class='bx bx-plus'></i></a>
                                             </div>
                                         </td>
                                         <td class="product-total">
-                                            <span>{{ item.gia | mul:item.soluong | floatformat:0 | intcomma }}đ</span>
+                                            <span>{{ item.price | mul:item.quantity | floatformat:0 | intcomma }}đ</span>
                                         </td>
-                                        <td class="product-remove"><a href="{% url 'xoaspgh' item.id %}">
+                                        <td class="product-remove"><a href="">
                                             <i class='bx bx-trash'></i></a></td>
                                     </tr>
                                 {% endfor %}
@@ -93,7 +91,7 @@
                     <div class="col-lg-3">
                         <div class="cart-shiping-update-wrapper">
                             <div class="cart-shiping-btn continure-btn">
-                                <a class="btn btn-link" href="{% url 'product' %}"><i
+                                <a class="btn btn-link" href="{% url 'shop' %}"><i
                                         class='bx bx-left-arrow-alt'></i> Trở về</a>
                             </div>
                         </div>
@@ -115,7 +113,7 @@
                     <div class="col-1"></div>
                     <div class="col-md-12 col-lg-5">
                         <div class="grand-total-wrap" style="float: right; width: 100%;">
-                            <form action="" method="get">
+                            <form action="{% url 'checkout' %}" method="get">
                                 {% csrf_token %}
                                 <div class="grand-total-content">
                                     <h3>Tổng tiền hàng <span>{{ tongtienhang | floatformat:0 | intcomma }}đ</span></h3>

@@ -57,6 +57,7 @@ def account(request):
     all_category = Category.objects.all()
     if request.user.is_authenticated:
         user_detail = UserDetail.objects.get(pk=request.user.id)
+        dh = Order.objects.filter(user=request.user.id)
         if 'update' in request.POST:
             user_detail.ud_fullname = request.POST['fullname']
             user_detail.ud_sex = request.POST['sex']
@@ -101,11 +102,20 @@ def user_logout(request):
 
 
 def cart(request):
-    return render(request, 'home/cart.html')
+    giohang = []
+    tongtienhang = tongthanhtoan = 0.0
+    ship = 30000
+    giamgia = 0
+    if "cart" in request.session:
+        giohang = request.session['cart']
+        for item in giohang:
+            tongtienhang += item.get('price') * float(item.get('quantity'))
+        tongthanhtoan = tongtienhang + ship - giamgia
+    return render(request, 'home/cart.html', locals())
 
 
-def checkout(request):
-    return render(request, 'home/checkout.html')
+# def checkout(request):
+#     return render(request, 'home/checkout.html')
 
 
 def about(request):
@@ -126,14 +136,107 @@ def contact(request):
 
 def shop(request, id=None):
     all_category = Category.objects.all()
-    all_product = Product.objects.all().values('pd_id', 'pd_name', 'pd_price', 'imageproduct__ip_url')
-    if id==1:
-        all_category = Category.objects.all()[:2]
+    all_product = Product.objects.all()
+    if id:
+        all_product = Product.objects.filter(category=id)
     return render(request, 'home/shop.html', locals())
 
 
-def product(request):
+def product(request, id=None):
+    all_category = Category.objects.all()
+    product = Product.objects.get(pk=id)
+    product_images = ImageProduct.objects.filter(product=id)
     return render(request, 'home/product.html', locals())
+
+
+def action_cart(request):
+    if 'add_cart' in request.POST:
+        pd_id = request.POST['pd_id']
+        if request.POST['quantity']:
+            quantity = request.POST['quantity']
+        else:
+            quantity = 1
+        product = Product.objects.get(pk=pd_id)
+        cart = []
+        if "cart" in request.session:
+            cart = request.session['cart']
+        new_cart = []
+        check = False
+        for item in cart:
+            id_pd_cart = item.get('id')
+            if id_pd_cart == product.pd_id:
+                check = True
+                messages.success(request, "Thêm sản phẩm thành công!")
+                item['quantity'] = int(item['quantity']) + int(quantity)
+                if item['quantity'] > product.pd_quantity:
+                    item['quantity'] = product.pd_quantity
+                    messages.error(request, "Số lượng của sản phẩm trong giỏ hàng đã bằng số lượng sản phẩm sẵn có!")
+            new_cart.append(item)
+        if check == False:
+            new_cart.append({
+                'id': product.pd_id,
+                'name': product.pd_name,
+                'price': float(product.pd_price),
+                'image': str(product.pd_img),
+                'quantity': int(quantity)
+            })
+            messages.success(request, "Thao tác thành công!")
+        request.session['cart'] = new_cart
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+def checkout(request):
+    cttk = None
+    giohang = []
+    if "cart" in request.session:
+        giohang = request.session['cart']
+    tongtienhang = ship = giamgia = tongthanhtoan = 0.0
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            id_u = request.user.id
+            cttk = UserDetail.objects.get(pk=id_u)
+        tongtienhang = request.GET['tongtienhang']
+        ship = request.GET['ship']
+        giamgia = request.GET['giamgia']
+        tongthanhtoan = request.GET['tongthanhtoan']
+        return render(request, 'home/checkout.html', locals())
+    elif request.method == 'POST':
+        if request.user.is_authenticated:
+            id_u = request.user.id
+            cttk = UserDetail.objects.get(pk=id_u)
+        hoten = request.POST['hoten']
+        sdt = request.POST['sdt']
+        diachi = request.POST['diachi']
+        email = request.POST['email']
+        tongtienhang = request.POST['tongtienhang']
+        ship = request.POST['ship']
+        giamgia = request.POST['giamgia']
+        tongthanhtoan = request.POST['tongthanhtoan']
+        dh = Order(order_name=hoten, order_phone=sdt, order_address=diachi, order_email=email, order_totalprice=tongtienhang,
+                     order_ship=ship, order_discount=giamgia, order_payment=0, order_status=0)
+        dh.save()
+        id_dh = dh.order_id
+        if request.user.is_authenticated:
+            user = User.objects.get(pk=id_u)
+            tk_dh = Order.objects.get(pk=id_dh)
+            tk_dh.user = user
+            tk_dh.save()
+        for item in giohang:
+            sp = Product.objects.get(pk=item.get('id'))
+            dh = Order.objects.get(pk=id_dh)
+            OrderDetail(od_nameproduct=item.get('name'), od_quantity=item.get('quantity'), od_price=item.get('price'), product=sp, order=dh).save()
+            sp.pd_quantity -= item.get('quantity')
+            sp.save()
+        del request.session['cart']
+        return redirect('order_detail', id=id_dh)
+    else:
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+def order_detail(request, id=None):
+    dh = Order.objects.get(pk=id)
+    ctdh = OrderDetail.objects.filter(order=id)
+    return render(request, 'home/order_detail.html', locals())
 
 
 def search(request):
@@ -186,7 +289,7 @@ def category(request):
         category_id = request.POST["category_update_id"]
         category_name = request.POST["name_category"]
         category_status = request.POST['category_status']
-        category_obj = Category.objects.get(category_id)
+        category_obj = Category.objects.get(pk=category_id)
         category_obj.category_name = category_name
         category_obj.category_status = category_status
         category_obj.save()
@@ -209,14 +312,15 @@ def ad_product(request):
         pd_spec = request.POST['product_spec']
         pd_description = request.POST['product_description']
         pd_quantity = request.POST['product_quantity']
-        pd_img = request.FILES.getlist('product_images')
+        pd_image = request.FILES['product_image']
+        pd_images = request.FILES.getlist('product_images')
         category = Category.objects.get(pk=request.POST['product_category'])
         pd_status = request.POST['product_status']
         product_add = Product(pd_name=pd_name, pd_price=pd_price, pd_spec=pd_spec, pd_description=pd_description,
-                              pd_status=pd_status, pd_quantity=pd_quantity, category=category)
+                              pd_status=pd_status, pd_quantity=pd_quantity, category=category, pd_img=pd_image)
         product_add.save()
         product_id = Product.objects.get(pk=product_add.pk)
-        for image in pd_img:
+        for image in pd_images:
             ImageProduct(ip_url=image, product=product_id).save()
         messages.success(request, "Thêm sản phẩm thành công!")
     if 'submit_update_product' in request.POST:

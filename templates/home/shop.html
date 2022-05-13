@@ -98,7 +98,7 @@
                             <div class="col-4">
                                 <div class="card-than">
                                     <div id="card-img">
-                                        <img class="d-block w-100" src="{{ MEDIA_URL }}{{ product.imageproduct__ip_url }}"
+                                        <img class="d-block w-100" src="{{ MEDIA_URL }}{{ product.pd_img }}"
                                              alt="">
                                         {#                                    <div class="card-hover" id="card-hover">#}
                                         {#                                        <a href="" class="card-add"><i#}
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="card-bot">
                                         <p class="card-name"><a
-                                                href="{% url 'product' %}">{{ product.pd_name }}</a>
+                                                href="{% url 'product' product.pd_id %}">{{ product.pd_name }}</a>
                                         </p>
                                         <p class="card-price">
                                             Giá: {{ product.pd_price | floatformat:0 | intcomma }}đ

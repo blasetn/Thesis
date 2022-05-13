@@ -201,15 +201,15 @@
                                     <li style="margin: 5px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding: 10px 10px">
                                         <div class="row">
                                             <div class="col">
-                                                <span>Mã đơn hàng: {{ item.dh_id }}</span>
+                                                <span>Mã đơn hàng: {{ item.order_id }}</span>
                                                 <br>
-                                                <span>Ngày đặt: {{ item.dh_thoigian | date:"H:i-d-m-Y" }}</span>
+                                                <span>Ngày đặt: {{ item.order_time | date:"H:i-d-m-Y" }}</span>
                                             </div>
                                             <div class="col">
-                                                Tổng thanh toán: {{ item.dh_tongtien | floatformat:0 | intcomma }}đ
+                                                Tổng thanh toán: {{ item.order_totalprice | floatformat:0 | intcomma }}đ
                                                 <br>
                                                 <a style="color: #f379a7; font-weight: 700"
-                                                   href="{% url 'tttc' item.dh_id %}">Xem chi tiết</a>
+                                                   href="{% url 'order_detail' item.order_id %}">Xem chi tiết</a>
                                             </div>
                                         </div>
                                     </li>

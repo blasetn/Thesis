@@ -30,6 +30,7 @@ class Product(models.Model):
     pd_view = models.PositiveBigIntegerField(default=0)
     pd_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
     pd_quantity = models.PositiveSmallIntegerField(default=0)
+    pd_img = models.ImageField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
@@ -49,11 +50,11 @@ class ImageProduct(models.Model):
 
 class Order(models.Model):
     order_id = models.BigAutoField(primary_key=True)
-    username = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     order_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     order_payment = models.CharField(max_length=5, default=0)
     order_status = models.CharField(max_length=5, null=True, default=0)
-    order_code_payment = models.CharField(max_length=250)
+    order_code_payment = models.CharField(max_length=250, null=True)
     order_ship = models.FloatField()
     order_voucher_code = models.CharField(max_length=250, null=True)
     order_discount = models.FloatField()
