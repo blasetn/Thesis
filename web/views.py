@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import os
 
 from django.contrib import messages
@@ -12,13 +13,16 @@ from .decorators import *
 
 def context():
     all_category = Category.objects.all()
+    all_brand = Brand.objects.all()
     all_product = Product.objects.all()
     all_voucher = Voucher.objects.all()
     return locals()
 
 # Home
 def home(request):
-    return render(request, 'home/index.html', context())
+    all_category = Category.objects.all()
+    product_new = Product.objects.all().order_by('-pd_id')[:3]
+    return render(request, 'home/index.html', locals())
 
 
 def signin(request):
@@ -109,13 +113,12 @@ def cart(request):
     if "cart" in request.session:
         giohang = request.session['cart']
         for item in giohang:
-            tongtienhang += item.get('price') * float(item.get('quantity'))
+            if(item.get('pricesale')>0 and item.get('pricesale')<=item.get('price')):
+                tongtienhang += item.get('pricesale') * float(item.get('quantity'))
+            else:
+                tongtienhang += item.get('price') * float(item.get('quantity'))
         tongthanhtoan = tongtienhang + ship - giamgia
     return render(request, 'home/cart.html', locals())
-
-
-# def checkout(request):
-#     return render(request, 'home/checkout.html')
 
 
 def about(request):
@@ -146,6 +149,7 @@ def product(request, id=None):
     all_category = Category.objects.all()
     product = Product.objects.get(pk=id)
     product_images = ImageProduct.objects.filter(product=id)
+    product_new = Product.objects.all().order_by('-pd_id')[:4]
     return render(request, 'home/product.html', locals())
 
 
@@ -173,10 +177,15 @@ def action_cart(request):
                     messages.error(request, "Số lượng của sản phẩm trong giỏ hàng đã bằng số lượng sản phẩm sẵn có!")
             new_cart.append(item)
         if check == False:
+            if product.pd_pricesale is None:
+                pricesale = NULL
+            else:
+                pricesale = float(product.pd_pricesale)
             new_cart.append({
                 'id': product.pd_id,
                 'name': product.pd_name,
                 'price': float(product.pd_price),
+                'pricesale': pricesale,
                 'image': str(product.pd_img),
                 'quantity': int(quantity)
             })
@@ -224,7 +233,7 @@ def checkout(request):
         for item in giohang:
             sp = Product.objects.get(pk=item.get('id'))
             dh = Order.objects.get(pk=id_dh)
-            OrderDetail(od_nameproduct=item.get('name'), od_quantity=item.get('quantity'), od_price=item.get('price'), product=sp, order=dh).save()
+            OrderDetail(od_nameproduct=item.get('name'), od_quantity=item.get('quantity'), od_price=item.get('price'),od_pricesale=item.get('pricesale'), product=sp, order=dh).save()
             sp.pd_quantity -= item.get('quantity')
             sp.save()
         del request.session['cart']
@@ -279,19 +288,15 @@ def admin(request):
 def category(request):
     if 'submit_add_category' in request.POST:
         list_name_category = request.POST.getlist("name_category[]")
-        category_status = request.POST['category_status']
         for item in list_name_category:
             if item:
-                Category(category_name=item,
-                         category_status=category_status).save()
+                Category(category_name=item).save()
         messages.success(request, "Thêm danh mục thành công!")
     if 'submit_update_category' in request.POST:
         category_id = request.POST["category_update_id"]
         category_name = request.POST["name_category"]
-        category_status = request.POST['category_status']
         category_obj = Category.objects.get(pk=category_id)
         category_obj.category_name = category_name
-        category_obj.category_status = category_status
         category_obj.save()
         messages.success(request, "Cập nhật danh mục thành công!")
     return render(request, 'admin/category.html', context())
@@ -302,6 +307,27 @@ def ajax_get_category(request):
     category_detail = list(Category.objects.filter(pk=category_id).values())
     return JsonResponse(category_detail, safe=False)
 
+def ad_brand(request):
+    if 'submit_add_brand' in request.POST:
+        list_name_category = request.POST.getlist("name_brand[]")
+        for item in list_name_category:
+            if item:
+                Brand(category_name=item).save()
+        messages.success(request, "Thêm thương hiệu thành công!")
+    if 'submit_update_brand' in request.POST:
+        brand_id = request.POST["brand_update_id"]
+        brand_name = request.POST["name_brand"]
+        brand_obj = Brand.objects.get(pk=brand_id)
+        brand_obj.brand_name = brand_name
+        brand_obj.save()
+        messages.success(request, "Cập nhật thương hiệu thành công!")
+    return render(request, 'admin/brand.html', context())
+
+def ajax_get_brand(request):
+    brand_id = request.POST["brand_id"]
+    brand_detail = list(Brand.objects.filter(pk=brand_id).values())
+    return JsonResponse(brand_detail, safe=False)
+
 # Admin Product
 
 
@@ -309,15 +335,20 @@ def ad_product(request):
     if 'submit_add_product' in request.POST:
         pd_name = request.POST['product_name']
         pd_price = request.POST['product_price']
+        if request.POST['product_pricesale'] == "":
+            pd_pricesale = None
+        else:
+            pd_pricesale = request.POST['product_pricesale']
         pd_spec = request.POST['product_spec']
         pd_description = request.POST['product_description']
         pd_quantity = request.POST['product_quantity']
         pd_image = request.FILES['product_image']
         pd_images = request.FILES.getlist('product_images')
         category = Category.objects.get(pk=request.POST['product_category'])
+        brand = Brand.objects.get(pk=request.POST['product_brand'])
         pd_status = request.POST['product_status']
-        product_add = Product(pd_name=pd_name, pd_price=pd_price, pd_spec=pd_spec, pd_description=pd_description,
-                              pd_status=pd_status, pd_quantity=pd_quantity, category=category, pd_img=pd_image)
+        product_add = Product(pd_name=pd_name, pd_price=pd_price, pd_pricesale=pd_pricesale, pd_spec=pd_spec, pd_description=pd_description,
+                              pd_status=pd_status, pd_quantity=pd_quantity, category=category,brand =brand, pd_img=pd_image)
         product_add.save()
         product_id = Product.objects.get(pk=product_add.pk)
         for image in pd_images:
@@ -327,14 +358,29 @@ def ad_product(request):
         product_id = request.POST['product_id']
         pd_name = request.POST['product_name']
         pd_price = request.POST['product_price']
+        if request.POST['product_pricesale'] == "":
+            pd_pricesale = None
+        else:
+            pd_pricesale = request.POST['product_pricesale']
         pd_spec = request.POST['product_spec']
         pd_description = request.POST['product_description']
         pd_quantity = request.POST['product_quantity']
         category = Category.objects.get(pk=request.POST['product_category'])
+        brand = Brand.objects.get(pk=request.POST['product_brand'])
         pd_status = request.POST['product_status']
-        Product.objects.filter(pk=product_id).update(pd_name=pd_name, pd_price=pd_price, pd_spec=pd_spec,
+        if request.FILES.get('product_image',False):
+            try:
+                product = Product.objects.get(pk=product_id)
+                os.remove(product.pd_img.path)
+            except:
+                pass
+            pd_img = request.FILES['product_image']
+            a = Product.objects.get(pk=product_id)
+            a.pd_img = pd_img
+            a.save()
+        Product.objects.filter(pk=product_id).update(pd_name=pd_name, pd_price=pd_price, pd_pricesale=pd_pricesale, pd_spec=pd_spec,
                                                      pd_description=pd_description, pd_status=pd_status,
-                                                     pd_quantity=pd_quantity, category=category)
+                                                     pd_quantity=pd_quantity, category=category, brand=brand)
         if request.FILES.getlist('product_images', False):
             product_id = Product.objects.get(pk=product_id)
             image_old = ImageProduct.objects.filter(product=product_id)
@@ -345,40 +391,40 @@ def ad_product(request):
             for image in images:
                 ImageProduct(ip_url=image, product=product_id).save()
         messages.success(request, "Cập nhật sản phẩm thành công!")
-    if 'submit_update_price_product' in request.POST:
-        product_id = request.POST['product_price_id']
-        pd_price = request.POST['product_price1']
-        pdd_discount = request.POST['product_price2']
-        pdd_avtive = request.POST['product_price_active']
-        pdd_time = request.POST['product_price_time_active']
-        product = Product.objects.get(pk=product_id)
-        product.pd_price = pd_price
-        product.save()
-        try:
-            product_discount = ProductDiscount.objects.get(pk=product)
-            if product_discount:
-                product_discount.pdd_discount = pdd_discount
-                product_discount.pdd_active = pdd_avtive
-                if pdd_time == '0':
-                    product_discount.pdd_date_start = None
-                    product_discount.pdd_date_end = None
-                if pdd_time == '1':
-                    if request.POST['product_price_datestart']:
-                        product_discount.pdd_date_start = request.POST['product_price_datestart']
-                    else:
-                        product_discount.pdd_date_start = None
-                    if request.POST['product_price_dateend']:
-                        product_discount.pdd_date_end = request.POST['product_price_dateend']
-                    else:
-                        product_discount.pdd_date_end = None
-                product_discount.save()
-        except:
-            ProductDiscount(
-                product=product, pdd_discount=pdd_discount, pdd_active=pdd_avtive).save()
-            if request.POST['product_price_datestart'] and request.POST['product_price_dateend']:
-                ProductDiscount(pdd_date_start=request.POST['product_price_datestart'],
-                                pdd_date_end=request.POST['product_price_dateend']).save()
-        messages.success(request, "Cập nhật giá sản phẩm thành công!")
+    # if 'submit_update_price_product' in request.POST:
+    #     product_id = request.POST['product_price_id']
+    #     pd_price = request.POST['product_price1']
+    #     pdd_discount = request.POST['product_price2']
+    #     pdd_avtive = request.POST['product_price_active']
+    #     pdd_time = request.POST['product_price_time_active']
+    #     product = Product.objects.get(pk=product_id)
+    #     product.pd_price = pd_price
+    #     product.save()
+    #     try:
+    #         product_discount = ProductDiscount.objects.get(pk=product)
+    #         if product_discount:
+    #             product_discount.pdd_discount = pdd_discount
+    #             product_discount.pdd_active = pdd_avtive
+    #             if pdd_time == '0':
+    #                 product_discount.pdd_date_start = None
+    #                 product_discount.pdd_date_end = None
+    #             if pdd_time == '1':
+    #                 if request.POST['product_price_datestart']:
+    #                     product_discount.pdd_date_start = request.POST['product_price_datestart']
+    #                 else:
+    #                     product_discount.pdd_date_start = None
+    #                 if request.POST['product_price_dateend']:
+    #                     product_discount.pdd_date_end = request.POST['product_price_dateend']
+    #                 else:
+    #                     product_discount.pdd_date_end = None
+    #             product_discount.save()
+    #     except:
+    #         ProductDiscount(
+    #             product=product, pdd_discount=pdd_discount, pdd_active=pdd_avtive).save()
+    #         if request.POST['product_price_datestart'] and request.POST['product_price_dateend']:
+    #             ProductDiscount(pdd_date_start=request.POST['product_price_datestart'],
+    #                             pdd_date_end=request.POST['product_price_dateend']).save()
+    #     messages.success(request, "Cập nhật giá sản phẩm thành công!")
     return render(request, 'admin/product.html', context())
 
 
@@ -387,12 +433,9 @@ def ajax_get_product(request):
     product_detail = list(Product.objects.filter(pk=product_id).values())
     product_img = list(ImageProduct.objects.filter(
         product=product_id).values())
-    product_price = list(Product.objects.filter(pk=product_id).values('pd_id', 'pd_price', 'productdiscount__pdd_discount',
-                         'productdiscount__pdd_active', 'productdiscount__pdd_date_start', 'productdiscount__pdd_date_end'))
     context = {
         'product_detail': product_detail,
-        'product_img': product_img,
-        'product_price': product_price
+        'product_img': product_img
     }
     return JsonResponse(context)
 

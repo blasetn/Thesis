@@ -3,7 +3,7 @@ a {
     color: black;
 }
 a:hover{
-    color: #f379a7;
+    color: #f36d00;
 }
 
 /* ============================== */
@@ -24,7 +24,7 @@ a:hover{
 }
 
 .header-top a:hover {
-    color: #f379a7;
+    color: #f36d00;
 }
 
 .header-top .header-info a {
@@ -123,12 +123,12 @@ a:hover{
 }
 
 .header-middle .header-align .header-align-center .header-search-box form .form-input-item input:focus {
-    border-color: #f379a7 !important;
+    border-color: #f36d00 !important;
 }
 
 .header-middle .header-align .header-align-center .header-search-box form .form-input-item .btn-src {
     border: none;
-    background-color: #f379a7;
+    background-color: #f36d00;
     border-radius: 0 22px 22px 0;
     color: #fff;
     font-size: 25px;
@@ -171,12 +171,12 @@ a:hover{
 }
 
 .header-middle .header-align .header-align-right .header-action-area button:hover {
-    color: #f379a7;
+    color: #f36d00;
 }
 
 .header-middle .header-align .header-align-right .header-action-area button .cart-count {
     border-radius: 50%;
-    background-color: #f379a7;
+    background-color: #f36d00;
     color: #fff;
     display: inline-block;
     top: -8px;
@@ -215,7 +215,7 @@ a:hover{
 }
 
 .main-menu > li:hover > a, .main-menu > li.active > a {
-    color: #f379a7 !important;
+    color: #f36d00 !important;
 }
 
 .main-menu.menu-capitalize > li > a {
@@ -275,7 +275,7 @@ a:hover{
 
     .has-submenu .submenu-nav > li a:hover,
     .has-submenu .submenu-nav > li:hover > a {
-        color: #f379a7 !important;
+        color: #f36d00 !important;
     }
 }
 
@@ -322,7 +322,7 @@ a:hover{
 
     .has-submenu .submenu-nav > li a:hover,
     .has-submenu .submenu-nav > li:hover > a {
-        color: #f379a7 !important;
+        color: #f36d00 !important;
     }
 }
 
@@ -364,15 +364,15 @@ a:hover{
 }
 
 .header-area.header-default .header-navigation-area .main-menu .has-submenu .submenu-nav > li.active > a {
-    color: #f379a7;
+    color: #f36d00;
 }
 
 .header-area.header-default .header-navigation-area .main-menu .has-submenu:hover > a {
-    color: #f379a7;
+    color: #f36d00;
 }
 
 .header-area.header-default .header-navigation-area .main-menu .has-submenu:hover > a:after {
-    color: #f379a7;
+    color: #f36d00;
 }
 
 .header-area.header-default.header-style .header-align {
@@ -400,17 +400,17 @@ a:hover{
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu > li > a:hover {
-    color: #f379a7;
+    color: #f36d00;
     text-decoration: none;
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu > li > a:hover:after {
-    color: #f379a7;
+    color: #f36d00;
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu > li > a:hover:before {
     bottom: -5px;
-    background-color: #f379a7;
+    background-color: #f36d00;
     content: "";
     cursor: pointer;
     position: absolute;
@@ -420,14 +420,14 @@ a:hover{
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu > li.active > a {
-    color: #f379a7;
+    color: #f36d00;
     text-decoration: none;
     position: relative;
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu > li.active > a:before {
     bottom: -5px;
-    background-color: #f379a7;
+    background-color: #f36d00;
     content: "";
     cursor: pointer;
     position: absolute;
@@ -437,14 +437,14 @@ a:hover{
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu .has-submenu.active > a {
-    color: #f379a7;
+    color: #f36d00;
     text-decoration: none;
     position: relative;
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu .has-submenu.active > a:before {
     bottom: -5px;
-    background-color: #f379a7;
+    background-color: #f36d00;
     content: "";
     cursor: pointer;
     position: absolute;
@@ -454,17 +454,17 @@ a:hover{
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu .has-submenu:hover > a {
-    color: #f379a7;
+    color: #f36d00;
     text-decoration: none;
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu .has-submenu:hover > a:after {
-    color: #f379a7;
+    color: #f36d00;
 }
 
 .header-area.header-default.header-style .header-navigation-area .main-menu .has-submenu:hover > a:before {
     bottom: -5px;
-    background-color: #f379a7;
+    background-color: #f36d00;
     content: "";
     cursor: pointer;
     position: absolute;
@@ -721,7 +721,7 @@ a:hover{
 
 .card-name a {
     font-size: 18px;
-    color: #F25C05;
+    color: #000;
     font-weight: 800;
 }
 
@@ -1009,7 +1009,6 @@ footer {
     color: #F25C05;
     opacity: 0.7;
 }
-
 .product-right-mid .card-than {
     margin-bottom: 50px;
 }
@@ -1085,7 +1084,7 @@ footer {
 }
 
 .product-actions-wrapper .form-group label {
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 600;
 }
 
@@ -1122,12 +1121,12 @@ footer {
 
 .product-meta .product-category span,
 .product-meta .product-tags span {
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .product-meta .product-category a,
 .product-meta .product-tags a {
-    font-size: 12px;
+    font-size: 15px;
     color: black;
     font-weight: 700;
 }
@@ -1316,7 +1315,7 @@ footer {
 .cart-table-wrap .cart-table table tbody > tr td.product-price span, .cart-table-wrap .cart-table table tbody > tr td.product-total span {
     font-size: 16px;
     font-weight: 600;
-    color: #f379a7;
+    color: #f36d00;
 }
 .cart-table-wrap .cart-table table tbody > tr td.cart-quality .product-details-quality input {
     border: 1px solid #e5e5e5;
@@ -1332,7 +1331,7 @@ footer {
     border-bottom: 1px solid #e5e5e5;
 }
 .cart-shiping-update-wrapper .cart-shiping-btn.continure-btn a {
-    background-color: #f379a7;
+    background-color: #f36d00;
 }
 .cart-shiping-update-wrapper .cart-shiping-btn a.btn-link {
     color: #fff;
@@ -1346,7 +1345,7 @@ footer {
 .cart-shiping-update-wrapper .cart-shiping-btn a {
     font-size: 16px;
     font-weight: 600;
-    background-color: #f379a7;
+    background-color: #f36d00;
 }
 .cart-calculate-discount-wrap h4 {
     font-weight: 700;
@@ -1450,7 +1449,7 @@ footer {
 .grand-total-wrap .grand-total-btn button {
     font-size: 18px;
     text-transform: uppercase;
-    background-color: #f379a7;
+    background-color: #f36d00;
     display: block;
     font-weight: 600;
 }
@@ -1493,7 +1492,7 @@ footer {
 }
 .your-order-area .your-order-wrap .your-order-product ul li span {
     font-size: 17px;
-    color: #f379a7;
+    color: #f36d00;
     font-weight: 500;
 }
 .your-order-area .your-order-wrap .your-order-subtotal {
@@ -1551,7 +1550,7 @@ footer {
     font-weight: 600;
     display: block;
     text-align: center;
-    background-color: #f379a7;
+    background-color: #f36d00;
     border: none;
     width: 100%;
 }

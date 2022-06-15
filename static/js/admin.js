@@ -59,11 +59,24 @@ $(document).on('click', '.category_update', function (e) {
             console.log(response);
             $('#category_update_id').val(response[0]['category_id']);
             $('#category_update_input_name').val(response[0]['category_name']);
-            if (response[0]['category_status'] == '1') {
-                $('#category_update_status').attr('checked', true);
-            } else {
-                $('#category_update_status').attr('checked', false);
-            }
+        }
+    });
+})
+
+// Get Data Brand Update
+$(document).on('click', '.brand_update', function (e) {
+    e.preventDefault();
+    var brand_id = $(this).attr("id");
+    var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+    $.ajax({
+        url: "/admin/ajax_get_brand/",
+        method: "POST",
+        data: { brand_id: brand_id, 'csrfmiddlewaretoken': csrf_token },
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            $('#category_update_id').val(response[0]['brand_id']);
+            $('#category_update_input_name').val(response[0]['brand_name']);
         }
     });
 })
@@ -82,8 +95,9 @@ $(document).on('click', '.product_update', function (e) {
             $('#product_id').val(response['product_detail'][0]['pd_id']);
             $('#product_name').val(response['product_detail'][0]['pd_name']);
             $('#product_price').val(response['product_detail'][0]['pd_price']);
+            $('#product_pricesale').val(response['product_detail'][0]['pd_pricesale']);
             $('#product_quantity').val(response['product_detail'][0]['pd_quantity']);
-            $('#product_spec').text(response['product_detail'][0]['pd_price']);
+            $('#product_spec').text(response['product_detail'][0]['pd_spec']);
             $('#product_description').text(response['product_detail'][0]['pd_description']);
             if (response['product_detail'][0]['pd_status'] == 1) {
                 $('#product_status').attr('checked', true);
@@ -91,7 +105,9 @@ $(document).on('click', '.product_update', function (e) {
                 $('#product_status').attr('checked', false);
             }
             $('#product_category option[value=' + response['product_detail'][0]['category_id'] + ']').prop("selected", true);
+            $('#product_brand option[value=' + response['product_detail'][0]['brand_id'] + ']').prop("selected", true);
             var image_data = response['product_img'];
+            $('#image_update_product').append('<div class="card"><img src="/media/' + response['product_detail'][0]['pd_img'] + '" class="card-img-top"></div>');
             image_data.forEach(element => {
                 var image_card = '<div class="card"><img src="/media/' + element['ip_url'] + '" class="card-img-top"></div>'
                 $('#image_update_product').append(image_card);

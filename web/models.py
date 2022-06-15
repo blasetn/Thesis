@@ -17,13 +17,20 @@ class Category(models.Model):
     category_id = models.BigAutoField(primary_key=True)
     category_name = models.CharField(max_length=250, null=True)
     category_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    category_status = models.CharField(default=0, max_length=5, null=True)
+    # category_status = models.CharField(default=0, max_length=5, null=True)
+
+
+class Brand(models.Model):
+    brand_id = models.BigAutoField(primary_key=True)
+    brand_name = models.CharField(max_length=250, null=True)
+    brand_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 
 class Product(models.Model):
     pd_id = models.BigAutoField(primary_key=True)
-    pd_name = models.CharField(max_length=250, null=True)
+    pd_name = models.CharField(max_length=250)
     pd_price = models.FloatField()
+    pd_pricesale = models.FloatField(null=True)
     pd_spec = models.TextField(null=True)
     pd_description = models.TextField(null=True)
     pd_status = models.CharField(default=0, max_length=5, null=True)
@@ -32,14 +39,15 @@ class Product(models.Model):
     pd_quantity = models.PositiveSmallIntegerField(default=0)
     pd_img = models.ImageField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
 
 
-class ProductDiscount(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
-    pdd_discount = models.FloatField()
-    pdd_active = models.BooleanField()
-    pdd_date_start = models.DateTimeField(null=True)
-    pdd_date_end = models.DateTimeField(null=True)
+# class ProductDiscount(models.Model):
+#     product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
+#     pdd_discount = models.FloatField()
+#     pdd_active = models.BooleanField()
+#     pdd_date_start = models.DateTimeField(null=True)
+#     pdd_date_end = models.DateTimeField(null=True)
 
 
 class ImageProduct(models.Model):
@@ -70,6 +78,7 @@ class OrderDetail(models.Model):
     od_nameproduct = models.CharField(max_length=250)
     od_quantity = models.PositiveSmallIntegerField()
     od_price = models.FloatField()
+    od_pricesale = models.FloatField(null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
@@ -85,29 +94,29 @@ class Voucher(models.Model):
     voucher_active = models.CharField(default=0, max_length=5, null=True)
 
 
-class News(models.Model):
-    news_id = models.BigAutoField(primary_key=True)
-    news_title = models.CharField(max_length=250)
-    news_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    news_img = models.ImageField()
-    news_content = models.TextField()
-    news_status = models.IntegerField(default=0)
-    news_view = models.PositiveIntegerField(default=0)
-    news_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    news_date_updated = models.DateTimeField(auto_now=True, auto_now_add=False)
-    news_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+# class News(models.Model):
+#     news_id = models.BigAutoField(primary_key=True)
+#     news_title = models.CharField(max_length=250)
+#     news_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+#     news_img = models.ImageField()
+#     news_content = models.TextField()
+#     news_status = models.IntegerField(default=0)
+#     news_view = models.PositiveIntegerField(default=0)
+#     news_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+#     news_date_updated = models.DateTimeField(auto_now=True, auto_now_add=False)
+#     news_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 
-class ImageNews(models.Model):
-    img_news = models.BigAutoField(primary_key=True)
-    img_news_url = models.ImageField()
-    news = models.ForeignKey(News, on_delete=models.CASCADE)
+# class ImageNews(models.Model):
+#     img_news = models.BigAutoField(primary_key=True)
+#     img_news_url = models.ImageField()
+#     news = models.ForeignKey(News, on_delete=models.CASCADE)
 
 
 class ThreadManager(models.Manager):
     def by_user(self, **kwargs):
         user = kwargs.get('user')
-        lookup = Q(first_person=user) | Q(second_person=user)
+        lookup = Q(second_person=True)
         qs = self.get_queryset().filter(lookup).distinct()
         return qs
 
@@ -115,8 +124,7 @@ class ThreadManager(models.Manager):
 class Thread(models.Model):
     first_person = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,
                                      related_name='thread_first_person')
-    second_person = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,
-                                      related_name='thread_second_person')
+    second_person = models.BooleanField(default=True)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

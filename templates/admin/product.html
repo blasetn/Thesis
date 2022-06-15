@@ -60,13 +60,13 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="10%">ID</th>
-                                    <th width="20%">Tên</th>
+                                    <th width="5%">ID</th>
+                                    <th width="25%">Tên</th>
                                     <th width="15%">Giá</th>
                                     <th width="10%">Trạng thái</th>
                                     <th width="10%">Danh mục</th>
+                                    <th width="15%">Thương hiệu</th>
                                     <th width="10%">Lượt xem</th>
-                                    <th width="15%">Ngày tạo</th>
                                     <th width="10%">Chức năng</th>
                                 </tr>
                             </thead>
@@ -79,7 +79,13 @@
                                         <span>{{ product.pd_name }}</span>
                                     </td>
                                     <td>
-                                        {% now "F d ,Y, g:i a" as now %}
+                                        {% if product.pd_pricesale >= 0 and product.pd_pricesale <= product.pd_price  %}
+                                            {{ product.pd_pricesale | floatformat:0 | intcomma }}đ
+                                            <br><del style="font-size: 15px;">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
+                                        {% else  %}
+                                            {{ product.pd_price | floatformat:0 | intcomma }}₫
+                                        {% endif %}
+                                        {% comment %} {% now "F d ,Y, g:i a" as now %}
                                         {% if product.productdiscount.pdd_discount and product.productdiscount.pdd_active == 1 %}
                                             {% if not product.productdiscount.pdd_date_start and not product.productdiscount.pdd_date_end %}
                                                 {{ product.productdiscount.pdd_discount | floatformat:0 | intcomma }}₫
@@ -106,7 +112,7 @@
                                             {% endif %}
                                         {% else  %}
                                             {{ product.pd_price | floatformat:0 | intcomma }}₫
-                                        {% endif %}
+                                        {% endif %} {% endcomment %}
                                     </td>
                                     <td>
                                         {% if product.pd_status == '1' %}
@@ -122,16 +128,16 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ product.category.category_name }}</td>
+                                    <td>{{ product.brand.brand_name }}</td>
                                     <td>{{ product.pd_view }}</td>
-                                    <td>{{ product.pd_date_created | date:'H:i d-m-Y' }}</td>
                                     <td>
                                         <div>
                                             <a class="product_update" style="font-size: 25px" id="{{ product.pd_id }}"
                                             data-toggle="modal" data-target="#ModalUpdateProduct" title="Chỉnh sửa">
                                             <i class='bx bx-pencil'></i></a>
-                                            <a class="product_discount" style="font-size: 25px" id="{{ product.pd_id }}"
+                                            {% comment %} <a class="product_discount" style="font-size: 25px" id="{{ product.pd_id }}"
                                             data-toggle="modal" data-target="#ModalUpdatePriceProduct" title="Giảm giá">
-                                            <i class='bx bx-money-withdraw'></i></a>
+                                            <i class='bx bx-money-withdraw'></i></a> {% endcomment %}
                                         </div>
                                     </td>
                                 </tr>
@@ -169,6 +175,13 @@
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="div_input_text">
+                                    <p>Số lượng:</p>
+                                    <input type="number" name="product_quantity" class="input_text" required min="0"
+                                    max="1000">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
                                     <p>Giá:</p>
                                     <input type="text" name="product_price" class="input_text" required
                                         pattern="[0-9]+">
@@ -176,9 +189,9 @@
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="div_input_text">
-                                    <p>Số lượng:</p>
-                                    <input type="number" name="product_quantity" class="input_text" required min="0"
-                                        max="1000">
+                                    <p>Giá khuyến mãi:</p>
+                                    <input type="text" name="product_pricesale" class="input_text"
+                                    placeholder="Có thể không nhập" value="" pattern="[0-9]+">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6">
@@ -188,6 +201,17 @@
                                         <option disabled selected>Chọn danh mục</option>
                                         {% for category in all_category %}
                                         <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    <p>Thương hiệu:</p>
+                                    <select style="color: rgba(0, 0, 0, 0.8);" name="product_brand" required>
+                                        <option disabled selected>Chọn thương hiệu</option>
+                                        {% for item in all_brand %}
+                                        <option value="{{ item.brand_id }}">{{ item.brand_name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -271,6 +295,13 @@
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="div_input_text">
+                                    <p>Giá khuyến mãi:</p>
+                                    <input id="product_pricesale" type="text" name="product_pricesale" class="input_text"
+                                    placeholder="Có thể không nhập" pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
                                     <p>Số lượng:</p>
                                     <input id="product_quantity" type="number" name="product_quantity"
                                         class="input_text" required min="0" max="1000">
@@ -289,6 +320,17 @@
                             </div>
                             <div class="col-12 col-sm-6">
                                 <div class="div_input_text">
+                                    <p>Thương hiệu:</p>
+                                    <select id="product_brand" style="color: rgba(0, 0, 0, 0.8);" name="product_brand" required>
+                                        <option disabled selected>Chọn thương hiệu</option>
+                                        {% for item in all_brand %}
+                                        <option value="{{ item.brand_id }}">{{ item.brand_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
                                     <p>Ẩn / Hiện sản phẩm:</p>
                                     <label class="switch">
                                         <input type="hidden" name="product_status" value="0">
@@ -301,8 +343,8 @@
                                 <div class="div_input_text">
                                     <p>Hình ảnh</p>
                                     <div>
-                                        <input id="product_images" type="file" name="product_images" class="input_image"
-                                            multiple>
+                                        <input type="file" name="product_image" class="input_image">
+                                        <input type="file" name="product_images" class="input_image" multiple>
                                     </div>
                                 </div>
                             </div>
@@ -339,7 +381,7 @@
     </form>
 </aside>
 
-<aside class="main-content add_tindang">
+{% comment %} <aside class="main-content add_tindang">
     <form action="{% url 'ad_product' %}" method="POST">
         {% csrf_token %}
         <input id="product_price_id" type="hidden" name="product_price_id">
@@ -413,5 +455,5 @@
                 </div>
             </div>
     </form>
-</aside>
+</aside> {% endcomment %}
 {% endblock %}

@@ -125,7 +125,11 @@
                                             {% for item in giohang %}
                                                 <li>{{ item.name }} × {{ item.quantity }}
                                                     <span>
-                                                        {{ item.price | mul:item.quantity | floatformat:0 | intcomma }}đ
+                                                        {% if item.pricesale > 0 and item.pricesale <= item.price  %}
+                                                            {{ item.pricesale | mul:item.quantity | floatformat:0 | intcomma }}đ
+                                                        {% else  %}
+                                                            {{ item.price | mul:item.quantity | floatformat:0 | intcomma }}đ
+                                                        {% endif %}
                                                     </span>
                                                 </li>
                                             {% endfor %}

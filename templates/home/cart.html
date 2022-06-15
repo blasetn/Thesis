@@ -57,8 +57,16 @@
                                         <td class="product-name">
                                             <h5><a href="{% url 'product' item.id %}">{{ item.name }}</a></h5>
                                         </td>
-                                        <td class="product-price"><span
-                                                class="amount">{{ item.price | floatformat:0 | intcomma }}đ</span></td>
+                                        <td class="product-price">
+                                            <span class="amount">
+                                                {% if item.pricesale > 0 and item.pricesale <= item.price %}
+                                                    {{ item.pricesale | floatformat:0 | intcomma }}đ
+                                                    <br><del style="font-size: 12px; color: black">{{ item.price | floatformat:0 | intcomma }}₫</del>
+                                                {% else  %}
+                                                    {{ item.price | floatformat:0 | intcomma }}₫
+                                                {% endif %}
+                                            </span>
+                                        </td>
                                         <td class="cart-quality">
                                             <div class="product-details-quality">
                                                 <a type="button" href=""
@@ -74,7 +82,13 @@
                                             </div>
                                         </td>
                                         <td class="product-total">
-                                            <span>{{ item.price | mul:item.quantity | floatformat:0 | intcomma }}đ</span>
+                                            <span>
+                                                {% if item.pricesale > 0 and item.pricesale <= item.price  %}
+                                                    {{ item.pricesale | mul:item.quantity | floatformat:0 | intcomma }}đ
+                                                {% else  %}
+                                                    {{ item.price | mul:item.quantity | floatformat:0 | intcomma }}đ
+                                                {% endif %}
+                                            </span>
                                         </td>
                                         <td class="product-remove"><a href="">
                                             <i class='bx bx-trash'></i></a></td>

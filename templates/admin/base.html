@@ -64,6 +64,12 @@
             </a>
         </li>
         <li>
+            <a href="{% url 'ad_brand' %}">
+                <i class='bx bx-crown'></i>
+                <span>Thương hiệu</span>
+            </a>
+        </li>
+        <li>
             <a href="{% url 'ad_product' %}">
                 <i class='bx bx-devices'></i>
                 <span>Sản phẩm</span>
@@ -75,12 +81,12 @@
                 <span>Mã giảm giá</span>
             </a>
         </li>
-        <li>
+        {% comment %} <li>
             <a href="#">
                 <i class='bx bx-news' ></i>
                 <span>Tin tức</span>
             </a>
-        </li>
+        </li> {% endcomment %}
         <li>
             <a href="#">
                 <i class='bx bx-user-pin' ></i>
