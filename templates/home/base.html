@@ -20,6 +20,35 @@
 
 {% include './blocks/footer.html' %}
 
+<div class="floating-chat">
+    <i class='bx bxs-message-square-dots icon-chat' style='color:#ffffff' aria-hidden="true"></i>
+    <div class="chat">
+        <div class="header">
+            <span class="title">
+                Chat
+            </span>
+            <button>
+                <i class='bx bx-chevrons-down' style='color:#ffffff' ></i>
+            </button>
+                         
+        </div>
+        <ul class="messages">
+            <li class="other">asdasdasasdasdasasdasdasasdasdasasdasdasasdasdasasdasdas</li>
+            <li class="other">Are we dogs??? 🐶</li>
+            <li class="self">no... we're human</li>
+            <li class="other">are you sure???</li>
+            <li class="self">yes.... -___-</li>
+            <li class="other">if we're not dogs.... we might be monkeys 🐵</li>
+            <li class="self">i hate you</li>
+            <li class="other">don't be so negative! here's a banana 🍌</li>
+            <li class="self">......... -___-</li>
+        </ul>
+        <div class="footer">
+            <div class="text-box" contenteditable="true" disabled="true"></div>
+            <button id="sendMessage">send</button>
+        </div>
+    </div>
+</div>
 
 <script src="{% static 'lib/jquery-3.5.1.min.js' %}"></script>
 <script src="{% static 'lib/bootstrap.js' %}"></script>
