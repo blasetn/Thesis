@@ -1305,7 +1305,7 @@ footer {
     vertical-align: middle;
 }
 .cart-table-wrap .cart-table table tbody > tr td {
-    padding: 23px;
+    padding: 20px;
 }
 .cart-table-wrap .cart-table table tbody > tr td.product-name h5 {
     font-weight: 400;
@@ -1434,9 +1434,9 @@ footer {
     border-top: 1px solid rgba(0,0,0,0.2);
     padding-top: 20px;
 }
-.grand-total-wrap .grand-total-btn button:hover {
+/* .grand-total-wrap .grand-total-btn button:hover {
     background-color: #95b3e0;
-}
+} */
 .grand-total-wrap .grand-total-btn button.btn-link {
     text-decoration: none;
     color: #fff;

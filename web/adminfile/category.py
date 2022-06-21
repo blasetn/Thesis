@@ -1,35 +1,38 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from web.models import *
 from django.http import JsonResponse
-
-
-def context():
-    all_category = Category.objects.all()
-    all_brand = Brand.objects.all()
-    all_product = Product.objects.all()
-    all_voucher = Voucher.objects.all()
-    return locals()
+from web.adminfile.context import *
 
 
 class CategoryAdmin:
     def category(request):
         if 'submit_add_category' in request.POST:
-            list_name_category = request.POST.getlist("name_category[]")
-            for item in list_name_category:
-                if item:
-                    Category(category_name=item).save()
-            messages.success(request, "Thêm danh mục thành công!")
+            try:
+                list_name_category = request.POST.getlist("name_category[]")
+                for item in list_name_category:
+                    if item:
+                        Category(category_name=item).save()
+                messages.success(request, "Thêm danh mục thành công!")
+            except:
+                messages.error(request, "Thêm không thành công!")
         if 'submit_update_category' in request.POST:
-            category_id = request.POST["category_update_id"]
-            category_name = request.POST["name_category"]
-            category_obj = Category.objects.get(pk=category_id)
-            category_obj.category_name = category_name
-            category_obj.save()
-            messages.success(request, "Cập nhật danh mục thành công!")
+            try:
+                category_id = request.POST["category_update_id"]
+                category_name = request.POST["name_category"]
+                category_obj = Category.objects.get(pk=category_id)
+                category_obj.category_name = category_name
+                category_obj.save()
+                messages.success(request, "Cập nhật danh mục thành công!")
+            except:
+                messages.error(request, "Cập nhật không thành công!")
         return render(request, 'admin/category.html', context())
 
     def ajax_get_category(request):
-        category_id = request.POST["category_id"]
-        category_detail = list(Category.objects.filter(pk=category_id).values())
-        return JsonResponse(category_detail, safe=False)
+        try:
+            category_id = request.POST["category_id"]
+            category_detail = list(Category.objects.filter(pk=category_id).values())
+            return JsonResponse(category_detail, safe=False)
+        except:
+            messages.error(request, "Lỗi không tìm thấy được mục yêu cầu!")
+            return redirect('ad_category')

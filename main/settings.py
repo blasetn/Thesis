@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
+from pickle import FALSE, TRUE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -112,13 +113,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'vi-vn'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
-USE_I18N = True
+# USE_I18N = TRUE
 
-USE_TZ = False
+# USE_TZ = TRUE
 
 
 # Static files (CSS, JavaScript, Images)

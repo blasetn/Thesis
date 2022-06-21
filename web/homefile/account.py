@@ -4,12 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from web.models import *
 import os
 
-def context():
-    all_category = Category.objects.all()
-    all_brand = Brand.objects.all()
-    all_product = Product.objects.all()
-    all_voucher = Voucher.objects.all()
-    return locals()
+from web.adminfile.context import *
 
 class AccountUser:
     def signin(request):

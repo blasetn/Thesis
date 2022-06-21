@@ -44,11 +44,12 @@
                                     <th class="width-price">Đơn giá</th>
                                     <th class="width-quantity">Số lượng</th>
                                     <th class="width-subtotal">Số tiền</th>
-                                    <th class="width-remove"></th>
+                                    <th class="width-remove"><a href="{% url 'cart_delete' %}" title="Xóa tất cả">
+                                        <i class='bx bx-trash'></i></a></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for item in giohang %}
+                                {% for item in cart %}
                                     <tr>
                                         <td class="product-thumbnail">
                                             <a href="{% url 'product' item.id %}"><img src="{{ MEDIA_URL }}{{ item.image }}"
@@ -69,14 +70,11 @@
                                         </td>
                                         <td class="cart-quality">
                                             <div class="product-details-quality">
-                                                <a type="button" href=""
+                                                <a type="button" href="{% url 'action_cart' item.id 0 %}"
                                                    style="font-size: 20px; vertical-align: top; border: 1px solid rgba(0,0,0,0.1); width: 32px; padding: 9px 0; text-align: center"><i
                                                         class='bx bx-minus'></i></a>
-                                                <input style="text-align: center" disabled type="text"
-                                                       class="input-text qty text" name="quantity"
-                                                       value="{{ item.quantity }}" title="Qty"
-                                                       placeholder="">
-                                                <a type="button" href=""
+                                                <input style="text-align: center" disabled type="text" class="input-text qty text" name="quantity"value="{{ item.quantity }}" title="Qty">
+                                                <a type="button" href="{% url 'action_cart' item.id 1 %}"
                                                    style="font-size: 20px; vertical-align: top; border: 1px solid rgba(0,0,0,0.1); width: 32px; padding: 9px 0; text-align: center"><i
                                                         class='bx bx-plus'></i></a>
                                             </div>
@@ -90,7 +88,7 @@
                                                 {% endif %}
                                             </span>
                                         </td>
-                                        <td class="product-remove"><a href="">
+                                        <td class="product-remove"><a href="{% url 'cart_delete' item.id %}">
                                             <i class='bx bx-trash'></i></a></td>
                                     </tr>
                                 {% endfor %}
@@ -130,35 +128,33 @@
                             <form action="{% url 'checkout' %}" method="get">
                                 {% csrf_token %}
                                 <div class="grand-total-content">
-                                    <h3>Tổng tiền hàng <span>{{ tongtienhang | floatformat:0 | intcomma }}đ</span></h3>
-                                    <input type="hidden" name="tongtienhang" value="{{ tongtienhang }}">
+                                    <h3>Tổng tiền hàng <span>{{ totalprice | floatformat:0 | intcomma }}đ</span></h3>
+                                    <input type="hidden" name="tongtienhang" value="{{ totalprice }}">
                                     <div class="grand-shipping-1">
                                         <p>Phí vận chuyển
                                             <span>
-                                                {% if tongthanhtoan <= 0 %}0
-                                                {% else %}{{ ship | floatformat:0 | intcomma }}
-                                                {% endif %}đ
+                                                Miễn phí
                                             </span>
                                         </p>
                                         <input type="hidden" name="ship"
-                                               value="{% if tongthanhtoan <= 0 %}0{% else %}{{ ship }}{% endif %}">
+                                               value="0">
                                     </div>
-                                    {#                                    <div class="grand-shipping-2">#}
-                                    {#                                        <p>Giảm giá<span>{{ giamgia | floatformat:0 | intcomma }}đ</span></p>#}
-                                    <input type="hidden" name="giamgia" value="{{ giamgia }}">
-                                    {#                                    </div>#}
+                                    <div class="grand-shipping-2">
+                                        <p>Giảm giá<span>{{ discount | floatformat:0 | intcomma }}đ</span></p>
+                                        <input type="hidden" name="giamgia" value="{{ discount }}">
+                                    </div>
                                     {#                                <div class="shipping-country">#}
                                     {#                                    <p>Vận chuyển đến Cần Thơ</p>#}
                                     {#                                </div>#}
                                     <div class="grand-total">
-                                        <h4>Tổng thanh toán <span>{{ tongthanhtoan | floatformat:0 | intcomma }}đ</span>
+                                        <h4>Tổng thanh toán <span>{{ totalpayment | floatformat:0 | intcomma }}đ</span>
                                         </h4>
-                                        <input type="hidden" name="tongthanhtoan" value="{{ tongthanhtoan }}">
+                                        <input type="hidden" name="tongthanhtoan" value="{{ totalpayment }}">
                                     </div>
                                 </div>
                                 <div class="grand-total-btn">
                                     <button class="btn btn-link" type="submit" href=""
-                                            {% if tongthanhtoan <= 0 %}disabled{% endif %}>THANH TOÁN
+                                            {% if totalpayment <= 0 %}disabled{% endif %}>THANH TOÁN
                                     </button>
                                 </div>
                             </form>

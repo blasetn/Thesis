@@ -1,0 +1,268 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Quản trị - Đơn hàng{% endblock %}
+
+{% block content %}
+    <div class="main">
+        <div class="main-header">
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class='bx bx-menu-alt-left'></i>
+            </div>
+            <div class="main-title">
+                Tất cả đơn hàng
+            </div>
+        </div>
+        <div class="main-content">
+            <p style="margin-bottom: 20px">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="text-center alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}"
+                            role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            </p>
+            <div class="row">
+                <div class="col-12">
+                    <div class="box">
+                        <div class="box-header button-action button-action-list text-center">
+                            <span style="margin-top: 20px;">Tất cả đơn hàng</span>
+                        </div>
+                        <hr>
+                        <div class="card-body box-body overflow-scroll">
+                            <table id="datatablesSimple" style="min-width: auto; max-height: 800px;">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">ID</th>
+                                        <th width="10%">Ngày</th>
+                                        <th width="20%">Trạng thái</th>
+                                        <th width="15%">Tổng tiền</th>
+                                        <th width="20%">Họ tên</th>
+                                        <th width="15%">Số điện thoại</th>
+                                        <th width="10%">Chức năng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in all_order %}
+                                    <tr>
+                                        <td>{{ order.order_id }}</td>
+                                        <td>
+                                            {#<img src="{{ MEDIA_URL }}{{ item.imagepost__link }}" alt="">#}
+                                            <span>{{ order.order_time | date:"H:i d-m-Y" }}</span>
+                                        </td>
+                                        <td>
+                                            {% if order.order_status == '1' %}
+                                            <div class="payment-status payment-paid">
+                                                <div class="dot"></div>
+                                                <span>Đã xác nhận</span>
+                                            </div>
+                                            {% elif order.order_status == '2' %}
+                                            <div class="payment-status payment-pending">
+                                                <div class="dot"></div>
+                                                <span>Đã hủy</span>
+                                            </div>
+                                            {% else %}
+                                            <div class="payment-status payment-warning">
+                                                <div class="dot"></div>
+                                                <span>Chưa xác nhận</span>
+                                            </div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ order.order_totalprice | floatformat:0 | intcomma }}đ
+                                        </td>
+                                        <td>{{ order.order_name }}</td>
+                                        <td>{{ order.order_phone }}</td>
+                                        <td>
+                                            <div>
+                                                {% csrf_token %}
+                                                <a class="orderdetail_view" style="font-size: 25px" id="{{ order.order_id }}"
+                                                data-toggle="modal" data-target="#ModalViewOrder" title="Xem chi tiết">
+                                                <i class='bx bx-detail'></i></a>
+                                                <a class="order_update" style="font-size: 25px" id="{{ order.order_id }}"
+                                                data-toggle="modal" data-target="#ModalUpdateOrder" title="Cập nhật trạn thái">
+                                                <i class='bx bx-money-withdraw'></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <aside class="main-content add_tindang" id="view_detail">
+        <div class="modal fade" id="ModalViewOrder" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Chi tiết đơn hàng</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Mã đơn hàng:
+                                    <p id="order_detail_id"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Thời gian:
+                                    <p id="order_detail_time"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Trạng thái:
+                                    <p id="order_detail_status"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Tài khoản:
+                                    <p id="order_detail_account"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Phương thức thanh toán:
+                                    <p id="order_detail_payment"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Mã thanh toán(Online):
+                                    <p id="order_detail_code_payment"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Voucher:
+                                    <p id="order_detail_voucher"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 div_col_input_hinhanh">
+                                <div class="div_input_text">
+                                    Tổng giảm giá:
+                                    <p id="order_detail_discount"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Tổng tiền sản phẩm:
+                                    <p id="order_detail_totalprice"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Tổng thanh toán:
+                                    <p id="order_detail_totalpayment"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Họ tên:
+                                    <p id="order_detail_name"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Số điện thoại:
+                                    <p id="order_detail_phone"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Địa chỉ:
+                                    <p id="order_detail_address"></p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="div_input_text">
+                                    Email:
+                                    <p id="order_detail_email"></p>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="pl-2 overflow-scroll">
+                                    <table style="min-width: 100%">
+                                        <thead>
+                                        <tr>
+                                            <th width="10%">ID</th>
+                                            <th width="40%">Tên sản phẩm</th>
+                                            <th width="20%">Giá</th>
+                                            <th width="20%">Giá KM</th>
+                                            <th width="10%">Số lượng</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="order_detail_products">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <aside class="main-content add_tindang">
+        <form action="{% url 'ad_order' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="order_id_update" id="order_id_update">
+            <div class="modal fade" id="ModalUpdateOrder" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa danh mục</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <div class="div_input_text">
+                                        <p>Trạng thái đơn hàng:</p>
+                                        <input type="radio" name="order_status" id="order_status_1" value="0">
+                                        <label for="order_status_1">Chưa xác nhận</label><br>
+                                        <input type="radio" name="order_status" id="order_status_2" value="1">
+                                        <label for="order_status_2">Xác nhận đơn hàng</label><br>
+                                        <input type="radio" name="order_status" id="order_status_3" value="2">
+                                        <label for="order_status_3">Hủy đơn hàng</label><br>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="div_input_text">
+                                        <p>Trạng thái thanh toán:</p>
+                                        <input type="radio" name="order_payment" id="order_payment_1" value="0">
+                                        <label for="order_payment_1">Chưa thanh toán</label><br>
+                                        <input type="radio" name="order_payment" id="order_payment_2" value="1">
+                                        <label for="order_payment_2">Đã thanh toán</label><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div style="float: right;" class="button-action">
+                                <button type="reset">Nhập lại</button>
+                                <button type="submit" name="submit_update_order" id="btn_ok">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </aside>
+{% endblock %}

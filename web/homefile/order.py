@@ -6,22 +6,39 @@ from web.vnpay.views import *
 
 class OrderUser:
     def cart(request):
-        giohang = []
-        tongtienhang = tongthanhtoan = 0.0
-        ship = 30000
-        giamgia = 0
+        cart = []
+        totalprice = totalpayment = 0.0
+        ship = 0
+        discount = 0
         if "cart" in request.session:
-            giohang = request.session['cart']
-            for item in giohang:
+            cart = request.session['cart']
+            for item in cart:
                 if(item.get('pricesale')>0 and item.get('pricesale')<=item.get('price')):
-                    tongtienhang += item.get('pricesale') * float(item.get('quantity'))
+                    totalprice += item.get('pricesale') * float(item.get('quantity'))
                 else:
-                    tongtienhang += item.get('price') * float(item.get('quantity'))
-            tongthanhtoan = tongtienhang + ship - giamgia
+                    totalprice += item.get('price') * float(item.get('quantity'))
+            totalpayment = totalprice + ship - discount
         return render(request, 'home/cart.html', locals())
     
 
-    def action_cart(request):
+    def action_cart(request, id=None, quantity=None):
+        if id is not None:
+            new_cart = []
+            if "cart" in request.session:
+                cart = request.session['cart']
+            for product in cart:
+                if int(product['id']) == id:
+                    if quantity == 0:
+                        product['quantity'] -= 1
+                    else:
+                        product['quantity'] = int(product['quantity']) + quantity
+                    if product['quantity'] <= 0:
+                        product['quantity']=1
+                    product_obj = Product.objects.get(pk=id)
+                    if product['quantity'] > product_obj.pd_quantity:
+                        product['quantity'] = product_obj.pd_quantity
+                new_cart.append(product)
+                request.session['cart'] = new_cart
         if 'add_cart' in request.POST:
             pd_id = request.POST['pd_id']
             if request.POST['quantity']:
@@ -59,8 +76,20 @@ class OrderUser:
                 })
                 messages.success(request, "Thao tác thành công!")
             request.session['cart'] = new_cart
-            return redirect(request.META.get('HTTP_REFERER'))
+        return redirect(request.META.get('HTTP_REFERER'))
 
+    def cart_delete(request, id=None):
+        if id is not None:
+            new_cart = []
+            if "cart" in request.session:
+                cart = request.session['cart']
+            for product in cart:
+                if product['id'] != id:
+                    new_cart.append(product)
+            request.session['cart'] = new_cart
+        else:
+            request.session['cart'] = []
+        return redirect(request.META.get('HTTP_REFERER'))
 
     def checkout(request):
         cttk = None
@@ -106,7 +135,7 @@ class OrderUser:
                 sp.pd_quantity -= item.get('quantity')
                 sp.save()
             # del request.session['cart']
-            tongthanhtoan = int(float(tongthanhtoan))/1000
+            tongthanhtoan = int(float(tongthanhtoan))/10000
             return payment(request, id_dh, tongthanhtoan)
         else:
             return redirect(request.META.get('HTTP_REFERER'))

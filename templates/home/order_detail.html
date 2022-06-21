@@ -116,13 +116,9 @@
                                         {% if dh.order_status == '0' %}
                                             Chưa xác nhận
                                         {% elif dh.order_status == '1' %}
-                                            Đã hủy
-                                        {% elif dh.order_status == '2' %}
                                             Đã xác nhận
-                                        {% elif dh.order_status == '3' %}
-                                            Đang giao hàng
-                                        {% elif dh.order_status == '4' %}
-                                            Đã hoàn thành
+                                        {% elif dh.order_status == '2' %}
+                                            Đã hủy
                                         {% endif %}
                                     </span>
                                 </div>
@@ -167,9 +163,8 @@
                             </div>
                             <div class="payment-method">
                                 <h3>Phương thức thanh toán</h3>
-                                <span>{% if dh.order_status == '0' %}Thanh toán khi nhận
-                                    hàng{% elif dh.order_status == '1' %}
-                                    Thanh toán online{% endif %}</span>
+                                <span>{% if dh.order_status == '0' %}COD{% elif dh.order_status == '1' %}
+                                    VNPAY{% endif %}</span>
                             </div>
                         </div>
                     </div>

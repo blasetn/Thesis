@@ -2,12 +2,21 @@ from django.shortcuts import render
 from web.models import *
 
 class ProductUser:
-    def shop(request, id=None):
+    def shop(request, category=None, brand=None):
         all_category = Category.objects.all()
+        all_brand = Brand.objects.all()
         all_product = Product.objects.all()
-        if id:
-            all_product = Product.objects.filter(category=id)
+        if category:
+            all_product = Product.objects.filter(category=category)
+        if brand:
+            all_product = Product.objects.filter(brand=brand)
         return render(request, 'home/shop.html', locals())
+
+    def shopcategory(request, category=None):
+        return ProductUser.shop(request, category=category, brand=None)
+
+    def shopbrand(request, brand=None):
+        return ProductUser.shop(request, category=None, brand=brand)
 
 
     def product(request, id=None):

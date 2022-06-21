@@ -29,7 +29,16 @@
                         <a href="{% url 'shop' %}">Tất cả</a>
                         <ul>
                             {% for category in all_category %}
-                                <li><a href="{% url 'shop' category.category_id %}">{{ category.category_name }}</a></li>
+                                <li><a href="{% url 'shopcategory' category.category_id %}">{{ category.category_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="product-title category">
+                        <h4>THƯƠNG HIỆU</h4>
+                        <a href="{% url 'shop' %}">Tất cả</a>
+                        <ul>
+                            {% for brand in all_brand %}
+                                <li><a href="{% url 'shopbrand' brand=brand.brand_id %}">{{ brand.brand_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>

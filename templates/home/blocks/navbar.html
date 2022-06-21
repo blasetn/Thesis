@@ -90,7 +90,7 @@
                                     id="chevron-down"></i></a>
                                 <ul class="submenu-nav" style="list-style: none">
                                     {% for category in all_category %}
-                                        <li><a href="{% url 'shop' category.category_id %}">{{ category.category_name }}</a>
+                                        <li><a href="{% url 'shopcategory' category.category_id %}">{{ category.category_name }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>

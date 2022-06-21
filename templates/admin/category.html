@@ -23,6 +23,7 @@
                     {% endfor %}
                 {% endif %}
             </p>
+            {% comment %}
             <div class="row">
                 <div class="col-12">
                     <div class="row">
@@ -37,27 +38,32 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-sm-1 col-md-3 col-lg-3 col-xl-3"></div>
+                                     <div class="col-6 col-sm-1 col-md-3 col-lg-3 col-xl-3"></div>
                                     <div class="col-12 col-sm-1 col-md-2 col-lg-2 col-xl-3"></div>
                                     <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-                                        <div>
+                                        <div class="dataTable-search">
                                             <span style="font-size: 1.5rem; margin-top: 8px; position: absolute;"><i
                                                     class='bx bx-search'></i></span>
-                                            <input style="text-align: center ;width: 100%; ;font-size: 1.2rem; padding: 10px 15px 10px 30px; border: none; border-bottom: 1px solid rgba( 0,0,0, 0.3); outline: none; "
+                                            <input class="dataTable-input" style="text-align: center ;width: 100%; ;font-size: 1.2rem; padding: 10px 15px 10px 30px; border: none; border-bottom: 1px solid rgba( 0,0,0, 0.3); outline: none; "
                                                    placeholder="Nhập nội dung tìm kiếm" type="search" name="">
                                         </div>
-                                    </div>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>{% endcomment %}
                 <div class="col-12">
                     <div class="box">
-                        <div class="box-header text-center">Tất cả danh mục</div>
+                        <div class="box-header button-action button-action-list d-flex justify-content-between">
+                            <span style="margin-top: 20px;">Tất cả danh mục</span>
+                            <button type="button" id="btn_ok" data-toggle="modal" data-target="#ModalAddCategory">
+                                Thêm danh mục
+                            </button>
+                        </div>
                         <hr>
-                        <div class="box-body overflow-scroll">
-                            <table style="min-width: auto; max-height: 800px;">
+                        <div class="card-body box-body overflow-scroll">
+                            <table id="datatablesSimple" style="min-width: auto; max-height: 800px;">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
