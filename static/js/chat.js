@@ -99,7 +99,7 @@ function newMessage(message, sent_by_id, thread_id) {
 
 
 $('.contact-li').on('click', function (){
-    $('.contacts .actiive').removeClass('active')
+    $('.contacts .active').removeClass('active')
     $(this).addClass('active')
 
     // message wrappers

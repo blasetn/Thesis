@@ -10,8 +10,8 @@ from web.adminfile.category import *
 from web.adminfile.brand import *
 from web.adminfile.product import *
 from web.adminfile.voucher import *
-from web.adminfile.chat import *
 from web.adminfile.order import *
+from web.adminfile.statistic import *
 
 # VNPay
 from web.vnpay.views import *

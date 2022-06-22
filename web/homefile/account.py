@@ -40,7 +40,8 @@ class AccountUser:
 
 
     def account(request):
-        all_category = Category.objects.all()
+        all_category = Category.objects.all().order_by()
+        all_brand = Brand.objects.all().order_by()
         if request.user.is_authenticated:
             user_detail = UserDetail.objects.get(pk=request.user.id)
             dh = Order.objects.filter(user=request.user.id)

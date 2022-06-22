@@ -2,9 +2,9 @@ body,
 html {
   height: 100%;
   margin: 0;
-  background: #7f7fd5;
-  background: -webkit-linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
-  background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
+  /* background: #7f7fd5; */
+  /* background: -webkit-linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5); */
+  /* background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5); */
 }
 
 .chat {
@@ -14,7 +14,9 @@ html {
 .card {
   height: 90%;
   border-radius: 15px !important;
-  background-color: rgba(0, 0, 0, 0.4) !important;
+  background: #7f7fd5;
+  background: -moz-linear-gradient(-45deg, #183850 0, #183850 25%, #192C46 50%, #22254C 75%, #22254C 100%);
+  background: -webkit-linear-gradient(-45deg, #183850 0, #183850 25%, #192C46 50%, #22254C 75%, #22254C 100%);
 }
 .contacts_body {
   padding: 0.75rem 0 !important;
@@ -156,7 +158,7 @@ html {
   margin-bottom: auto;
   margin-left: 10px;
   border-radius: 25px;
-  background-color: #82ccdd;
+  background-color: #f36d00;
   padding: 10px;
   position: relative;
   min-width: 70px;
@@ -169,7 +171,7 @@ html {
   margin-bottom: auto;
   margin-right: 10px;
   border-radius: 25px;
-  background-color: #78e08f;
+  background-color: #82ccdd;
   padding: 10px;
   position: relative;
 }

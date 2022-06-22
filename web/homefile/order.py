@@ -1,15 +1,19 @@
 from asyncio.windows_events import NULL
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from tomlkit import date
 from web.models import *
 from web.vnpay.views import *
 
 class OrderUser:
+    all_category = Category.objects.all().order_by()
+    all_brand = Brand.objects.all().order_by()
     def cart(request):
         cart = []
         totalprice = totalpayment = 0.0
         ship = 0
-        discount = 0
+        discount = OrderUser.use_voucher(request)
         if "cart" in request.session:
             cart = request.session['cart']
             for item in cart:
@@ -19,7 +23,6 @@ class OrderUser:
                     totalprice += item.get('price') * float(item.get('quantity'))
             totalpayment = totalprice + ship - discount
         return render(request, 'home/cart.html', locals())
-    
 
     def action_cart(request, id=None, quantity=None):
         if id is not None:
@@ -92,6 +95,8 @@ class OrderUser:
         return redirect(request.META.get('HTTP_REFERER'))
 
     def checkout(request):
+        all_category = Category.objects.all().order_by()
+        all_brand = Brand.objects.all().order_by()
         cttk = None
         giohang = []
         if "cart" in request.session:
@@ -134,9 +139,12 @@ class OrderUser:
                 OrderDetail(od_nameproduct=item.get('name'), od_quantity=item.get('quantity'), od_price=item.get('price'),od_pricesale=item.get('pricesale'), product=sp, order=dh).save()
                 sp.pd_quantity -= item.get('quantity')
                 sp.save()
-            # del request.session['cart']
-            tongthanhtoan = int(float(tongthanhtoan))/10000
-            return payment(request, id_dh, tongthanhtoan)
+            del request.session['cart']
+            if payment_method == '1':
+                tongthanhtoan = int(float(tongthanhtoan))/1000
+                return payment(request, id_dh, tongthanhtoan)
+            else:
+                return redirect ('order_detail', id=id_dh)
         else:
             return redirect(request.META.get('HTTP_REFERER'))
     
@@ -162,8 +170,68 @@ class OrderUser:
                     order.save()
                     return redirect ('order_detail', id=order_id)
 
-
     def order_detail(request, id=None):
         dh = Order.objects.get(pk=id)
         ctdh = OrderDetail.objects.filter(order=id)
         return render(request, 'home/order_detail.html', locals())
+
+    def use_voucher(request):
+        discount = 0.0
+        now = datetime.datetime.now()
+        if 'voucher_code' in request.GET:
+            totalprice = 0.0
+            if "cart" in request.session:
+                cart = request.session['cart']
+                for item in cart:
+                    if(item.get('pricesale')>0 and item.get('pricesale')<=item.get('price')):
+                        totalprice += item.get('pricesale') * float(item.get('quantity'))
+                    else:
+                        totalprice += item.get('price') * float(item.get('quantity'))
+            voucher_code = request.GET['voucher_code']
+            try:
+                voucher = Voucher.objects.get(voucher_code=voucher_code)
+                if voucher.voucher_active == '1':
+                    if voucher.voucher_quantity is None:
+                        if voucher.voucher_value < 1:
+                            discount = totalprice * voucher.voucher_value
+                            # messages.error(request, "Thêm sản phẩm thành công!")
+                        else:
+                            discount = totalprice - (totalprice - voucher.voucher_value)
+                        # if voucher.voucher_date_start is None and voucher.voucher_date_end is None:
+                        #     if voucher.voucher_value < 1:
+                        #         discount = totalprice * voucher.voucher_value
+                        #         # messages.error(request, "Thêm sản phẩm thành công!")
+                        #     else:
+                        #         discount = totalprice - voucher.voucher_value
+                        # elif voucher.voucher_date_start is None and voucher.voucher_date_end:
+                        #     if now < voucher.voucher_date_end:
+                        #         if voucher.voucher_value < 1:
+                        #             discount = totalprice * voucher.voucher_value
+                        #         else:
+                        #             discount = totalprice - voucher.voucher_value
+                        # elif voucher.voucher_date_end is None and voucher.voucher_date_start:
+                        #     if now > voucher.voucher_date_start:
+                        #         if voucher.voucher_value < 1:
+                        #             discount = totalprice * voucher.voucher_value
+                        #         else:
+                        #             discount = totalprice - voucher.voucher_value
+                        # else:
+                        #     if now > voucher.voucher_date_start and now < voucher.voucher_date_start:
+                        #         if voucher.voucher_value < 1:
+                        #             discount = totalprice * voucher.voucher_value
+                        #         else:
+                        #             discount = totalprice - voucher.voucher_value
+                    elif voucher.voucher_quantity > 0:
+                        if voucher.voucher_value < 1:
+                            discount = totalprice * voucher.voucher_value
+                            # messages.error(request, "Thêm sản phẩm thành công!")
+                        else:
+                            discount = totalprice - (totalprice - voucher.voucher_value)
+                    else:
+                        messages.error(request, "Mã giảm giá hết lượt!")
+                else:
+                    discount = 0
+            except:
+                discount = 0
+                messages.error(request, "Mã giảm giá không tồn tại!")
+        return discount

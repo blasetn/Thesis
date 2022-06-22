@@ -3,15 +3,19 @@ from django.shortcuts import render, redirect
 from web.models import *
 from django.http import JsonResponse
 from web.adminfile.context import *
+from django.contrib.auth.decorators import login_required
+from web.decorators import *
 
 class BrandAdmin:
+    @login_required(login_url='signin')
+    @checkadmin
     def ad_brand(request):
         if 'submit_add_brand' in request.POST:
             try:
-                list_name_category = request.POST.getlist("name_brand[]")
-                for item in list_name_category:
+                list_name_brand = request.POST.getlist("name_brand[]")
+                for item in list_name_brand:
                     if item:
-                        Brand(category_name=item).save()
+                        Brand(brand_name=item).save()
                 messages.success(request, "Thêm thương hiệu thành công!")
             except:
                 messages.error(request, "Thêm không thành công!")
@@ -27,6 +31,8 @@ class BrandAdmin:
                 messages.error(request, "Cập nhật không thành công!")
         return render(request, 'admin/brand.html', context())
 
+    @login_required(login_url='signin')
+    @checkadmin
     def ajax_get_brand(request):
         try:
             brand_id = request.POST["brand_id"]

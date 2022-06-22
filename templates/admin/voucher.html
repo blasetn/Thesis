@@ -196,7 +196,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-4 voucher_time">
+                            {% comment %} <div class="col-4 voucher_time">
                                 <div class="div_input_text">
                                     <p>Thời gian:</p>
                                     <label class="switch" title="Ẩn / Hiện">
@@ -217,7 +217,7 @@
                                     <p>Ngày kết thúc:</p>
                                     <input type="datetime-local" name="voucher_date_end" class="input_text">
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                         <div class="modal-footer">
                             <div style="float: right;" class="button-action">
@@ -285,12 +285,12 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-4 voucher_time">
+                            {% comment %} <div class="col-4 voucher_time">
                                 <div class="div_input_text">
                                     <p>Thời gian:</p>
                                     <label class="switch" title="Ẩn / Hiện">
-                                        <input name="voucher_time_active" value="0" type="hidden">
-                                        <input id="voucher_time_active" name="voucher_time_active" value="1" class="product_price_time_active" type="checkbox">
+                                        <input name="voucher_time_active_update" value="0" type="hidden">
+                                        <input id="voucher_time_active" name="voucher_time_active_update" value="1" class="product_price_time_active" type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
@@ -306,7 +306,7 @@
                                     <p>Ngày kết thúc:</p>
                                     <input id="voucher_date_end" type="datetime-local" name="voucher_date_end" class="input_text">
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                         <div class="modal-footer">
                             <div style="float: right;" class="button-action">

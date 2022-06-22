@@ -1,7 +1,7 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
-{% block title %}Panda Cake - Sản phẩm{% endblock %}
+{% block title %}Sản phẩm{% endblock %}
 {% block content %}
     <section style="background-color: black;">
         <div class="container" style="height: 160px;">
@@ -203,11 +203,11 @@
                                     data-parent="#accordionExample" class="collapse">
                                 <div class="card-body p-5">
                                     <p class="font-weight-light m-0">
-                                        Hồ Chí Minh và Hà Nội phí ship là: 15.000đ
+                                        {% comment %} Hồ Chí Minh và Hà Nội phí ship là: 15.000đ
                                         <br>
                                         Tỉnh khác phí ship là: 30.000đ
-                                        <br>
-                                        Miễn phí vận chuyển đơn hàng từ 500.000đ
+                                        <br> {% endcomment %}
+                                        Miễn phí vận chuyển
                                     </p>
                                 </div>
                             </div>

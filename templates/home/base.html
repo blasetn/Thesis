@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="#">
     <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel='stylesheet'>
     <link href="{% static 'lib/bootstrap.css' %}" rel='stylesheet'>
     <link href="{% static 'css/style.css' %}" rel='stylesheet'>
@@ -20,7 +21,7 @@
 
 {% include './blocks/footer.html' %}
 
-<div class="floating-chat">
+{% comment %} <div class="floating-chat">
     <i class='bx bxs-message-square-dots icon-chat' style='color:#ffffff' aria-hidden="true"></i>
     <div class="chat">
         <div class="header">
@@ -48,7 +49,7 @@
             <button id="sendMessage">send</button>
         </div>
     </div>
-</div>
+</div> {% endcomment %}
 
 <script src="{% static 'lib/jquery-3.5.1.min.js' %}"></script>
 <script src="{% static 'lib/bootstrap.js' %}"></script>

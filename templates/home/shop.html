@@ -1,7 +1,7 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
-{% block title %}Panda Cake - Sản phẩm{% endblock %}
+{% block title %}Sản phẩm{% endblock %}
 {% block content %}
     <section style="background-color: black;">
         <div class="container" style="height: 160px;">
@@ -42,66 +42,8 @@
                             {% endfor %}
                         </ul>
                     </div>
-{#                    <div class="product-title category">#}
-{#                        <h4>GIỚI TÍNH</h4>#}
-{#                        <a href="">Tất cả</a>#}
-{#                        <ul>#}
-{#                            <li><a href="">Nam</a></li>#}
-{#                            <li><a href="">Nữ</a></li>#}
-{#                        </ul>#}
-{#                    </div>#}
-{#                    <div class="product-title brand">#}
-{#                        <h4>THƯƠNG HIỆU</h4>#}
-{#                        <a href="">Tất cả</a>#}
-{#                        <ul>#}
-{#                            <li><a href="">TH</a></li>#}
-{#                        </ul>#}
-{#                    </div>#}
-{#                    <div class="product-title price">#}
-{#                        <h4>MỨC GIÁ</h4>#}
-{#                        <a href="">Tất cả</a>#}
-{#                        <ul>#}
-{#                            <li><a href="">Dưới 1.000.000đ</a></li>#}
-{#                            <li><a href="">1.000.000đ - 2.000.000đ </a></li>#}
-{#                            <li><a href="">2.000.000đ - 3.000.000đ</a></li>#}
-{#                            <li><a href="">3.000.000đ - 5.000.000đ</a></li>#}
-{#                            <li><a href="">Trên 5.000.000đ</a></li>#}
-{#                        </ul>#}
-{#                    </div>#}
-                    <!-- <div class="product-title size col" style="display: block;">
-                        <h4>SIZE</h4>
-                        <ul>
-                            <c:forEach var="isize" begin="34" end="47">
-                                <li><a href="product.jsp?size=${isize}"
-                                        class="btn btn-outline-primary">${isize}</a></li>
-                            </c:forEach>
-                        </ul>
-                    </div> -->
                 </div>
                 <div class="col-12 col-lg-9">
-{#                    <div class="row product-right-top">#}
-{#                        <div class="col">#}
-{#                            <a href=""><i class="fi-rr-grid"></i></a>#}
-{#                            <span style="margin-left: 45px;">Sản phẩm 1 đến 9</span>#}
-{#                        </div>#}
-{#                        <div class="col">#}
-{#                            <p>#}
-{#                                <strong>Hiển thị 9</strong>#}
-{#                                <strong>sản phẩm mỗi trang</strong>#}
-{#                            </p>#}
-{#                        </div>#}
-{#                        <div class="col">#}
-{#                            <p style="float: right;">#}
-{#                                <strong>Sắp xếp:</strong>#}
-{#                                <select name="" id="">#}
-{#                                    <option value="0">Mới nhất</option>#}
-{#                                    <option value="1">Giá thấp</option>#}
-{#                                    <option value="2">Giá cao</option>#}
-{#                                </select>#}
-{#                            </p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <hr style="margin-top: 10px; margin-bottom: 40px;">#}
                     <div class="row product-right-mid">
                         {% for product in all_product %}
                             <div class="col-4">
@@ -109,19 +51,18 @@
                                     <div id="card-img">
                                         <img class="d-block w-100" src="{{ MEDIA_URL }}{{ product.pd_img }}"
                                              alt="">
-                                        {#                                    <div class="card-hover" id="card-hover">#}
-                                        {#                                        <a href="" class="card-add"><i#}
-                                        {#                                                class="fi-rr-shopping-bag-add"></i></a>#}
-                                        {#                                        <a href="" class="card-like"><i class="fi-rr-heart"></i></a>#}
-                                        {#                                        <a href="" class="card-quickview"><i class="fi-rr-eye"></i></a>#}
-                                        {#                                    </div>#}
                                     </div>
                                     <div class="card-bot">
                                         <p class="card-name"><a
                                                 href="{% url 'product' product.pd_id %}">{{ product.pd_name }}</a>
                                         </p>
                                         <p class="card-price">
-                                            Giá: {{ product.pd_price | floatformat:0 | intcomma }}đ
+                                            Giá: {% if product.pd_pricesale >= 0 and product.pd_pricesale <= product.pd_price  %}
+                                                    {{ product.pd_pricesale | floatformat:0 | intcomma }}đ
+                                                    <br><del style="font-size: 15px; color: black">{{ product.pd_price | floatformat:0 | intcomma }}₫</del>
+                                                {% else  %}
+                                                    {{ product.pd_price | floatformat:0 | intcomma }}₫
+                                                {% endif %}
                                         </p>
                                     </div>
                                 </div>

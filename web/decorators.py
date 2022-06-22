@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 
 
-def ktnv(view_func):
+def checkstaff(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_staff or request.user.is_superuser:
             return view_func(request, *args, **kwargs)
@@ -10,7 +10,7 @@ def ktnv(view_func):
     return wrapper_func
 
 
-def ktadmin(view_func):
+def checkadmin(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_superuser:
             return view_func(request, *args, **kwargs)

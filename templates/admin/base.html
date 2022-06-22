@@ -21,7 +21,7 @@
 <!-- SIDEBAR -->
 <div class="sidebar">
     <div class="sidebar-logo">
-        <a href="#"><img src="{% static 'img/logo.png' %}" alt=""></a>
+        <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
         <div class="sidebar-close" id="sidebar-close">
             <i class='bx bx-left-arrow-alt'></i>
         </div>
@@ -33,7 +33,7 @@
                 <i class='bx bx-user' style="font-size: 25px; margin-right: 10px;"></i>{{ request.user.username }}
             </div>
         </div>
-        <button type="button" class="btn btn-outline" onclick="window.location.href='#'">
+        <button type="button" class="btn btn-outline" onclick="window.location.href='{% url 'logout' %}'">
             <i class='bx bx-log-out'></i>
         </button>
     </div>
@@ -46,7 +46,7 @@
             </a>
         </li>
         <li>
-            <a href="{% url 'ad_chat' %}">
+            <a href="{% url 'chat' %}">
                 <i class='bx bx-message-dots' ></i>
                 <span>Chat</span>
             </a>
@@ -57,6 +57,7 @@
                 <span>Đơn hàng</span>
             </a>
         </li>
+        {% if request.user.is_superuser %}
         <li>
             <a href="{% url 'ad_category' %}">
                 <i class='bx bx-category'></i>
@@ -81,24 +82,31 @@
                 <span>Mã giảm giá</span>
             </a>
         </li>
+        <li>
+            <a href="{% url 'statistic' %}">
+                <i class='bx bx-user-circle'></i>
+                <span>Thống kê</span>
+            </a>
+        </li>
+        {% comment %} <li>
+            <a href="#">
+                <i class='bx bx-user-circle'></i>
+                <span>Nhân viên</span>
+            </a>
+        </li> {% endcomment %}
+        {% endif %}
+        {% comment %} <li>
+            <a href="#">
+                <i class='bx bx-user-pin' ></i>
+                <span>Khách hàng</span>
+            </a>
+        </li> {% endcomment %}
         {% comment %} <li>
             <a href="#">
                 <i class='bx bx-news' ></i>
                 <span>Tin tức</span>
             </a>
         </li> {% endcomment %}
-        <li>
-            <a href="#">
-                <i class='bx bx-user-pin' ></i>
-                <span>Khách hàng</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-user-circle'></i>
-                <span>Nhân viên</span>
-            </a>
-        </li>
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>

@@ -1365,14 +1365,14 @@ footer {
     padding: 2px 16px;
     width: 100%;
 }
-.calculate-discount-content .calculate-discount-btn a.btn {
+.calculate-discount-content .calculate-discount-btn button.btn {
     border-radius: 3px;
     padding: 10px 19px;
     color: white;
     margin-top: 20px;
 }
-.calculate-discount-content .calculate-discount-btn a {
-    background-color: #95b3e0;
+.calculate-discount-content .calculate-discount-btn button {
+    background-color: #f36d00;
     font-size: 16px;
     font-weight: 600;
     text-transform: capitalize;

@@ -6,9 +6,13 @@ from django.http import JsonResponse
 
 from web.models import *
 from web.adminfile.context import *
+from django.contrib.auth.decorators import login_required
+from web.decorators import *
 
 
 class ProductAdmin:
+    @login_required(login_url='signin')
+    @checkadmin
     def ad_product(request):
         if 'submit_add_product' in request.POST:
             try:
@@ -78,6 +82,8 @@ class ProductAdmin:
         return render(request, 'admin/product.html', context())
 
 
+    @login_required(login_url='signin')
+    @checkadmin
     def ajax_get_product(request):
         try:
             product_id = request.POST["product_id"]

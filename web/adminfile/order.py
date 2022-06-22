@@ -3,9 +3,13 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 
 from web.models import Order, OrderDetail
+from django.contrib.auth.decorators import login_required
+from web.decorators import *
 
 
 class OrderAdmin:
+    @login_required(login_url='signin')
+    @checkstaff
     def order(request):
         if 'submit_update_order' in request.POST:
             try:
@@ -22,6 +26,9 @@ class OrderAdmin:
         all_order = Order.objects.all().order_by('-order_id')
         return render(request, 'admin/order.html', locals())
     
+
+    @login_required(login_url='signin')
+    @checkstaff
     def ajax_get_order(request):
         try:
             order_id = request.POST["order_id"]

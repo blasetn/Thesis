@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% load mathfilters %}
-{% block title %}Panda Cake - Giỏ hàng{% endblock %}
+{% block title %}Giỏ hàng{% endblock %}
 {% block content %}
     <section style="background-color: black;">
         <div class="container" style="height: 160px;">
@@ -109,18 +109,20 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        {#                        <div class="cart-calculate-discount-wrap mb-40">#}
-                        {#                            <h4>Mã giảm giá </h4>#}
-                        {#                            <div class="calculate-discount-content">#}
-                        {#                                <p>Nhập mã giảm giá (nếu có)!</p>#}
-                        {#                                <div class="input-style">#}
-                        {#                                    <input type="text" placeholder="Mã giảm giá">#}
-                        {#                                </div>#}
-                        {#                                <div class="calculate-discount-btn">#}
-                        {#                                    <a class="btn btn-link" href="#/">Áp dụng</a>#}
-                        {#                                </div>#}
-                        {#                            </div>#}
-                        {#                        </div>#}
+                        <div class="cart-calculate-discount-wrap mb-40">
+                            <h4>Mã giảm giá </h4>
+                            <div class="calculate-discount-content">
+                                {% comment %} <p>Nhập mã giảm giá (nếu có)!</p> {% endcomment %}
+                                <form action="{% url 'cart' %}" method="get">
+                                    <div class="input-style">
+                                        <input type="text" name="voucher_code" placeholder="Mã giảm giá">
+                                    </div>
+                                    <div class="calculate-discount-btn">
+                                        <button class="btn" type="submit">Áp dụng</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                     <div class="col-md-12 col-lg-5">

@@ -176,15 +176,15 @@ $(document).on('click', '.product_update', function (e) {
 //     });
 // })
 
-$(document).on('change', '.product_price_time_active', function () {
-    if (this.checked) {
-        $('.product_price_time_start').removeClass("d-none");
-        $('.product_price_time_end').removeClass("d-none");
-    } else {
-        $('.product_price_time_start').addClass("d-none");
-        $('.product_price_time_end').addClass("d-none");
-    }
-});
+// $(document).on('change', '.product_price_time_active', function () {
+//     if (this.checked) {
+//         $('.product_price_time_start').removeClass("d-none");
+//         $('.product_price_time_end').removeClass("d-none");
+//     } else {
+//         $('.product_price_time_start').addClass("d-none");
+//         $('.product_price_time_end').addClass("d-none");
+//     }
+// });
 
 $(document).on('change', '.voucher_value_type', function () {
     if (this.checked) {
@@ -219,33 +219,33 @@ $(document).on('click', '.btn_voucher_update', function (e) {
             } else {
                 $('#voucher_active_update').attr('checked', false);
             }
-            $('#voucher_date_start').val("");
-            $('#voucher_date_end').val("");
-            $('#voucher_date_start').attr('max', "");
-            $('#voucher_date_end').attr('min', "");
-            if (response['voucher_detail'][0]['voucher_date_start'] || response['voucher_detail'][0]['voucher_date_end']) {
-                var date_start = response['voucher_detail'][0]['voucher_date_start'];
-                var date_end = response['voucher_detail'][0]['voucher_date_end'];
-                $('#voucher_time_active').attr('checked', true);
-                $('.product_price_time_start').removeClass("d-none");
-                $('.product_price_time_end').removeClass("d-none");
-                // $('#product_price_datestart').attr('max', date_end);
-                $('#voucher_date_end').attr('min', date_start);
-                if(date_start == null){
-                    $('#voucher_date_start').val("");
-                }else{
-                    $('#voucher_date_start').val(date_start);
-                }
-                if(date_end == null){
-                    $('#voucher_date_end').val("");
-                }else{
-                    $('#voucher_date_end').val(date_end);
-                }
-            } else {
-                $('#voucher_time_active').attr('checked', false);
-                $('.product_price_time_start').addClass("d-none");
-                $('.product_price_time_end').addClass("d-none");
-            }
+            // $('#voucher_date_start').val("");
+            // $('#voucher_date_end').val("");
+            // $('#voucher_date_start').attr('max', "");
+            // $('#voucher_date_end').attr('min', "");
+            // if (response['voucher_detail'][0]['voucher_date_start'] || response['voucher_detail'][0]['voucher_date_end']) {
+            //     var date_start = response['voucher_detail'][0]['voucher_date_start'];
+            //     var date_end = response['voucher_detail'][0]['voucher_date_end'];
+            //     $('#voucher_time_active').attr('checked', true);
+            //     $('.product_price_time_start').removeClass("d-none");
+            //     $('.product_price_time_end').removeClass("d-none");
+            //     // $('#product_price_datestart').attr('max', date_end);
+            //     $('#voucher_date_end').attr('min', date_start);
+            //     if(date_start == null){
+            //         $('#voucher_date_start').val("");
+            //     }else{
+            //         $('#voucher_date_start').val(date_start);
+            //     }
+            //     if(date_end == null){
+            //         $('#voucher_date_end').val("");
+            //     }else{
+            //         $('#voucher_date_end').val(date_end);
+            //     }
+            // } else {
+            //     $('#voucher_time_active').attr('checked', false);
+            //     $('.product_price_time_start').addClass("d-none");
+            //     $('.product_price_time_end').addClass("d-none");
+            // }
         }
     });
 })

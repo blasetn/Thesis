@@ -1,7 +1,7 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% load humanize %}
-{% block title %}Panda Cake - Tìm kiếm{% endblock %}
+{% block title %}Tìm kiếm{% endblock %}
 {% block content %}
     <section style="background-color: black;">
         <div class="container" style="height: 160px;">
@@ -24,7 +24,7 @@
     <div style="margin-top: 50px ;margin-bottom: 50px;">
         <div class="container">
             <div style="padding: 0 300px;">
-                <form action="" method="POST">
+                <form action="{% url 'search' %}" method="GET">
                     {% csrf_token %}
                     <div style="display: inline-table; width: 100%; text-align: center; border-bottom: 2px solid rgba(0,0,0,0.4)">
                         <input style="
@@ -43,22 +43,27 @@
     <div>
         <div class="container" style="min-height: 400px">
             <div>
-                {% if kq == null %}
+                {% if result == null %}
                     <p style="font-size: 20px; text-align: center;">Không có kết quả</p>
                 {% endif %}
                 <div class="row product-right-mid">
-                    {% for item in kq %}
+                    {% for item in result %}
                         <div class="col-3">
                             <div class="card-than">
                                 <div id="card-img">
-                                    <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.hinhsp__hinhsp_url }}"
+                                    <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.pd_img }}"
                                          alt="">
                                 </div>
                                 <div class="card-bot">
-                                    <p class="card-name"><a href="{% url 'ctsp' item.sp_id %}">{{ item.sp_ten }}</a>
+                                    <p class="card-name"><a href="{% url 'product' item.pd_id %}">{{ item.pd_name }}</a>
                                     </p>
                                     <p class="card-price">
-                                        {{ item.sp_gia | floatformat:0 | intcomma }}đ
+                                        {% if item.pd_pricesale >= 0 and item.pd_pricesale <= item.pd_price  %}
+                                            {{ item.pd_pricesale | floatformat:0 | intcomma }}đ
+                                            <br><del style="font-size: 15px; color: black">{{ item.pd_price | floatformat:0 | intcomma }}₫</del>
+                                        {% else  %}
+                                            {{ item.pd_price | floatformat:0 | intcomma }}₫
+                                        {% endif %}
                                     </p>
                                 </div>
                             </div>

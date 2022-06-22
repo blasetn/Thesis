@@ -87,8 +87,8 @@ class Voucher(models.Model):
     voucher_id = models.BigAutoField(primary_key=True)
     voucher_code = models.CharField(max_length=250)
     voucher_value = models.FloatField()
-    voucher_date_start = models.DateTimeField(null=True)
-    voucher_date_end = models.DateTimeField(null=True)
+    # voucher_date_start = models.DateTimeField(null=True)
+    # voucher_date_end = models.DateTimeField(null=True)
     voucher_quantity = models.PositiveSmallIntegerField(null=True, default=None)
     voucher_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
     voucher_active = models.CharField(default=0, max_length=5, null=True)
@@ -113,31 +113,31 @@ class Voucher(models.Model):
 #     news = models.ForeignKey(News, on_delete=models.CASCADE)
 
 
-class ThreadManager(models.Manager):
-    def by_user(self, **kwargs):
-        user = kwargs.get('user')
-        lookup = Q(second_person=True)
-        qs = self.get_queryset().filter(lookup).distinct()
-        return qs
+# class ThreadManager(models.Manager):
+#     def by_user(self, **kwargs):
+#         user = kwargs.get('user')
+#         lookup = Q(second_person=True)
+#         qs = self.get_queryset().filter(lookup).distinct()
+#         return qs
 
 
-class Thread(models.Model):
-    first_person = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,
-                                     related_name='thread_first_person')
-    second_person = models.BooleanField(default=True)
-    updated = models.DateTimeField(auto_now=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+# class Thread(models.Model):
+#     first_person = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,
+#                                      related_name='thread_first_person')
+#     second_person = models.BooleanField(default=True)
+#     updated = models.DateTimeField(auto_now=True)
+#     timestamp = models.DateTimeField(auto_now_add=True)
 
-    objects = ThreadManager()
+#     objects = ThreadManager()
 
-    class Meta:
-        unique_together = ['first_person', 'second_person']
+#     class Meta:
+#         unique_together = ['first_person', 'second_person']
 
 
-class ChatMessage(models.Model):
-    thread = models.ForeignKey(Thread, null=True, blank=True, on_delete=models.CASCADE,
-                               related_name='chatmessage_thread')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+# class ChatMessage(models.Model):
+#     thread = models.ForeignKey(Thread, null=True, blank=True, on_delete=models.CASCADE,
+#                                related_name='chatmessage_thread')
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     message = models.TextField()
+#     timestamp = models.DateTimeField(auto_now_add=True)
 

@@ -37,7 +37,7 @@
                         </div>
                         <div class="header-align-center">
                             <div class="header-search-box">
-                                <form action="{% url 'search' %}" method="POST">
+                                <form action="{% url 'search' %}" method="GET">
                                     {% csrf_token %}
                                     <div class="form-input-item">
                                         <label for="search" class="sr-only">Tìm kiếm</label>
@@ -51,13 +51,13 @@
                         </div>
                         <div class="header-align-right">
                             <div class="header-action-area">
-                                <div class="header-action-search d-md-none">
+                                {% comment %} <div class="header-action-search d-md-none">
                                     <button class="btn-chat" onclick="window.location.href='{% url 'search' %}'">
                                         <i class='bx bx-search'></i>
                                     </button>
-                                </div>
+                                </div> {% endcomment %}
                                 <div class="header-action-chat">
-                                    <button class="btn-chat" onclick="window.location.href='#'">
+                                    <button class="btn-chat" target="_blank" onclick="window.location.href='{% url 'chat' %}'">
                                         <i class='bx bx-message-dots'></i>
                                     </button>
                                 </div>
@@ -91,6 +91,16 @@
                                 <ul class="submenu-nav" style="list-style: none">
                                     {% for category in all_category %}
                                         <li><a href="{% url 'shopcategory' category.category_id %}">{{ category.category_name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <li class="has-submenu"><a href="{% url 'shop' %}">Thương hiệu<i
+                                    class='bx bx-chevron-down'
+                                    id="chevron-down"></i></a>
+                                <ul class="submenu-nav" style="list-style: none">
+                                    {% for brand in all_brand %}
+                                        <li><a href="{% url 'shopbrand' brand.brand_id %}">{{ brand.brand_name }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
