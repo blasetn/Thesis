@@ -24,8 +24,10 @@ class CategoryAdmin:
             try:
                 category_id = request.POST["category_update_id"]
                 category_name = request.POST["name_category"]
+                category_status = request.POST["category_status"]
                 category_obj = Category.objects.get(pk=category_id)
                 category_obj.category_name = category_name
+                category_obj.category_status = category_status
                 category_obj.save()
                 messages.success(request, "Cập nhật danh mục thành công!")
             except:

@@ -23,8 +23,10 @@ class BrandAdmin:
             try:
                 brand_id = request.POST["brand_update_id"]
                 brand_name = request.POST["name_brand"]
+                brand_status = request.POST["brand_status"]
                 brand_obj = Brand.objects.get(pk=brand_id)
                 brand_obj.brand_name = brand_name
+                brand_obj.brand_status = brand_status
                 brand_obj.save()
                 messages.success(request, "Cập nhật thương hiệu thành công!")
             except:

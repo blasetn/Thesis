@@ -94,15 +94,15 @@
                                 <div class="col coldk">
                                     <div class="input-text">
                                         <p>Họ tên:</p>
-                                        <input required type="text" name="hoten" value="{% if cttk.cttk_hoten != None %}{{ cttk.cttk_hoten }}{% endif %}">
+                                        <input required type="text" name="hoten" value="{% if cttk.ud_fullname != None %}{{ cttk.ud_fullname }}{% endif %}">
                                     </div>
                                     <div class="input-text">
                                         <p>Số điện thoại:</p>
-                                        <input required type="text" name="sdt" value="{% if cttk.cttk_sdt != None %}{{ cttk.cttk_sdt }}{% endif %}">
+                                        <input required type="text" name="sdt" value="{% if cttk.ud_phone != None %}{{ cttk.ud_phone }}{% endif %}">
                                     </div>
                                     <div class="input-text">
                                         <p>Địa chỉ:</p>
-                                        <input required type="text" name="diachi" value="{% if cttk.cttk_diachi != None %}{{ cttk.cttk_diachi }}{% endif %}">
+                                        <input required type="text" name="diachi" value="{% if cttk.ud_address != None %}{{ cttk.ud_address }}{% endif %}">
                                     </div>
                                     <div class="input-text">
                                         <p>Email:</p>
@@ -144,9 +144,10 @@
                                     <div class="your-order-subtotal">
                                         <h3>Ship <span>{{ ship | floatformat:0 | intcomma }}đ</span></h3>
                                         <input type="hidden" name="ship" value="{{ ship }}">
-{#                                        <h3 style="margin-top: 10px;">Giảm giá#}
-{#                                            <span>{{ giamgia | floatformat:0 | intcomma }}đ</span></h3>#}
+                                       <h3 style="margin-top: 10px;">Mã giảm giá
+                                        <span>{{ giamgia | floatformat:0 | intcomma }}đ</span></h3>
                                         <input type="hidden" name="giamgia" value="{{ giamgia }}">
+                                        <input type="hidden" name="magiamgia" value="{{ magiamgia }}">
                                     </div>
                                     <div class="your-order-total">
                                         <h3>Tổng thanh toán

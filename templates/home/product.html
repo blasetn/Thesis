@@ -142,12 +142,12 @@
                         <div class="product-meta">
                             <span class="product-category">
                                 <span>Thương hiệu:</span>
-                                <a href="#" title="">{{ product.brand.brand_name }}</a>
+                                <a href="{% url 'shopbrand' product.brand.brand_id %}" title="">{{ product.brand.brand_name }}</a>
                             </span>
                             <span>-</span>
                             <span class="product-tags">
                                 <span>Danh mục:</span>
-                                <a href="#" title="">{{ product.category.category_name }}</a>
+                                <a href="{% url 'shopcategory' product.category.category_id %}" title="">{{ product.category.category_name }}</a>
                             </span>
                         </div>
                     </div>

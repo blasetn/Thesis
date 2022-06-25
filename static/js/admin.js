@@ -68,6 +68,11 @@ $(document).on('click', '.category_update', function (e) {
         success: function (response) {
             $('#category_update_id').val(response[0]['category_id']);
             $('#category_update_input_name').val(response[0]['category_name']);
+            if (response[0]['category_status'] == 0) {
+                $('#category_status').attr('checked', true);
+            } else {
+                $('#category_status').attr('checked', false);
+            }
         }
     });
 })
@@ -85,6 +90,11 @@ $(document).on('click', '.brand_update', function (e) {
         success: function (response) {
             $('#category_update_id').val(response[0]['brand_id']);
             $('#category_update_input_name').val(response[0]['brand_name']);
+            if (response[0]['brand_status'] == 0) {
+                $('#brand_status').attr('checked', true);
+            } else {
+                $('#brand_status').attr('checked', false);
+            }
         }
     });
 })
@@ -279,7 +289,7 @@ $(document).on('click', '.orderdetail_view', function (e) {
             $('#order_detail_code_payment').html(response['order'][0]['order_code_payment']);
             $('#order_detail_voucher').html(response['order'][0]['order_voucher_code']);
             $('#order_detail_discount').html(response['order'][0]['order_discount']);
-            $('#order_detail_totalprice').html(response['order'][0]['order_totalprice']);
+            $('#order_detail_totalprice').html(response['order'][0]['order_totalprice']+response['order'][0]['order_discount']);
             $('#order_detail_totalpayment').html(response['order'][0]['order_totalprice']);
             $('#order_detail_name').html(response['order'][0]['order_name']);
             $('#order_detail_phone').html(response['order'][0]['order_phone']);
@@ -326,3 +336,42 @@ $(document).on('click', '.order_update', function (e) {
         }
     });
 })
+
+$(document).on('click', '.orderuser_view', function (e) {
+    console.clear();
+    e.preventDefault();
+    var user_id = $(this).attr("id");
+    var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+    $.ajax({
+        url: "/admin/ajax_get_order_user/",
+        method: "POST",
+        data: { user: user_id, 'csrfmiddlewaretoken': csrf_token },
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            var order = response['order'];
+            var status;
+            $('#order_user').html('');
+            order.forEach(element => {
+                if(element['order_status']=='1'){
+                    status = "Đã xác nhận";
+                }else if(element['order_status']=='2'){
+                    status = 'Đã hủy';
+                }else{
+                    status = 'Chưa xác nhận';
+                }
+                var order_table = '<tr><td>' + element['order_id'] + '</td><td>' + element['order_time'] + '</td><td>' + 
+                status + '</td><td>' + element['order_totalprice'] + '</td><td><a target="_blank" href="/home/order_detail/'+ element['order_id'] +'/">Xem chi tiết</a></td></tr>'
+                $('#order_user').append(order_table);
+            })
+        }
+    });
+})
+
+ $("#exportexcel").click(function(){
+    $("#datatablesSimple").table2excel({
+    name: "Worksheet Name",
+    filename: "FileExcel",
+    fileext: ".xlsx"
+    }) 
+ });

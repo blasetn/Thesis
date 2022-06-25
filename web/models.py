@@ -17,13 +17,14 @@ class Category(models.Model):
     category_id = models.BigAutoField(primary_key=True)
     category_name = models.CharField(max_length=250, null=True)
     category_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    # category_status = models.CharField(default=0, max_length=5, null=True)
+    category_status = models.CharField(default=0, max_length=5, null=True)
 
 
 class Brand(models.Model):
     brand_id = models.BigAutoField(primary_key=True)
     brand_name = models.CharField(max_length=250, null=True)
     brand_date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    brand_status = models.CharField(default=0, max_length=5, null=True)
 
 
 class Product(models.Model):

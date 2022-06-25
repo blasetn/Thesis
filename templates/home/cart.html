@@ -142,8 +142,9 @@
                                                value="0">
                                     </div>
                                     <div class="grand-shipping-2">
-                                        <p>Giảm giá<span>{{ discount | floatformat:0 | intcomma }}đ</span></p>
+                                        <p>Mã giảm giá<span>{{ discount | floatformat:0 | intcomma }}đ</span></p>
                                         <input type="hidden" name="giamgia" value="{{ discount }}">
+                                        <input type="hidden" name="magiamgia" value="{{ voucher }}">
                                     </div>
                                     {#                                <div class="shipping-country">#}
                                     {#                                    <p>Vận chuyển đến Cần Thơ</p>#}

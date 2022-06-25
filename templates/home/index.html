@@ -10,17 +10,17 @@
                     <ol class="carousel-indicators">
                         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        {% comment %} <li data-target="#carouselExampleIndicators" data-slide-to="2"></li> {% endcomment %}
                     </ol>
                     <div class="carousel-inner">
+                        {% comment %} <div class="carousel-item active">
+                            <img class="d-block w-100" src="{% static 'img/Banner-Gigabyte-Aorus.jpg' %}">
+                        </div> {% endcomment %}
                         <div class="carousel-item active">
-                            <img class="d-block w-100" src="{% static 'img/banner1.webp' %}">
+                            <img class="d-block w-100" src="{% static 'img/banner-asus.jpg' %}">
                         </div>
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="{% static 'img/banner1.webp' %}">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="{% static 'img/banner1.webp' %}">
+                            <img class="d-block w-100" src="{% static 'img/banner-msi.jpg' %}">
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
@@ -44,7 +44,7 @@
                 <div class="row">
                     <!-- DEMO 1 Item-->
                     <div class="col-lg-4 mb-4 mb-lg-0">
-                        <a href="{% url 'shop' %}">
+                        <a href="{% url 'shopbrand' 1 %}">
                             <div class="hover hover-1 text-white rounded">
                                 <img src="{% static 'img/ngang1.jpg' %}" alt="">
                                 <div class="hover-overlay"></div>
@@ -57,9 +57,9 @@
                         </a>
                     </div>
                     <div class="col-lg-4 mb-4 mb-lg-0">
-                        <a href="{% url 'shop' %}">
+                        <a href="{% url 'shopbrand' 2 %}">
                             <div class="hover hover-1 text-white rounded">
-                                <img src="{% static 'img/ngang2.webp' %}" alt="">
+                                <img src="{% static 'img/ngang2.jpg' %}" alt="">
                                 <div class="hover-overlay"></div>
                                 <div class="hover-1-content px-5 py-4">
                                     <h3 class="hover-1-title text-uppercase font-weight-bold mb-0"> <span
@@ -70,7 +70,7 @@
                         </a>
                     </div>
                     <div class="col-lg-4 mb-4 mb-lg-0">
-                        <a href="{% url 'shop' %}">
+                        <a href="{% url 'shopbrand' 3 %}">
                             <div class="hover hover-1 text-white rounded">
                                 <img src="{% static 'img/ngang3.jpg' %}" alt="">
                                 <div class="hover-overlay"></div>
@@ -91,13 +91,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-3">
-                    <a href="{% url 'shop' %}">
-                        <div class="hover hover-1 text-white rounded" style="height: 421px !important;">
-                            <img src="{% static 'img/doc1.jpg' %}" alt="">
+                    <a href="{% url 'shopcategory' 1 %}">
+                        <div class="hover hover-1 text-white rounded" style="height: 352px !important;">
+                            <img src="{% static 'img/doc1.png' %}" alt="">
                             <div class="hover-overlay"></div>
                             <div class="hover-1-content px-5 py-4 section-3-nike">
-                                <a href="{% url 'shop' %}" style="color: white;">
-                                    <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">Laptop</h3>
+                                <a href="{% url 'shopcategory' 1 %}" style="color: white;">
+                                    <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">Mainbroad</h3>
                                 </a>
                             </div>
                         </div>
@@ -105,8 +105,8 @@
                 </div>
                 <div class="col-9">
                     <div class="row">
-                        {% for item in product_new %}
-                        <div class="col" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                        {% for item in mainbroad %}
+                        <div class="col-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
                             <div class="card-than">
                                 <div id="card-img">
                                     <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.pd_img }}" alt="">
@@ -131,20 +131,27 @@
             <hr style="margin-top: 50px">
         </div>
     </section>
-    {% comment %} <section class="section-5" style="margin-bottom: 50px">
+    <section class="section-5" style="margin-bottom: 50px">
         <div class="container">
             <div class="row">
                 <div class="col-9" style="height: 421px;">
                     <div class="row">
-                        {% for item in sp2 %}
-                        <div class="col">
-                            <div class="card-than" style="padding: 0 20px">
+                        {% for item in vga %}
+                        <div class="col-4" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                            <div class="card-than">
                                 <div id="card-img">
-                                    <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.hinhsp__hinhsp_url }}" alt="">
+                                    <img class="d-block w-100" src="{{ MEDIA_URL }}{{ item.pd_img }}" alt="">
                                 </div>
                                 <div class="card-bot">
-                                    <p class="card-name"><a href="{% url 'ctsp' item.sp_id %}">{{ item.sp_ten }}</a></p>
-                                    <p class="card-price">Giá: {{ item.sp_gia | floatformat:0 | intcomma }}đ</p>
+                                    <p class="card-name" style="min-height: 90px;"><a href="{% url 'product' item.pd_id %}">{{ item.pd_name }}</a></p>
+                                    <p class="card-price" style="color: red">
+                                        {% if item.pd_pricesale >= 0 and item.pd_pricesale <= item.pd_price  %}
+                                            {{ item.pd_pricesale | floatformat:0 | intcomma }}đ
+                                            <br><del style="font-size: 15px; color: black">{{ item.pd_price | floatformat:0 | intcomma }}₫</del>
+                                        {% else  %}
+                                            {{ item.pd_price | floatformat:0 | intcomma }}₫
+                                        {% endif %}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -152,13 +159,13 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <a href="{% url 'shop' %}">
+                    <a href="{% url 'shopcategory' 4 %}">
                         <div class="hover hover-1 text-white rounded" style="height: 421px !important;"><img
-                                src="{% static 'img/doc-2.jpg' %}" alt="">
+                                src="{% static 'img/doc2.jpg' %}" alt="">
                             <div class="hover-overlay"></div>
                             <div class="hover-1-content px-5 py-4 section-5-adidas">
-                                <a href="{% url 'shop' %}" style="color: white;">
-                                    <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">CHEESE
+                                <a href="{% url 'shopcategory' 4 %}" style="color: white;">
+                                    <h3 class="hover-1-title text-uppercase font-weight-bold mb-0">VGA
                                     </h3>
                                 </a>
                             </div>
@@ -168,5 +175,5 @@
             </div>
             <hr style="margin-top: 50px">
         </div>
-    </section> {% endcomment %}
+    </section>
 {% endblock %}

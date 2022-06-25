@@ -67,7 +67,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Tên thương hiệu</th>
-                                        <th></th>
+                                        <th>Trạng thái</th>
+                                        <th>Chức năng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -78,6 +79,13 @@
                                         </td>
                                         <td>
                                             {{ item.brand_name }}
+                                        </td>
+                                        <td>
+                                            {% if item.brand_status == '1' %}
+                                                Đã ẩn
+                                            {% else %}
+                                                Hiển thị
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <a class="brand_update" id="{{ item.brand_id }}"
@@ -161,6 +169,14 @@
                                 <input type="hidden" name="brand_update_id" id="category_update_id">
                                 <input type="text" name="name_brand" id="category_update_input_name" class="input_text">
                             </div>
+                        </div>
+                        <div class="div_input_text">
+                            <p>Ẩn / Hiện Thương Hiệu:</p>
+                            <label class="switch">
+                                <input type="hidden" name="brand_status" value="1">
+                                <input type="checkbox" id="brand_status" name="brand_status" value="0" checked>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="modal-footer">

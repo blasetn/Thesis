@@ -8,6 +8,13 @@ from web.adminfile.context import *
 
 class AccountUser:
     def signin(request):
+        all_category = Category.objects.filter(category_status=0).order_by()
+        all_brand = Brand.objects.filter(brand_status=0).order_by()
+        count_cart = 0
+        if 'cart' in request.session:
+            cart = request.session['cart']
+            for item in cart:
+                count_cart += item.get('quantity')
         if 'signup' in request.POST:
             username = request.POST['signup_username']
             password = request.POST['signup_password']
@@ -36,12 +43,17 @@ class AccountUser:
         if request.user.is_authenticated:
             return redirect('home')
         else:
-            return render(request, 'home/signin.html', context())
+            return render(request, 'home/signin.html', locals())
 
 
     def account(request):
-        all_category = Category.objects.all().order_by()
-        all_brand = Brand.objects.all().order_by()
+        count_cart = 0
+        if 'cart' in request.session:
+            cart = request.session['cart']
+            for item in cart:
+                count_cart += item.get('quantity')
+        all_category = Category.objects.filter(category_status=0).order_by()
+        all_brand = Brand.objects.filter(brand_status=0).order_by()
         if request.user.is_authenticated:
             user_detail = UserDetail.objects.get(pk=request.user.id)
             dh = Order.objects.filter(user=request.user.id)

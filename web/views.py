@@ -12,6 +12,8 @@ from web.adminfile.product import *
 from web.adminfile.voucher import *
 from web.adminfile.order import *
 from web.adminfile.statistic import *
+from web.adminfile.staff import *
+from web.adminfile.customer import *
 
 # VNPay
 from web.vnpay.views import *

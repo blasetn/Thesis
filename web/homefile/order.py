@@ -7,16 +7,22 @@ from web.models import *
 from web.vnpay.views import *
 
 class OrderUser:
-    all_category = Category.objects.all().order_by()
-    all_brand = Brand.objects.all().order_by()
     def cart(request):
+        count_cart = 0
+        all_category = Category.objects.filter(category_status=0).order_by()
+        all_brand = Brand.objects.filter(brand_status=0).order_by()
         cart = []
         totalprice = totalpayment = 0.0
         ship = 0
         discount = OrderUser.use_voucher(request)
+        if 'voucher_code' in request.GET:
+            voucher = request.GET['voucher_code']
+        if discount == 0:
+            voucher = ""
         if "cart" in request.session:
             cart = request.session['cart']
             for item in cart:
+                count_cart += item.get('quantity')
                 if(item.get('pricesale')>0 and item.get('pricesale')<=item.get('price')):
                     totalprice += item.get('pricesale') * float(item.get('quantity'))
                 else:
@@ -95,8 +101,13 @@ class OrderUser:
         return redirect(request.META.get('HTTP_REFERER'))
 
     def checkout(request):
-        all_category = Category.objects.all().order_by()
-        all_brand = Brand.objects.all().order_by()
+        count_cart = 0
+        if 'cart' in request.session:
+            cart = request.session['cart']
+            for item in cart:
+                count_cart += item.get('quantity')
+        all_category = Category.objects.filter(category_status=0).order_by()
+        all_brand = Brand.objects.filter(brand_status=0).order_by()
         cttk = None
         giohang = []
         if "cart" in request.session:
@@ -109,6 +120,10 @@ class OrderUser:
             tongtienhang = request.GET['tongtienhang']
             ship = request.GET['ship']
             giamgia = request.GET['giamgia']
+            if giamgia == '0':
+                magiamgia = ""
+            else:
+                magiamgia = request.GET['magiamgia']
             tongthanhtoan = request.GET['tongthanhtoan']
             return render(request, 'home/checkout.html', locals())
         elif request.method == 'POST':
@@ -122,10 +137,22 @@ class OrderUser:
             tongtienhang = request.POST['tongtienhang']
             ship = request.POST['ship']
             giamgia = request.POST['giamgia']
+            if giamgia == '0':
+                magiamgia = None
+            else:
+                magiamgia = request.POST['magiamgia']
             tongthanhtoan = request.POST['tongthanhtoan']
             dh = Order(order_name=hoten, order_phone=sdt, order_address=diachi, order_email=email, order_totalprice=tongthanhtoan,
-                        order_ship=ship, order_discount=giamgia, order_payment=0, order_status = 0)
+                        order_ship=ship,order_voucher_code=magiamgia, order_discount=giamgia, order_payment=0, order_status = 0)
             dh.save()
+            try:
+                voucher_used = Voucher.objects.get(voucher_code=magiamgia)
+                voucher_used.voucher_quantity -= 1
+                if voucher_used.voucher_quantity < 1:
+                    voucher_used.voucher_quantity = 0
+                voucher_used.save()
+            except:
+                pass
             id_dh = dh.order_id
             payment_method = request.POST['payment_method']
             if request.user.is_authenticated:
@@ -138,10 +165,12 @@ class OrderUser:
                 dh = Order.objects.get(pk=id_dh)
                 OrderDetail(od_nameproduct=item.get('name'), od_quantity=item.get('quantity'), od_price=item.get('price'),od_pricesale=item.get('pricesale'), product=sp, order=dh).save()
                 sp.pd_quantity -= item.get('quantity')
+                if sp.pd_quantity < 1:
+                    sp.pd_quantity = 0
                 sp.save()
             del request.session['cart']
             if payment_method == '1':
-                tongthanhtoan = int(float(tongthanhtoan))/1000
+                tongthanhtoan = int(float(tongthanhtoan))
                 return payment(request, id_dh, tongthanhtoan)
             else:
                 return redirect ('order_detail', id=id_dh)
@@ -167,10 +196,24 @@ class OrderUser:
                     order_id = order_id[14:]
                     order = Order.objects.get(pk=order_id)
                     order.order_status = 1
+                    order.order_code_payment = vnp_TransactionNo
                     order.save()
-                    return redirect ('order_detail', id=order_id)
+                else:
+                    messages.error(request, "Thanh toán qua VNPAY không thành công vui lòng liên hệ cửa hàng để được hỗ trợ tốt nhất! Cảm ơn quý khách rất nhiều!")
+            else:
+                messages.error(request, "Thanh toán qua VNPAY không thành công vui lòng liên hệ cửa hàng để được hỗ trợ tốt nhất! Cảm ơn quý khách rất nhiều!")
+        else:
+            messages.error(request, "Thanh toán qua VNPAY không thành công vui lòng liên hệ cửa hàng để được hỗ trợ tốt nhất! Cảm ơn quý khách rất nhiều!")
+        return redirect ('order_detail', id=order_id)
 
     def order_detail(request, id=None):
+        all_category = Category.objects.filter(category_status=0).order_by()
+        all_brand = Brand.objects.filter(brand_status=0).order_by()
+        count_cart = 0
+        if 'cart' in request.session:
+            cart = request.session['cart']
+            for item in cart:
+                count_cart += item.get('quantity')
         dh = Order.objects.get(pk=id)
         ctdh = OrderDetail.objects.filter(order=id)
         return render(request, 'home/order_detail.html', locals())

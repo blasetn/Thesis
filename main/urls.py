@@ -37,6 +37,10 @@ urlpatterns = [
     path('admin/order/', views.OrderAdmin.order, name='ad_order'),
     path('admin/ajax_get_order/', views.OrderAdmin.ajax_get_order, name='ajax_get_order'),
     path('admin/statistic/', views.StatisticAdmin.statistic, name='statistic'),
+    path('admin/staff/', views.StaffAdmin.staff, name='staff'),
+    path('admin/staff/update/<int:id>/<int:func>/', views.StaffAdmin.staff_update_role, name='staff_update'),
+    path('admin/customer/', views.CustomerAdmin.customer, name='customer'),
+    path('admin/ajax_get_order_user/', views.CustomerAdmin.ajax_get_order, name='ajax_get_order_user'),
     
     path('chat/', chat.chat, name='chat'),
 

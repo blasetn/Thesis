@@ -84,14 +84,14 @@
         }
 
         .account .list-group-item.active {
-            background-color: #f379a7;
-            border-color: #f379a7;
+            background-color: #f36d00;
+            border-color: #f36d00;
         }
 
         .account .input-text input {
             width: 100%;
             padding: 10px;
-            outline-color: #f379a7;
+            outline-color: #f36d00;
             border: 2px solid rgba(0, 0, 0, 0.3);
             border-radius: 5px;
         }
@@ -186,7 +186,7 @@
                             </div>
                             <p style="text-align: right">
                                 <button onclick="window.location.href='{% url 'logout' %}'"
-                                        style="color: white; background-color: #f379a7; border: none; padding: 5px 10px; font-size: 20px; font-weight: 600; border-radius: 5px">
+                                        style="color: white; background-color: #f36d00; border: none; padding: 5px 10px; font-size: 20px; font-weight: 600; border-radius: 5px">
                                     Đăng xuất
                                 </button>
                             </p>
@@ -208,7 +208,7 @@
                                             <div class="col">
                                                 Tổng thanh toán: {{ item.order_totalprice | floatformat:0 | intcomma }}đ
                                                 <br>
-                                                <a style="color: #f379a7; font-weight: 700"
+                                                <a style="color: #f36d00; font-weight: 700"
                                                    href="{% url 'order_detail' item.order_id %}">Xem chi tiết</a>
                                             </div>
                                         </div>

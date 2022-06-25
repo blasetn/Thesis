@@ -23,7 +23,7 @@
                             </div>
                             <div class="counter-info">
                                 <div class="counter-count">
-                                    {{ sl_sp }}
+                                    {{ count_product }}
                                 </div>
                                 <i class='bx bx-cake'></i>
                             </div>
@@ -38,7 +38,7 @@
                             </div>
                             <div class="counter-info">
                                 <div class="counter-count">
-                                    {{ sl_dh }}
+                                    {{ count_order }}
                                 </div>
                                 <i class='bx bx-store-alt'></i>
                             </div>
@@ -49,11 +49,11 @@
                     <div class="box box-hover">
                         <div class="counter">
                             <div class="counter-title">
-                                Người dùng
+                                Khách hàng
                             </div>
                             <div class="counter-info">
                                 <div class="counter-count">
-                                    {{ sl_user }}
+                                    {{ count_customer }}
                                 </div>
                                 <i class='bx bx-user-circle'></i>
                             </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="counter-info">
                                 <div class="counter-count">
-                                    {{ sl_mgg }}
+                                    {{ count_voucher }}
                                 </div>
                                 <i class='bx bx-trending-down'></i>
                             </div>
@@ -86,19 +86,26 @@
                         </div>
                         <div class="box-body">
                             <ul class="product-list">
-                                {% for item in sp_moi %}
+                                {% for item in product_new %}
                                     <li class="product-list-item">
-                                        <div class="item-info">
-                                            <img src="{{ MEDIA_URL }}{{ item.hinhsp__hinhsp_url }}" alt="product image">
+                                        <div class="item-info pr-2">
+                                            <img src="{{ MEDIA_URL }}{{ item.pd_img }}" alt="product image">
                                             <div class="item-name">
                                                 <div class="product-name"><a
-                                                        href="{% url 'ctsp' item.sp_id %}">{{ item.sp_ten }}</a></div>
+                                                        href="{% url 'product' item.pd_id %}">{{ item.pd_name }}</a></div>
                                                 <div class="text-second">{{ item.sp_vi }}</div>
                                             </div>
                                         </div>
                                         <div class="item-sale-info">
                                             <div class="text-second">Giá</div>
-                                            <div class="product-sales">{{ item.sp_gia | floatformat:0 | intcomma }}</div>
+                                            <div class="product-sales">
+                                                {% if item.pd_pricesale >= 0 and item.pd_pricesale <= item.pd_price  %}
+                                                    {{ item.pd_pricesale | floatformat:0 | intcomma }}đ
+                                                    <br><del style="font-size: 15px;">{{ item.pd_price | floatformat:0 | intcomma }}₫</del>
+                                                {% else  %}
+                                                    {{ item.pd_price | floatformat:0 | intcomma }}₫
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </li>
                                 {% endfor %}
@@ -115,15 +122,14 @@
                         </div>
                         <div class="box-body">
                             <ul class="product-list">
-                                {% for item in dh_moi %}
+                                {% for item in order_new %}
                                     <li class="product-list-item">
                                         <div class="item-info">
-                                            {#                                            <img src="{{ MEDIA_URL }}{{ item.imagenews__link }}" alt="product image">#}
                                             <div class="item-name">
-                                                <div class="product-name"><a href="{% url 'ctdh' item.dh_id %}">Mã đơn
-                                                    hàng: {{ item.dh_id }}</a></div>
+                                                <div class="product-name"><a href="{% url 'order_detail' item.order_id %}">Mã đơn
+                                                    hàng: {{ item.order_id }}</a></div>
                                                 <div class="text-second">Ngày
-                                                    đặt: {{ item.dh_thoigian | date:"H:i - d-m-Y" }}</div>
+                                                    đặt: {{ item.order_time | date:"H:i - d-m-Y" }}</div>
                                             </div>
                                         </div>
                                     </li>
@@ -141,7 +147,7 @@
                         </div>
                         <div class="box-body">
                             <ul class="product-list">
-                                {% for item in kh_moi %}
+                                {% for item in customer_new %}
                                     <li class="product-list-item">
                                         <div class="item-info">
                                             <div class="item-name">
